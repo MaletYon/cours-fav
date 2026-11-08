@@ -1,0 +1,396 @@
+% ============================================================================
+% Fichier  : partie5/P05_C13_antiforensique_nuage.tex
+% Titre    : Anti-forensique, Nuage et Conteneurs
+% Auteur   : MINKA MI NGUIDJOÏ Thierry Emmanuel
+% Version  : 1.0 -- novembre 2024
+% Corrigés : corriges/Corr_C13.tex
+% ============================================================================
+% Sources : Carrier (2005) pour les attributs NTFS ; ISO/IEC 27037 et 27042
+% (paraphrasées) ; modèle de responsabilité partagée de l'informatique en
+% nuage (présenté sans citation) ; journaux d'audit de Kubernetes (présentés
+% sans citation).
+% Faits nouveaux (bible) : sur SRV-FIC01, outil upd.exe daté de 2017 dans
+% $STANDARD_INFORMATION, du 13/03/2025 dans $FILE_NAME et $UsnJrnl ; journal
+% de sécurité de SRV-FIC01 vidé le 14/03 à 3 h 52 (1102). SOLITRANS,
+% février 2026 : instance du portail en nuage compromise, journaux d'audit
+% du fournisseur conservés 90 jours, conteneur supprimé par la reprise
+% automatique.
+% ============================================================================
+
+\chapter{Anti-forensique, Nuage et Conteneurs}
+\label{chap:antiforensique}
+\chaptermark{Anti-forensique, nuage, conteneurs}
+
+\epigraph{%
+    « Effacer une trace en laisse une autre.\\
+    Il faut savoir où la chercher. »%
+}{Principe du cours}
+
+\niveauChapitre{Expert}{%
+    Maîtrise de la partie~II
+}
+
+\begin{boxobjectifs}
+\begin{itemize}
+    \item Reconnaître les principales techniques d'anti-forensique et les
+          traces qu'elles laissent.
+    \item Détecter une falsification de dates par la confrontation des
+          attributs NTFS et des journaux.
+    \item Exploiter les traces d'un journal effacé.
+    \item Conduire une acquisition dans un environnement en nuage, selon le
+          modèle de responsabilité partagée.
+    \item Préserver les traces d'un conteneur avant sa disparition.
+    \item Coter \NEK{} ce que l'environnement rend inaccessible.
+\end{itemize}
+\end{boxobjectifs}
+
+\bigskip
+
+% ============================================================================
+\section*{Avant de commencer : un outil de 2017}
+% ============================================================================
+
+Yaoundé, 28 mars 2025. Dans l'acquisition à froid de SRV-FIC01, M.~FOTSO
+trouve l'outil de copie de l'attaquant~: \texttt{upd.exe}, rangé dans un
+dossier de mises à jour. L'explorateur affiche une date de création du
+4~juin 2017. Si elle est vraie, l'outil était sur le serveur bien avant
+l'attaque, et peut-être installé par quelqu'un de la maison. M.~FOTSO ouvre
+l'enregistrement MFT du fichier.
+
+\begin{boxalert}
+\textbf{Violation typique.} Prendre pour acquise une date affichée par
+l'explorateur ou par un outil, sans la confronter aux autres sources qui
+datent le même fichier.
+
+\smallskip
+\textbf{Règle~:} une date se recoupe. Quand plusieurs sources indépendantes
+datent un même objet, leur désaccord est une constatation, et souvent la
+trace d'une manipulation.
+\end{boxalert}
+
+\separateur
+
+% ============================================================================
+\section{Les Techniques d'Anti-forensique}
+\label{sec:c13-techniques}
+% ============================================================================
+
+\begin{boxdef}
+\textbf{\termecle{Anti-forensique}}~: ensemble des techniques qui visent à
+empêcher, retarder ou tromper l'investigation~: effacer, masquer, falsifier
+ou rendre illisibles les traces.
+\end{boxdef}
+
+\begin{tableaucours}{L{3.2cm}L{4.4cm}L{4.6cm}}{%
+    \tableauHeader{Technique} &
+    \tableauHeader{Ce qu'elle fait} &
+    \tableauHeader{Trace qu'elle laisse}
+}
+Effacement des journaux & Vide le journal de sécurité ou système &
+Événement 1102 ou 104, trou dans la numérotation, sources externes
+intactes \\
+Falsification de dates & Réécrit les dates d'un fichier & Désaccord entre
+\texttt{\$STANDARD\_INFORMATION}, \texttt{\$FILE\_NAME} et
+\texttt{\$UsnJrnl} \\
+Effacement sécurisé & Écrase le contenu d'un fichier & Nom et dates dans
+la MFT et le \texttt{\$UsnJrnl}, outil d'effacement lui-même \\
+Chiffrement & Rend le contenu illisible & Le conteneur chiffré, l'outil,
+parfois la clé en mémoire \\
+Exécution en mémoire, outils du système & N'écrit rien sur le disque,
+utilise \texttt{powershell}, \texttt{rundll32} & Mémoire, lignes de
+commande, journaux de script s'ils sont activés \\
+Dissimulation & Cache des fichiers ou des processus & Écarts entre deux
+méthodes de lecture (\texttt{pslist} et \texttt{psscan}) \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~13.1. Techniques d'anti-forensique et traces résiduelles}\end{center}
+
+Le tableau montre une constante~: chaque technique déplace la trace plus
+qu'elle ne la supprime. L'enquêteur cherche donc là où l'attaquant ne
+pense pas ou ne peut pas agir~: les journaux centralisés hors de la machine,
+la mémoire, les structures internes du système de fichiers, les équipements
+réseau.
+
+% ============================================================================
+\section{Détecter une Falsification de Dates}
+\label{sec:c13-dates}
+% ============================================================================
+
+Les outils de falsification réécrivent en général les dates de
+\texttt{\$STANDARD\_INFORMATION}, que tout programme peut modifier. Les
+dates de \texttt{\$FILE\_NAME} et les entrées du \texttt{\$UsnJrnl} sont plus
+difficiles à atteindre. Trois indices orientent l'examen~: une date de
+création antérieure à l'installation du système, des fractions de seconde
+toutes nulles (les outils écrivent souvent des secondes rondes), et un
+désaccord entre les attributs.
+
+\begin{boxscenario}{Opération NYANGA. L'outil upd.exe}
+\begin{tableaucours}{L{4.6cm}L{4.0cm}L{3.0cm}}{%
+    \tableauHeader{Source} &
+    \tableauHeader{Date de création} &
+    \tableauHeader{Fractions}
+}
+\texttt{\$STANDARD\_INFORMATION} & 04/06/2017 09:12:00 & ,0000000 \\
+\texttt{\$FILE\_NAME} & 13/03/2025 23:58:41 & ,3318274 \\
+\texttt{\$UsnJrnl}, création du fichier & 13/03/2025 23:58:41 & \\
+Installation du système (registre) & 17/01/2020 & \\
+\end{tableaucours}
+
+\medskip
+\textbf{Constatations.} La date de \texttt{\$STANDARD\_INFORMATION} précède de
+deux ans et demi l'installation du système, et ses fractions sont nulles.
+\texttt{\$FILE\_NAME} et le \texttt{\$UsnJrnl} concordent sur le 13~mars
+2025 à 23~h~58.
+
+\textbf{Analyse} (confiance élevée). La date de 2017 a été falsifiée.
+L'outil a été déposé le 13~mars à 23~h~58, soit soixante-quatorze minutes
+avant le début de l'exfiltration. La piste d'un outil ancien, installé par
+un employé, tombe.
+\end{boxscenario}
+
+% ============================================================================
+\section{Un Journal Vidé}
+\label{sec:c13-journal}
+% ============================================================================
+
+\begin{boxscenario}{Opération NYANGA. Le journal de SRV-FIC01}
+\textbf{Constatations.} Le journal de sécurité de SRV-FIC01 commence par un
+événement 1102, le 14~mars à 3~h~52, enregistré sous le compte
+\texttt{adm.kamga}~: le journal a été vidé, cinq minutes après la fin de
+l'exfiltration. Les journaux du contrôleur de domaine, eux, conservent les
+authentifications de \texttt{adm.kamga} vers SRV-FIC01 le 13 à 23~h~55 et
+le 14 à 1~h~09.
+
+\textbf{Analyse} (confiance élevée). L'attaquant a effacé les traces locales
+de ses sessions, mais pas celles que le contrôleur de domaine garde sur les
+authentifications. L'effacement lui-même est une constatation, datée et
+attribuée à un compte.
+\end{boxscenario}
+
+\begin{boxinfo}
+\textbf{La centralisation des journaux.} Un journal copié en temps réel sur
+un serveur de collecte, hors de portée des comptes d'administration
+ordinaires, survit à l'effacement local. C'est la mesure la plus simple
+contre l'effacement des journaux, et NYANGA ne l'avait pas.
+\end{boxinfo}
+
+% ============================================================================
+\section{L'Enquête dans le Nuage}
+\label{sec:c13-nuage}
+% ============================================================================
+
+Dans l'informatique en nuage, l'organisation ne possède ni les machines ni
+le réseau. Le \termecle{modèle de responsabilité partagée} répartit la
+sécurité entre le fournisseur et le client~: plus le service est géré par
+le fournisseur, moins le client a de prise, et moins l'enquêteur a de
+traces directement accessibles.
+
+\begin{tableaucours}{L{2.4cm}L{3.6cm}L{3.2cm}L{3.0cm}}{%
+    \tableauHeader{Modèle} &
+    \tableauHeader{Ce que gère le client} &
+    \tableauHeader{Traces accessibles} &
+    \tableauHeader{Traces chez le fournisseur}
+}
+Infrastructure (IaaS) & Système, applications, données & Disques des
+machines (instantanés), journaux du système & Hyperviseur, réseau physique \\
+Plateforme (PaaS) & Applications, données & Journaux de l'application et du
+service & Système sous-jacent \\
+Logiciel (SaaS) & Données, comptes & Journaux d'audit exposés par le
+service & Presque tout le reste \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~13.2. Traces et responsabilité partagée}\end{center}
+
+L'acquisition y change de forme. On ne débranche pas un serveur~: on prend
+un instantané de ses disques par l'interface du fournisseur, on exporte les
+journaux d'audit de la console, on copie les journaux du réseau virtuel s'ils
+sont activés. La mémoire d'une machine virtuelle ne se capture que par un
+outil exécuté à l'intérieur, ou par un service spécialisé du fournisseur.
+Les durées de conservation par défaut des journaux d'audit sont souvent
+courtes, et les données peuvent se trouver dans un autre pays que
+l'organisation, ce qui fait intervenir l'entraide internationale
+(Chapitre~\ref{chap:normes-droit}).
+
+\begin{boxscenario}{Opération SOLITRANS. Le portail en février 2026}
+\textbf{Constatations.} Le 9~février 2026, le portail des transitaires,
+hébergé chez un fournisseur en nuage sous forme de conteneurs, présente des
+pages modifiées. L'équipe de M.~NJIKE prend un instantané des disques des
+machines virtuelles et exporte les journaux d'audit de la console, conservés
+90~jours. Le conteneur compromis, lui, a déjà été remplacé~: le système de
+reprise automatique l'a détruit et relancé à partir de l'image d'origine
+quand il a cessé de répondre, à 4~h~10.
+
+\textbf{Analyse} (confiance élevée). Le contenu du conteneur compromis est
+perdu~; seuls restent les journaux que l'orchestrateur et le fournisseur
+ont gardés. La reprise automatique, qui sert la disponibilité, a détruit la
+preuve.
+\end{boxscenario}
+
+% ============================================================================
+\section{Les Conteneurs}
+\label{sec:c13-conteneurs}
+% ============================================================================
+
+Un conteneur est éphémère par conception~: il naît d'une image, vit
+quelques minutes ou quelques jours, et disparaît avec ses fichiers et ses
+journaux s'ils n'ont pas été envoyés ailleurs. L'enquête doit donc préparer
+la préservation avant l'incident.
+
+\begin{tableaucours}{L{4.0cm}L{8.2cm}}{%
+    \tableauHeader{Trace} &
+    \tableauHeader{Comment la préserver}
+}
+Image d'origine & Conserver son empreinte (\textit{digest}) et l'image
+elle-même dans le registre \\
+Modifications du conteneur & Copier la couche modifiable avant de détruire
+le conteneur, ou le suspendre au lieu de le redémarrer \\
+Journaux de l'application & Les envoyer en continu vers un collecteur
+externe \\
+Journaux de l'orchestrateur & Activer et conserver le journal d'audit
+(créations, suppressions, accès aux secrets) \\
+Réseau & Journaux des flux du réseau virtuel \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~13.3. Préserver les traces d'un conteneur}\end{center}
+
+\begin{boxlecture}{Ce que l'enquête peut encore savoir, NYANGA et SOLITRANS}
+\begin{tableaucours}{L{7.4cm}c}{%
+    \tableauHeader{Proposition} &
+    \tableauHeader{Cote}
+}
+\texttt{upd.exe} a été déposé sur SRV-FIC01 le 13~mars 2025 & \OUI{} \\
+\texttt{upd.exe} était présent en 2017 & \NON{} \\
+Le journal de SRV-FIC01 a été vidé par le compte \texttt{adm.kamga} &
+\OUI{} \\
+Les sessions de l'attaquant sur SRV-FIC01 sont datées & \OUI{} \\
+Le conteneur du portail de SOLITRANS contenait un outil de l'attaquant &
+\NEK{} \\
+Le point d'entrée sur le portail de SOLITRANS est identifié & \NEK{} \\
+\end{tableaucours}
+
+\medskip
+\textbf{Lecture.} Sur NYANGA, l'anti-forensique a échoué~: chaque trace
+effacée ou falsifiée a été recoupée ailleurs. Sur SOLITRANS, deux \NEK{}
+tiennent à l'architecture elle-même~: ce que la reprise automatique a
+détruit ne se reconstitue pas.
+\end{boxlecture}
+
+% ============================================================================
+\section{Ce que ces Défis demandent à chaque Métier}
+\label{sec:c13-metiers}
+% ============================================================================
+
+\begin{boxmetier}{Analyste en réponse à incident}
+\textbf{Face à l'anti-forensique}
+\begin{enumerate}
+    \item Recouper chaque date par au moins deux sources indépendantes.
+    \item Chercher les journaux hors de la machine (contrôleur, collecteur,
+          réseau).
+    \item Traiter chaque effacement comme une constatation datée.
+    \item Dans le nuage, exporter d'abord les journaux d'audit, dont la
+          conservation est courte.
+    \item Suspendre un conteneur suspect au lieu de le laisser redémarrer.
+\end{enumerate}
+\end{boxmetier}
+
+\begin{boxmetier}{RSSI}
+Centraliser les journaux hors de portée des comptes d'administration~;
+négocier avec les fournisseurs en nuage la durée de conservation des
+journaux d'audit~; régler la reprise automatique des conteneurs pour
+qu'elle isole avant de détruire.
+\end{boxmetier}
+
+\begin{boxmetier}{Application OPJ/Expert Judiciaire}
+Pour les données détenues par un fournisseur à l'étranger, l'expert indique
+dans son rapport ce qu'il n'a pas pu examiner et pourquoi, et l'OPJ engage
+sans délai la demande de conservation puis l'entraide.
+\end{boxmetier}
+
+\separateur
+
+\begin{boxresume}
+\textbf{Ce qu'il faut retenir de ce chapitre~:}
+\begin{itemize}
+    \item L'anti-forensique déplace les traces plus qu'elle ne les
+          supprime~; on les cherche là où l'attaquant n'agit pas.
+    \item Une falsification de dates se détecte par le désaccord entre
+          \texttt{\$STANDARD\_INFORMATION}, \texttt{\$FILE\_NAME} et
+          \texttt{\$UsnJrnl}.
+    \item Un journal vidé laisse un événement daté et attribué~; les
+          journaux centralisés survivent.
+    \item Dans le nuage, l'acquisition passe par les instantanés et les
+          journaux d'audit, aux durées courtes.
+    \item Un conteneur se préserve avant l'incident~; la reprise automatique
+          peut détruire la preuve.
+\end{itemize}
+\end{boxresume}
+
+\begin{boxinfo}
+\textbf{Points de contrôle.} Vous avez compris ce chapitre si vous savez~:
+\begin{itemize}
+    \item démontrer une falsification de dates à partir de trois sources~;
+    \item dire ce qu'un client peut acquérir selon le modèle de service~;
+    \item préparer la préservation d'un environnement de conteneurs.
+\end{itemize}
+\end{boxinfo}
+
+% ============================================================================
+\section*{Exercices}
+% ============================================================================
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~13.1. Trace résiduelle \niveaubase}]
+Pour chaque technique, citez une trace résiduelle à chercher~: (a) un
+journal de sécurité vidé~; (b) un fichier écrasé par un outil d'effacement~;
+(c) un script exécuté en mémoire par \texttt{powershell}~; (d) une archive
+chiffrée.
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~13.2. Vraie ou fausse date \niveaumoyen}]
+Un fichier \texttt{rapport.xlsx} présente une création au 12/03/2025
+14:05:33,8812094 dans \texttt{\$STANDARD\_INFORMATION} et au 12/03/2025
+14:05:33,8812094 dans \texttt{\$FILE\_NAME}~; le \texttt{\$UsnJrnl} ne
+contient plus d'entrée aussi ancienne.
+\begin{enumerate}[(a)]
+    \item La date est-elle falsifiée~?
+    \item Pourquoi le \texttt{\$UsnJrnl} ne permet-il pas de trancher~?
+    \item Comment cotez-vous la proposition « le fichier a été créé le
+          12~mars »~?
+\end{enumerate}
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~13.3. Acquérir dans le nuage \niveaumoyen}]
+Une machine virtuelle de SOLITRANS, hébergée en IaaS, est suspectée.
+Décrivez, dans l'ordre, les acquisitions à faire, et dites pour chacune ce
+qui serait perdu si on la faisait trop tard.
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~13.4. Préparer les conteneurs \niveauexpert}]
+\begin{enumerate}[(a)]
+    \item Rédigez cinq règles de préparation qui auraient permis d'examiner
+          le conteneur compromis du portail de SOLITRANS.
+    \item La reprise automatique sert la disponibilité. Proposez un réglage
+          qui concilie disponibilité et préservation.
+    \item Reprenez l'encadré « Ce que l'enquête peut encore savoir » et dites
+          lesquelles des deux cotes \NEK{} de SOLITRANS vos règles auraient
+          pu changer.
+\end{enumerate}
+\end{boxexo}
+
+\bigskip
+
+\begin{boxinfo}
+\textbf{Pour aller plus loin.}
+\begin{itemize}
+    \item B.~Carrier, \textit{File System Forensic
+          Analysis}~\cite{carrier2005}, sur les attributs NTFS.
+    \item L'ISO/IEC~27042~\cite{iso27042_2015}, sur l'analyse et
+          l'interprétation.
+\end{itemize}
+\end{boxinfo}
+
+\begin{boxinfo}
+\textbf{Transition.} Tous les outils sont en place~: acquérir, analyser,
+dater, remonter à la faille, contourner l'anti-forensique. Le
+Chapitre~\ref{chap:enquete} les rassemble dans une enquête complète, du
+premier appel au dernier scellé.
+\end{boxinfo}

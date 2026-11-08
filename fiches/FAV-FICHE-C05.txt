@@ -1,0 +1,233 @@
+NDAP SUKULU · FAV · fiche FAV-FICHE-C05
+Chapitre 5 : L'analyse de la mémoire
+
+Version papier, à utiliser en attendant l'ouverture du portail NDAP SUKULU.
+La fiche complète compte 40 questions. Répondez sur la grille en fin de fiche.
+Durée indicative : 60 minutes. Seuil de réussite : 60 %.
+Les corrections figurent dans le livret de correction du cours.
+
+========================================================================
+Questions à choix multiple (une seule bonne réponse)
+========================================================================
+
+ 1. Que contient la mémoire vive et que le disque ne garde pas ?
+      a) Les fichiers supprimés anciens
+      b) Les connexions réseau ouvertes
+      c) La table de partitions
+      d) Les sauvegardes
+
+ 2. Quelle source montre ce qui s'est passé il y a un mois ?
+      a) La mémoire
+      b) Le cache du processeur
+      c) Le disque
+      d) Les registres
+
+ 3. Où peut-on trouver un programme malveillant jamais écrit sur le disque ?
+      a) En mémoire
+      b) Dans la MFT
+      c) Dans le $UsnJrnl
+      d) Dans la table GPT
+
+ 4. Quel est l'outil libre de référence pour l'analyse mémoire ?
+      a) Wireshark
+      b) Autopsy
+      c) Zeek
+      d) Volatility 3
+
+ 5. Que permettent les tables de symboles de Volatility ?
+      a) Chiffrer la capture
+      b) Reconstruire les structures du noyau d'une version donnée
+      c) Compresser la mémoire
+      d) Calculer le CVSS
+
+ 6. Quel greffon vérifie que la capture est lisible et donne l'heure système ?
+      a) windows.pslist
+      b) windows.netscan
+      c) windows.info
+      d) windows.malfind
+
+ 7. Quel greffon suit la liste des processus tenue par le noyau ?
+      a) windows.pslist
+      b) windows.psscan
+      c) windows.cmdline
+      d) windows.svcscan
+
+ 8. Quel greffon cherche les structures de processus dans toute la capture ?
+      a) windows.pslist
+      b) windows.info
+      c) windows.pstree
+      d) windows.psscan
+
+ 9. Quel greffon montre qui a lancé qui ?
+      a) windows.netscan
+      b) windows.pstree
+      c) windows.malfind
+      d) windows.info
+
+10. Quel greffon relie les connexions réseau aux processus ?
+      a) windows.cmdline
+      b) windows.pslist
+      c) windows.netscan
+      d) windows.svcscan
+
+11. Quel greffon signale des zones exécutables sans fichier associé ?
+      a) windows.malfind
+      b) windows.info
+      c) windows.pstree
+      d) windows.svcscan
+
+12. Quel greffon liste les services enregistrés et leur binaire ?
+      a) windows.netscan
+      b) windows.psscan
+      c) windows.cmdline
+      d) windows.svcscan
+
+13. Quelle structure Windows décrit un processus ?
+      a) MFT
+      b) EPROCESS
+      c) VAD seule
+      d) GPT
+
+14. Que signifie un processus présent dans psscan et absent de pslist ?
+      a) Un processus normal
+      b) Une erreur de l'outil seulement
+      c) Un processus terminé ou caché
+      d) Un service
+
+15. Quel est le parent attendu de lsass.exe ?
+      a) wininit.exe
+      b) explorer.exe
+      c) services.exe
+      d) cmd.exe
+
+16. Quel est le parent attendu de svchost.exe ?
+      a) wininit.exe
+      b) explorer.exe
+      c) lsass.exe
+      d) services.exe
+
+17. Combien de processus lsass.exe un système normal compte-t-il ?
+      a) Deux
+      b) Un seul
+      c) Un par utilisateur
+      d) Quatorze
+
+18. Dans quel dossier tourne normalement svchost.exe ?
+      a) ProgramData
+      b) Users\Public
+      c) System32
+      d) Temp
+
+19. Sur quoi juge-t-on un processus ?
+      a) Chemin, parent, commande, heure de démarrage et réseau
+      b) Son nom seul
+      c) Sa taille
+      d) Sa couleur d'icône
+
+20. Combien de processus svchost.exe la capture de SRV-AD01 compte-t-elle ?
+      a) 13
+      b) 1
+      c) 4412
+      d) 14
+
+========================================================================
+Vrai ou faux
+========================================================================
+
+21. La mémoire dit ce qui s'est passé il y a un mois.
+      Vrai / Faux
+
+22. Certains programmes malveillants n'existent qu'en mémoire.
+      Vrai / Faux
+
+23. Volatility s'emploie greffon par greffon.
+      Vrai / Faux
+
+24. pslist et psscan donnent toujours la même liste.
+      Vrai / Faux
+
+25. Un processus terminé peut encore apparaître dans psscan.
+      Vrai / Faux
+
+26. Un processus nommé svchost.exe est forcément légitime.
+      Vrai / Faux
+
+27. lsass.exe est lancé par explorer.exe.
+      Vrai / Faux
+
+28. Il existe plusieurs svchost.exe sur un système normal.
+      Vrai / Faux
+
+29. Le PID 4412 est installé comme service pour redémarrer avec la machine.
+      Vrai / Faux
+
+30. Le PID 4412 est un composant légitime de Windows.
+      Vrai / Faux
+
+========================================================================
+Textes à trous
+========================================================================
+
+31. L'outil de référence pour l'analyse mémoire est ______ 3.
+
+32. Le greffon qui balaye toute la capture est windows.______.
+
+33. Le greffon qui relie connexions et processus est windows.______.
+
+34. Le greffon qui signale du code injecté est windows.______.
+
+35. La structure qui décrit un processus Windows est ______.
+
+36. Le parent normal de lsass.exe est ______.
+
+37. Le parent normal de svchost.exe est ______.
+
+38. Le faux svchost.exe porte le PID ______.
+
+39. Le service de l'attaquant s'appelle ______.
+
+40. Le PID 4412 communique sur le port ______.
+
+========================================================================
+Grille de réponses   Nom : ............................  Matricule : ............
+========================================================================
+ 1. ............................................
+ 2. ............................................
+ 3. ............................................
+ 4. ............................................
+ 5. ............................................
+ 6. ............................................
+ 7. ............................................
+ 8. ............................................
+ 9. ............................................
+10. ............................................
+11. ............................................
+12. ............................................
+13. ............................................
+14. ............................................
+15. ............................................
+16. ............................................
+17. ............................................
+18. ............................................
+19. ............................................
+20. ............................................
+21. ............................................
+22. ............................................
+23. ............................................
+24. ............................................
+25. ............................................
+26. ............................................
+27. ............................................
+28. ............................................
+29. ............................................
+30. ............................................
+31. ............................................
+32. ............................................
+33. ............................................
+34. ............................................
+35. ............................................
+36. ............................................
+37. ............................................
+38. ............................................
+39. ............................................
+40. ............................................

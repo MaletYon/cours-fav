@@ -1,0 +1,120 @@
+% ============================================================================
+% Fichier  : front/02_mode_emploi.tex (Mode d'emploi)
+% Version  : 1.0 -- novembre 2024
+% ============================================================================
+% 30 h de cours magistral = 15 séances de 2 h ; TD (fiches, exercices) et TP
+% (dix labs) faits par l'étudiant chez lui, hors des 30 h.
+% ============================================================================
+
+\chapter*{Mode d'emploi du cours}
+\addcontentsline{toc}{chapter}{Mode d'emploi du cours}
+\markboth{Mode d'emploi}{Mode d'emploi}
+
+\section*{Structure générale}
+
+Le cours compte un prologue et six parties, soit seize chapitres, pour
+30~heures de cours magistral réparties en quinze séances de deux heures.
+Les travaux dirigés et les travaux pratiques se font à la maison, hors de
+ces 30~heures~: pour les travaux dirigés, la fiche de questions de chaque
+chapitre et ses exercices de fin de chapitre (environ dix heures au
+total)~; pour les travaux pratiques, les dix laboratoires de NDAP SUKULU,
+d'une heure chacun. Les corrigés des exercices sont réunis dans un livret
+séparé.
+
+\begin{tableaucours}{cL{6.4cm}cL{3.2cm}}{%
+    \tableauHeader{Partie} &
+    \tableauHeader{Thème} &
+    \tableauHeader{Chap.} &
+    \tableauHeader{Niveau}
+}
+0 & Prologue~: la nuit du 14 mars à Bafoussam & P & introductif \\
+I & Fondements~: enquêter sur des traces numériques & 1--2 & fondamental \\
+II & Méthode~: acquérir et analyser & 3--7 & fondamental à
+intermédiaire \\
+III & Cadre normatif et juridique & 8 & fondamental \\
+IV & Vulnérabilités~: identifier, coter, corriger & 9--12 & intermédiaire \\
+V & Défis avancés & 13--15 & intermédiaire à expert \\
+VI & Recherche~: mesurer l'incertitude d'une enquête & 16 & recherche \\
+\end{tableaucours}
+
+\section*{Les quinze séances}
+
+\begin{tableaucours}{cL{6.8cm}L{4.2cm}}{%
+    \tableauHeader{Séance} &
+    \tableauHeader{Contenu} &
+    \tableauHeader{Travail à la maison}
+}
+1 & Prologue et Chap.~1~: l'incident, l'investigation numérique & Fiches P et 1 \\
+2 & Chap.~2~: la preuve et la chaîne de possession & Fiche 2, lab 01 \\
+3 & Chap.~3~: acquérir et préserver & Fiche 3, lab 02 \\
+4 & Chap.~4~: l'analyse du disque & Fiche 4, lab 03 \\
+5 & Chap.~5~: l'analyse de la mémoire & Fiche 5, lab 04 \\
+6 & Chap.~6~: l'analyse du réseau & Fiche 6, lab 05 \\
+7 & Chap.~7~: chronologie et corrélation & Fiche 7, lab 06 \\
+8 & Chap.~8~: normes et droit de l'investigation & Fiche 8 \\
+9 & Chap.~9~: qu'est-ce qu'une vulnérabilité & Fiche 9, lab 08 \\
+10 & Chap.~10~: identifier sans exploiter & Fiche 10, lab 07 \\
+11 & Chap.~11~: gérer les vulnérabilités & Fiche 11, lab 09 \\
+12 & Chap.~12~: de l'artefact à la vulnérabilité & Fiche 12 \\
+13 & Chap.~13~: anti-forensique, nuage et conteneurs & Fiche 13 \\
+14 & Chap.~14~: l'enquête intégratrice & Fiche 14, lab 10 \\
+15 & Chap.~15 et~16~: le rapport, l'incertitude d'une enquête & Fiches 15
+et 16 \\
+\end{tableaucours}
+
+Cette répartition est indicative~; l'enseignant l'adapte au calendrier et au
+rythme du groupe.
+
+\section*{Le gabarit des chapitres}
+
+Chaque chapitre suit le même plan~: une épigraphe, le niveau et les
+prérequis, les objectifs, une situation d'ouverture tirée de l'un des deux
+cas, des sections numérotées, ce qu'il faut retenir, des points de
+contrôle, trois à quatre exercices gradués, des lectures, et une
+transition.
+
+\section*{Les encadrés}
+
+\begin{tableaucours}{L{3.6cm}L{8.6cm}}{%
+    \tableauHeader{Encadré} &
+    \tableauHeader{Rôle}
+}
+Objectifs & Ce que l'on doit savoir faire à la fin du chapitre \\
+Définition & Les notions, en gras dans le texte et indexées \\
+Violation typique & Une erreur fréquente, et la règle qui l'évite \\
+Information & Un complément, un renvoi, une nuance \\
+Opération (NYANGA, SOLITRANS) & Le cas~: les constatations, puis
+l'analyse, avec un niveau de confiance \\
+Artefact & Une trace décrite~: source, emplacement, empreinte, ce qu'elle
+prouve et ce qu'elle ne prouve pas \\
+Chaîne de possession & Ce que le dossier doit contenir pour qu'un autre
+puisse refaire l'examen \\
+Lecture & Un décompte de cotes \OUI{}~/ \NON{}~/ \NEK{} et sa lecture \\
+Métier & Ce que la notion change pour chacun des métiers du cours \\
+Texte juridique & Un article cité dans son texte officiel, et sa portée \\
+Ce qu'il faut retenir & Les faits et les règles du chapitre \\
+Exercice & Trois niveaux de difficulté~: \niveaubase, \niveaumoyen,
+\niveauexpert \\
+\end{tableaucours}
+
+\section*{Les conventions}
+
+\begin{itemize}
+    \item Les cotes~: \OUI{} (établi par une preuve), \NON{} (absent ou
+          contredit par une preuve), \NEK{} (connaissance insuffisante pour
+          trancher). Une conclusion d'enquête reçoit l'une de ces trois
+          cotes.
+    \item Constatation et analyse sont toujours séparées~; l'analyse porte
+          un niveau de confiance (faible, moyenne, élevée).
+    \item Les heures sont données en heure locale du Cameroun (UTC+1), sauf
+          mention UTC explicite.
+    \item Les textes~: seuls les articles lus dans leur version officielle
+          sont cités entre guillemets~; les normes sous licence sont
+          paraphrasées~; le degré de vérification figure à
+          l'annexe~\ref{ann:textes}.
+    \item Les adresses IP des cas appartiennent aux plages réservées à la
+          documentation (RFC~5737), et l'identifiant de la faille de la
+          passerelle, VULN-2024-4471, est fictif.
+    \item Les cas sont fictifs~: noms en majuscules, montants en francs
+          CFA, villes réelles.
+\end{itemize}

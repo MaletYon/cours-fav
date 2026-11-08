@@ -1,0 +1,233 @@
+NDAP SUKULU · FAV · fiche FAV-FICHE-C06
+Chapitre 6 : L'analyse du réseau
+
+Version papier, à utiliser en attendant l'ouverture du portail NDAP SUKULU.
+La fiche complète compte 40 questions. Répondez sur la grille en fin de fiche.
+Durée indicative : 60 minutes. Seuil de réussite : 60 %.
+Les corrections figurent dans le livret de correction du cours.
+
+========================================================================
+Questions à choix multiple (une seule bonne réponse)
+========================================================================
+
+ 1. Quelle source contient tous les paquets, en-têtes et contenu ?
+      a) Les flux NetFlow
+      b) La capture complète (PCAP)
+      c) Les journaux du proxy
+      d) Les alertes de sonde
+
+ 2. Quelle source dit qui a parlé à qui et combien d'octets, sans contenu ?
+      a) La capture complète
+      b) Le registre Windows
+      c) Les flux (NetFlow, IPFIX)
+      d) La MFT
+
+ 3. Quelle source couvre souvent plusieurs mois ?
+      a) Les flux
+      b) La capture complète
+      c) La mémoire
+      d) Le cache
+
+ 4. Quelle est la limite des alertes de sonde ?
+      a) Elles contiennent tout le trafic
+      b) Elles sont illisibles
+      c) Elles durent une heure
+      d) Elles ne voient que ce que les règles décrivent
+
+ 5. Par où une enquête réseau commence-t-elle souvent ?
+      a) Par le détail des paquets
+      b) Par les flux, pour repérer la fenêtre utile
+      c) Par le rapport
+      d) Par les sauvegardes
+
+ 6. Quel auteur a écrit sur la supervision de la sécurité réseau ?
+      a) Brian Carrier
+      b) Edmond Locard
+      c) Richard Bejtlich
+      d) Michael Ligh
+
+ 7. Quel analyseur de paquets est cité dans le chapitre ?
+      a) Wireshark
+      b) Volatility
+      c) Autopsy
+      d) Plaso
+
+ 8. Quelle est la version en ligne de commande de Wireshark ?
+      a) tcpdump seul
+      b) nmap
+      c) curl
+      d) tshark
+
+ 9. Quel outil transforme une capture en journaux par protocole ?
+      a) Autopsy
+      b) Zeek
+      c) WinPmem
+      d) LiME
+
+10. Qu'est-ce qu'une conversation dans une capture ?
+      a) Un courriel
+      b) Un appel téléphonique
+      c) Un échange entre une paire d'adresses et de ports
+      d) Une alerte
+
+11. Par quoi commence la lecture d'une capture ?
+      a) Les statistiques de conversations
+      b) Le détail des paquets
+      c) Le rapport
+      d) L'export du certificat
+
+12. Que consigne-t-on à chaque analyse de capture ?
+      a) Seulement le résultat
+      b) Le nom du juge
+      c) Rien
+      d) Chaque filtre appliqué
+
+13. Que montre l'échange TLS sans déchiffrement ?
+      a) Le contenu des fichiers
+      b) Le nom annoncé (SNI) et le certificat
+      c) Les mots de passe
+      d) Le texte des courriels
+
+14. À quoi reconnaît-on surtout une exfiltration ?
+      a) À son contenu toujours lisible
+      b) À son port 80
+      c) À sa forme : volume, déséquilibre, débit, horaire, destination
+      d) À sa couleur dans Wireshark
+
+15. Quelle machine envoie 3,2 Go le 14 mars ?
+      a) SRV-FIC01 (10.20.1.20)
+      b) SRV-AD01
+      c) SRV-CPT01
+      d) La passerelle
+
+16. Combien d'octets SRV-FIC01 reçoit-il pendant l'exfiltration ?
+      a) 3,2 Go
+      b) 0
+      c) 500 Mo
+      d) 11 Mo
+
+17. Quel nom de serveur le client annonce-t-il ?
+      a) update.microsoft.com
+      b) cdn-update.example.net
+      c) vpn.nyanga-credit.cm
+      d) api.paiement.cm
+
+18. Quel certificat présente le serveur de destination ?
+      a) Un certificat d'autorité reconnue de 2020
+      b) Aucun certificat
+      c) Un certificat auto-signé émis le 1er mars 2025
+      d) Un certificat de l'ANTIC
+
+19. Quelle est la durée de la conversation d'exfiltration ?
+      a) 2 h 35
+      b) 1 h 15
+      c) 48 heures
+      d) 10 minutes
+
+20. Quel débit moyen l'exfiltration atteint-elle ?
+      a) 20 Mbit/s
+      b) 344 Mbit/s
+      c) 0,1 Mbit/s
+      d) Environ 2,75 Mbit/s
+
+========================================================================
+Vrai ou faux
+========================================================================
+
+21. Les flux contiennent le contenu des échanges.
+      Vrai / Faux
+
+22. La capture complète coûte cher en stockage.
+      Vrai / Faux
+
+23. On ouvre directement le scellé de la capture pour l'analyser.
+      Vrai / Faux
+
+24. Le filtre utilisé fait partie de la méthode.
+      Vrai / Faux
+
+25. Le chiffrement cache la taille et la destination d'un flux.
+      Vrai / Faux
+
+26. Un rapport envoyé sur reçu très élevé évoque une exfiltration.
+      Vrai / Faux
+
+27. L'exfiltration a duré de 1 h 12 à 3 h 47.
+      Vrai / Faux
+
+28. Le certificat du serveur de destination était émis par une autorité reconnue.
+      Vrai / Faux
+
+29. Le contenu des fichiers sortis a été lu dans la capture réseau.
+      Vrai / Faux
+
+30. Les heures du journal de l'outil encadrent la conversation réseau.
+      Vrai / Faux
+
+========================================================================
+Textes à trous
+========================================================================
+
+31. Une capture complète se stocke au format ______.
+
+32. L'analyseur de paquets cité s'appelle ______.
+
+33. Le nom annoncé dans un échange TLS s'appelle le ______.
+
+34. 3,2 Go sont partis vers l'adresse 203.0.113.______.
+
+35. SRV-FIC01 a pour adresse interne 10.20.1.______.
+
+36. Le nom annoncé par le client est cdn-update.______.net.
+
+37. L'exfiltration dure 2 h ______.
+
+38. Le lien Internet du siège fait ______ Mbit/s.
+
+39. Une connexion régulière vers un serveur de commande est une ______.
+
+40. La balise de SRV-AD01 revient toutes les ______ secondes environ.
+
+========================================================================
+Grille de réponses   Nom : ............................  Matricule : ............
+========================================================================
+ 1. ............................................
+ 2. ............................................
+ 3. ............................................
+ 4. ............................................
+ 5. ............................................
+ 6. ............................................
+ 7. ............................................
+ 8. ............................................
+ 9. ............................................
+10. ............................................
+11. ............................................
+12. ............................................
+13. ............................................
+14. ............................................
+15. ............................................
+16. ............................................
+17. ............................................
+18. ............................................
+19. ............................................
+20. ............................................
+21. ............................................
+22. ............................................
+23. ............................................
+24. ............................................
+25. ............................................
+26. ............................................
+27. ............................................
+28. ............................................
+29. ............................................
+30. ............................................
+31. ............................................
+32. ............................................
+33. ............................................
+34. ............................................
+35. ............................................
+36. ............................................
+37. ............................................
+38. ............................................
+39. ............................................
+40. ............................................

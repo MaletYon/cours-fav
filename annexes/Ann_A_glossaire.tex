@@ -1,0 +1,127 @@
+% ============================================================================
+% Fichier  : annexes/Ann_A_glossaire.tex
+% Titre    : Glossaire
+% Version  : 1.0 -- novembre 2024
+% ============================================================================
+% Définitions reprises des chapitres, abrégées ; le chapitre de référence est
+% indiqué.
+% ============================================================================
+
+\chapter{Glossaire}
+\label{ann:glossaire}
+
+Ce glossaire reprend, sous une forme abrégée, les définitions données dans
+les chapitres. Le numéro renvoie au chapitre où le terme est défini et
+illustré.
+
+\begin{description}
+    \item[Acquisition à chaud] Recueil sur une machine allumée (mémoire,
+          volume déverrouillé), qui laisse une empreinte documentée de
+          l'outil (Ch.~\ref{chap:acquisition}).
+    \item[Acquisition à froid] Copie d'un support après extinction, derrière
+          un bloqueur d'écriture (Ch.~\ref{chap:acquisition}).
+    \item[Analyse] Interprétation d'une ou de plusieurs constatations,
+          assortie d'un niveau de confiance (Ch.~\ref{chap:prologue}).
+    \item[Analyse de variantes] Recherche, dans tout le parc, de la même
+          vulnérabilité, de la même faiblesse ou de la même cause profonde
+          qu'un incident a révélées (Ch.~\ref{chap:artefact-vuln}).
+    \item[Anti-forensique] Techniques visant à empêcher, retarder ou tromper
+          l'investigation (Ch.~\ref{chap:antiforensique}).
+    \item[Artefact] Trace qu'un système laisse en fonctionnant normalement~:
+          entrée de journal, clé de registre, raccourci (Ch.~\ref{chap:disque}).
+    \item[Autorité de numérotation (CNA)] Organisme habilité à attribuer des
+          identifiants CVE (Ch.~\ref{chap:vulnerabilite}).
+    \item[Balise] Connexion régulière d'un programme malveillant vers son
+          serveur de commande (Ch.~\ref{chap:reseau}).
+    \item[Bloqueur d'écriture] Dispositif qui laisse passer les lectures
+          vers un support et refuse les écritures (Ch.~\ref{chap:acquisition}).
+    \item[Cause contributive] Condition qui a aggravé un incident ou facilité
+          l'une de ses étapes (Ch.~\ref{chap:artefact-vuln}).
+    \item[Cause immédiate] Événement qui a directement permis l'incident
+          (Ch.~\ref{chap:artefact-vuln}).
+    \item[Cause profonde] Défaut d'organisation qui a laissé subsister la
+          cause immédiate et les causes contributives
+          (Ch.~\ref{chap:artefact-vuln}).
+    \item[Chaîne de possession] Documentation continue de chaque détenteur,
+          transfert, lieu et opération d'une pièce (Ch.~\ref{chap:preuve}).
+    \item[Constatation] Fait vérifiable, rattaché à une source identifiée
+          (Ch.~\ref{chap:prologue}).
+    \item[Conversation] Échange entre une paire d'adresses et de ports, unité
+          d'analyse d'une capture réseau (Ch.~\ref{chap:reseau}).
+    \item[Cote OUI, NON, NEK] Réponse à une proposition fermée~: établie,
+          contredite, ou non tranchable avec les preuves disponibles
+          (Ch.~\ref{chap:prologue}, \ref{chap:auditologie}).
+    \item[CVE] Identifiant unique d'une vulnérabilité publiée
+          (Ch.~\ref{chap:vulnerabilite}).
+    \item[CVSS] Système de notation de la gravité des vulnérabilités, de 0 à
+          10~; version~4.0 avec groupes Base, Menace, Environnement,
+          Supplémentaire (Ch.~\ref{chap:vulnerabilite}).
+    \item[CWE] Catalogue des types de faiblesses logicielles
+          (Ch.~\ref{chap:vulnerabilite}).
+    \item[Empreinte cryptographique] Valeur de taille fixe calculée par une
+          fonction de hachage, qui change si un seul bit de la donnée change
+          (Ch.~\ref{chap:preuve}).
+    \item[Entropie (H)] Mesure, en bits, de la dispersion des cotes d'un
+          ensemble de propositions (Ch.~\ref{chap:auditologie}).
+    \item[EPSS] Probabilité estimée qu'une CVE soit exploitée dans les trente
+          jours (Ch.~\ref{chap:vulnerabilite}).
+    \item[Exception] Décision écrite acceptant, pour une durée limitée et avec
+          une mesure compensatoire, qu'une vulnérabilité reste ouverte
+          (Ch.~\ref{chap:gerer}).
+    \item[Faiblesse] Type d'erreur de conception ou de programmation
+          susceptible de créer des vulnérabilités (Ch.~\ref{chap:vulnerabilite}).
+    \item[Faux négatif] Vulnérabilité présente et non signalée
+          (Ch.~\ref{chap:identifier}).
+    \item[Faux positif] Vulnérabilité signalée et absente
+          (Ch.~\ref{chap:identifier}).
+    \item[Force probante] Poids qu'un décideur accorde à une pièce recevable
+          (Ch.~\ref{chap:preuve}).
+    \item[Indicateur de compromission] Trace caractéristique d'une attaque
+          ou de l'exploitation d'une faille, publiée pour en permettre la
+          détection (Ch.~\ref{chap:artefact-vuln}).
+    \item[Investigation numérique] Démarche méthodique qui identifie,
+          recueille, préserve, examine et analyse des traces numériques pour
+          répondre à des questions de fait (Ch.~\ref{chap:investigation}).
+    \item[KEV] Catalogue des vulnérabilités dont l'exploitation est constatée,
+          tenu par la CISA (Ch.~\ref{chap:vulnerabilite}).
+    \item[MFT] Table principale de NTFS, qui décrit chaque fichier par un
+          enregistrement (Ch.~\ref{chap:disque}).
+    \item[Menace] Source potentielle d'atteinte (Ch.~\ref{chap:vulnerabilite}).
+    \item[Modèle de responsabilité partagée] Répartition de la sécurité entre
+          le fournisseur et le client d'un service en nuage
+          (Ch.~\ref{chap:antiforensique}).
+    \item[Pivot] Élément commun qui relie des événements dans une
+          chronologie~: adresse, compte, empreinte, heure
+          (Ch.~\ref{chap:chronologie}).
+    \item[Preuve numérique] Trace recueillie, préservée et examinée de façon à
+          soutenir ou réfuter une proposition de fait devant un décideur
+          (Ch.~\ref{chap:investigation}).
+    \item[Recevabilité] Aptitude d'une pièce à être versée au débat
+          (Ch.~\ref{chap:preuve}).
+    \item[Répétabilité] Propriété d'un examen qui donne le même résultat,
+          refait par la même personne avec les mêmes outils
+          (Ch.~\ref{chap:investigation}).
+    \item[Reproductibilité] Propriété d'un examen qui donne un résultat
+          compatible, refait par une autre personne avec d'autres outils
+          (Ch.~\ref{chap:investigation}).
+    \item[Risque] Combinaison de la vraisemblance qu'une menace exploite une
+          vulnérabilité et de la gravité de l'atteinte
+          (Ch.~\ref{chap:vulnerabilite}).
+    \item[SSVC] Méthode de décision de la CISA, qui conduit à suivre, suivre
+          de près, traiter ou agir (Ch.~\ref{chap:vulnerabilite}).
+    \item[Système de fichiers] Organisation des données d'un volume en
+          fichiers et répertoires (Ch.~\ref{chap:disque}).
+    \item[Table de partitions] Structure qui découpe un disque en volumes
+          (MBR, GPT) (Ch.~\ref{chap:disque}).
+    \item[Taux d'établissement ($\mu$)] Part des propositions cotées \OUI{}
+          (Ch.~\ref{chap:auditologie}).
+    \item[Taux d'incertitude ($U$)] Part des propositions cotées \NEK{}
+          (Ch.~\ref{chap:auditologie}).
+    \item[Temps de présence] Durée entre la première action établie de
+          l'attaquant et la détection~; borne inférieure
+          (Ch.~\ref{chap:chronologie}).
+    \item[Trace numérique] Donnée qui garde la marque d'une action ou d'un
+          état passé (Ch.~\ref{chap:investigation}).
+    \item[Vulnérabilité] Défaut d'une version précise d'un produit, exploitable
+          pour porter atteinte à la sécurité (Ch.~\ref{chap:vulnerabilite}).
+\end{description}

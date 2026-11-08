@@ -1,0 +1,426 @@
+% ============================================================================
+% Fichier  : partie2/P02_C05_analyse_memoire.tex
+% Titre    : L'Analyse de la Mémoire
+% Auteur   : MINKA MI NGUIDJOÏ Thierry Emmanuel
+% Version  : 1.0 -- novembre 2024
+% Corrigés : corriges/Corr_C05.tex
+% ============================================================================
+% Sources : Ligh et al. (2014) ; Volatility 3 (greffons windows.info,
+% pslist, psscan, pstree, cmdline, netscan, malfind, svcscan) ; structures
+% EPROCESS et VAD de Windows (présentées sans citation de la documentation).
+% Faits nouveaux (bible) : sur SRV-AD01 (capture du 14/03 à 10 h 02),
+% processus « svchost.exe » PID 4412 lancé depuis C:\ProgramData, parent
+% services.exe, service WinUpdSvc créé le 09/03 à 1 h 35 ; connexion établie
+% vers 203.0.113.47:443 ; fichier lsass.dmp créé le 09/03 à 1 h 37 sur le
+% disque de SRV-AD01 par rundll32.exe (commande retrouvée dans les journaux).
+% ============================================================================
+
+\chapter{L'Analyse de la Mémoire}
+\label{chap:memoire}
+\chaptermark{L'analyse de la mémoire}
+
+\epigraph{%
+    « Un programme peut effacer son fichier.\\
+    Il ne peut pas tourner sans être en mémoire. »%
+}{Principe du cours}
+
+\niveauChapitre{Intermédiaire}{%
+    Maîtrise des Chapitres~\ref{chap:acquisition} et~\ref{chap:disque}
+}
+
+\begin{boxobjectifs}
+\begin{itemize}
+    \item Expliquer ce que la mémoire vive contient et que le disque ne
+          garde pas.
+    \item Identifier le profil d'une capture et en vérifier la cohérence.
+    \item Lister les processus par deux méthodes et interpréter leurs
+          écarts.
+    \item Repérer un processus anormal par son parent, son chemin et sa
+          ligne de commande.
+    \item Relier un processus à ses connexions réseau et à sa persistance.
+    \item Reconnaître les traces d'un vol d'identifiants, sans en
+          reproduire la technique.
+\end{itemize}
+\end{boxobjectifs}
+
+\bigskip
+
+% ============================================================================
+\section*{Avant de commencer : un svchost de trop}
+% ============================================================================
+
+Yaoundé, 22 mars 2025. M.~ABOUBAKAR, l'expert réquisitionné par le
+procureur, a reçu le scellé NC-01, l'a ouvert devant témoin, a vérifié son
+empreinte et travaille sur sa copie~: 16~Go de mémoire du contrôleur de
+domaine, capturés le 14~mars à 10~h~02. Il compte, dans la liste des
+processus, quatorze \texttt{svchost.exe}. Treize sont lancés depuis
+\texttt{C:\textbackslash Windows\textbackslash System32}. Le quatorzième
+tourne depuis \texttt{C:\textbackslash ProgramData}, et il est le seul à
+entretenir une connexion vers l'extérieur.
+
+\begin{boxalert}
+\textbf{Violation typique.} Conclure qu'un processus est légitime parce que
+son nom est celui d'un programme du système.
+
+\smallskip
+\textbf{Règle~:} un processus se juge sur son chemin, son parent, sa ligne de
+commande, son heure de démarrage et son comportement réseau, comparés à ce
+qu'on attend de ce programme. Le nom est le premier attribut qu'un attaquant
+imite.
+\end{boxalert}
+
+\separateur
+
+% ============================================================================
+\section{Ce que la Mémoire Contient}
+\label{sec:c05-contenu}
+% ============================================================================
+
+La mémoire vive d'un serveur Windows contient, à l'instant de la capture,
+l'état complet du système~: les processus et leurs fils d'exécution, les
+bibliothèques chargées, les connexions réseau, les objets ouverts (fichiers,
+clés de registre), le cache des fichiers, une partie du registre, et les
+données que les programmes manipulent, y compris des mots de passe, des clés
+de chiffrement et des commandes saisies. Certains programmes malveillants
+n'existent qu'en mémoire~: ils sont chargés depuis le réseau, ou injectés
+dans un processus légitime, sans jamais être écrits sur le disque.
+
+\begin{tableaucours}{L{4.4cm}L{3.6cm}L{4.2cm}}{%
+    \tableauHeader{Question} &
+    \tableauHeader{Mémoire} &
+    \tableauHeader{Disque}
+}
+Quels programmes tournaient~? & Oui, avec leurs parents & Indirectement
+(Amcache, journaux) \\
+Quelles connexions étaient ouvertes~? & Oui, avec le processus & Non \\
+Quelle ligne de commande~? & Oui & Seulement si l'audit l'enregistre \\
+Code injecté dans un processus~? & Oui & Rarement \\
+Ce qui s'est passé il y a un mois~? & Non & Oui, par les journaux et
+les dates \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~5.1. Mémoire et disque~: deux sources complémentaires}\end{center}
+
+% ============================================================================
+\section{L'Outil et la Méthode}
+\label{sec:c05-outil}
+% ============================================================================
+
+L'outil de référence, libre, est Volatility, dans sa version~3~\cite{volatility3}.
+Il reconstruit les structures du système d'exploitation à partir de la
+capture brute, grâce à des tables de symboles propres à chaque version du
+noyau. On l'emploie greffon par greffon, chacun répondant à une question.
+
+\begin{tableaucours}{L{3.6cm}L{8.6cm}}{%
+    \tableauHeader{Greffon} &
+    \tableauHeader{Question}
+}
+\texttt{windows.info} & La capture est-elle lisible, de quelle version de
+Windows, à quelle heure système~? \\
+\texttt{windows.pslist} & Quels processus figurent dans la liste tenue par
+le noyau~? \\
+\texttt{windows.psscan} & Quelles structures de processus trouve-t-on en
+balayant toute la mémoire, y compris des processus terminés ou cachés~? \\
+\texttt{windows.pstree} & Qui a lancé qui~? \\
+\texttt{windows.cmdline} & Avec quelle ligne de commande~? \\
+\texttt{windows.netscan} & Quelles connexions et quels ports, rattachés à
+quel processus~? \\
+\texttt{windows.malfind} & Quelles zones de mémoire exécutables et
+modifiables, sans fichier associé, suggèrent une injection de code~? \\
+\texttt{windows.svcscan} & Quels services sont enregistrés, avec quel
+binaire~? \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~5.2. Les greffons de base de Volatility~3}\end{center}
+
+\subsection{Deux listes de processus}
+
+Windows tient la liste des processus actifs dans une liste chaînée de
+structures \texttt{EPROCESS}. Le greffon \texttt{pslist} suit cette liste.
+Le greffon \texttt{psscan}, lui, cherche ces structures partout dans la
+capture, par leur forme. La comparaison des deux est instructive~: un
+processus présent dans \texttt{psscan} et absent de \texttt{pslist} est soit
+terminé (sa structure traîne encore en mémoire, avec une heure de fin), soit
+caché par un programme qui l'a retiré de la liste. Le premier cas est
+banal~; le second est un signe fort de compromission.
+
+\subsection{Le processus normal}
+
+Pour juger un processus, on compare ses attributs à ce que l'on sait des
+processus du système. Quelques repères suffisent pour les plus imités.
+
+\begin{tableaucours}{L{2.6cm}L{3.8cm}L{2.6cm}L{3.2cm}}{%
+    \tableauHeader{Nom} &
+    \tableauHeader{Chemin attendu} &
+    \tableauHeader{Parent attendu} &
+    \tableauHeader{Nombre}
+}
+\texttt{lsass.exe} & \texttt{System32} & \texttt{wininit.exe} & Un seul \\
+\texttt{services.exe} & \texttt{System32} & \texttt{wininit.exe} & Un seul \\
+\texttt{svchost.exe} & \texttt{System32} & \texttt{services.exe} &
+Plusieurs \\
+\texttt{explorer.exe} & \texttt{Windows} & Variable (lancé à la session) &
+Un par session \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~5.3. Quelques processus et leurs attributs attendus}\end{center}
+
+% ============================================================================
+\section{Ce que la Mémoire de SRV-AD01 Révèle}
+\label{sec:c05-nyanga}
+% ============================================================================
+
+\begin{boxscenario}{Opération NYANGA. Le processus 4412}
+\textbf{Constatations} (copie de NC-01, Volatility~3).
+\begin{itemize}
+    \item \texttt{windows.info}~: Windows Server 2019, heure système de la
+          capture 14/03/2025 09:02:11 UTC, soit 10:02:11 heure locale,
+          cohérente avec le registre des actions.
+    \item \texttt{pslist} et \texttt{psscan}~: quatorze processus
+          \texttt{svchost.exe}~; le PID~4412 a pour chemin
+          \texttt{C:\textbackslash ProgramData\textbackslash
+          WinUpd\textbackslash svchost.exe}, pour parent
+          \texttt{services.exe}, et a démarré le 09/03 à 1~h~35.
+    \item \texttt{svcscan}~: un service \texttt{WinUpdSvc}, en démarrage
+          automatique, a pour binaire ce même fichier.
+    \item \texttt{netscan}~: le PID~4412 maintient une connexion établie vers
+          203.0.113.47, port~443.
+    \item \texttt{malfind}~: aucune zone suspecte dans \texttt{lsass.exe}~;
+          deux zones exécutables sans fichier associé dans le PID~4412.
+\end{itemize}
+
+\textbf{Analyse} (confiance élevée). Le PID~4412 est un programme étranger
+au système, déguisé sous le nom \texttt{svchost.exe}, installé comme service
+pour redémarrer avec la machine, et en communication avec l'adresse vers
+laquelle sont partis les 3,2~Go. C'est l'outil d'accès à distance de
+l'attaquant sur le contrôleur de domaine.
+\end{boxscenario}
+
+Le parent \texttt{services.exe} ne disculpe pas le processus~: un service
+est toujours lancé par \texttt{services.exe}, y compris un service créé par
+un attaquant. C'est le chemin qui trahit le PID~4412, et le service qui
+explique son parent.
+
+\begin{boxobjet}{Processus 4412, capture mémoire de SRV-AD01}
+\textbf{Source~:} scellé NC-01, copie de travail, Volatility~3.
+
+\textbf{Attributs~:} nom \texttt{svchost.exe}~; chemin
+\texttt{C:\textbackslash ProgramData\textbackslash WinUpd}~; parent
+\texttt{services.exe}~; démarrage 09/03/2025 1~h~35~; service
+\texttt{WinUpdSvc}~; connexion vers 203.0.113.47:443.
+
+\textbf{Ce qu'il prouve~:} la présence, le 14~mars, d'un programme
+persistant étranger au système, en communication avec l'adresse de
+l'exfiltration.
+
+\textbf{Ce qu'il ne prouve pas~:} comment le programme est arrivé sur la
+machine, ni qui le pilotait.
+\end{boxobjet}
+
+% ============================================================================
+\section{Le Vol d'Identifiants}
+\label{sec:c05-identifiants}
+% ============================================================================
+
+Sous Windows, le processus \texttt{lsass.exe} gère les authentifications et
+garde en mémoire des éléments d'identification des sessions ouvertes. Un
+attaquant qui obtient les droits d'administration sur une machine peut
+copier la mémoire de ce processus dans un fichier, puis l'emporter et
+l'analyser chez lui pour en extraire des identifiants. Le cours ne décrit
+pas la technique d'extraction~: elle relève de l'UE MSN-2S3-SEC03. Il
+apprend à en reconnaître les traces.
+
+\begin{tableaucours}{L{4.4cm}L{7.8cm}}{%
+    \tableauHeader{Trace} &
+    \tableauHeader{Où la chercher}
+}
+Fichier de vidage (\texttt{.dmp}) de \texttt{lsass.exe} & Disque~:
+\texttt{\$UsnJrnl}, MFT, dossiers temporaires \\
+Ligne de commande d'un outil de vidage & Mémoire (\texttt{cmdline}) si le
+processus tourne encore~; événement 4688 si l'audit est actif \\
+Accès au processus \texttt{lsass.exe} par un autre processus & Journaux de
+surveillance avancée, s'ils existent \\
+Réutilisation des identifiants & Ouvertures de session du compte volé depuis
+des machines inhabituelles (4624) \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~5.4. Les traces d'un vol d'identifiants}\end{center}
+
+\begin{boxscenario}{Opération NYANGA. Le fichier du 9 mars}
+\textbf{Constatations.} Sur l'image du disque de SRV-AD01 (acquise le
+16~mars), le \texttt{\$UsnJrnl} enregistre la création, le 9~mars à 1~h~37,
+d'un fichier \texttt{lsass.dmp} de 54~Mo dans
+\texttt{C:\textbackslash Windows\textbackslash Temp}, et sa suppression à
+1~h~49. Le journal système enregistre, à 1~h~35, la création du service
+\texttt{WinUpdSvc} (événement 7045) par le compte \texttt{svc\_backup}. À
+partir du 10~mars, le compte \texttt{adm.kamga} ouvre des sessions depuis
+SRV-AD01 vers les autres serveurs.
+
+\textbf{Analyse} (confiance élevée). L'attaquant, entré sous
+\texttt{svc\_backup}, a installé son outil le 9~mars, copié la mémoire de
+\texttt{lsass.exe} deux minutes plus tard, puis utilisé les identifiants de
+\texttt{adm.kamga}, présents en mémoire parce que l'administrateur s'était
+connecté au contrôleur de domaine dans les jours précédents. Cette séquence
+explique l'usage du compte sans la participation de son titulaire~; elle ne
+l'exclut pas.
+\end{boxscenario}
+
+\begin{boxlecture}{La mémoire de SRV-AD01 et le disque associé}
+\begin{tableaucours}{L{7.2cm}c}{%
+    \tableauHeader{Proposition} &
+    \tableauHeader{Cote}
+}
+Un programme étranger tournait sur SRV-AD01 le 14~mars & \OUI{} \\
+Il communiquait avec 203.0.113.47 & \OUI{} \\
+Il était installé comme service depuis le 9~mars & \OUI{} \\
+La mémoire de \texttt{lsass.exe} a été copiée le 9~mars & \OUI{} \\
+Les identifiants de \texttt{adm.kamga} ont été extraits de cette copie &
+\NEK{} \\
+Du code a été injecté dans \texttt{lsass.exe} & \NON{} \\
+\end{tableaucours}
+
+\medskip
+\textbf{Lecture.} Quatre \OUI{}, un \NON{}, un \NEK{}. L'extraction des
+identifiants depuis la copie reste \NEK{}~: elle a eu lieu hors du
+système, chez l'attaquant, et aucune pièce ne peut la montrer. On l'infère
+de la séquence, avec une confiance élevée, mais on ne la constate pas.
+\end{boxlecture}
+
+% ============================================================================
+\section{Les Limites de l'Analyse Mémoire}
+\label{sec:c05-limites}
+% ============================================================================
+
+\begin{itemize}
+    \item Une capture est un instantané~: elle ne dit rien de ce qui a
+          tourné puis s'est terminé, sauf traces résiduelles.
+    \item Les tables de symboles doivent correspondre exactement à la
+          version du noyau~; une version inconnue de l'outil donne des
+          résultats faux ou vides.
+    \item La capture elle-même peut être incohérente, parce que la mémoire a
+          changé pendant qu'on la lisait~: des structures à moitié copiées
+          apparaissent.
+    \item Les zones signalées par \texttt{malfind} ne sont pas toutes
+          malveillantes~: certains programmes légitimes (machines
+          virtuelles Java, navigateurs) génèrent du code en mémoire.
+\end{itemize}
+
+% ============================================================================
+\section{Ce que l'Analyse Mémoire demande à chaque Métier}
+\label{sec:c05-metiers}
+% ============================================================================
+
+\begin{boxmetier}{Analyste en réponse à incident}
+\textbf{Examiner une capture mémoire}
+\begin{enumerate}
+    \item Vérifier le profil et l'heure système avec \texttt{windows.info}.
+    \item Comparer \texttt{pslist} et \texttt{psscan}.
+    \item Examiner l'arbre des processus, les chemins et les lignes de
+          commande.
+    \item Rattacher chaque connexion à son processus.
+    \item Chercher la persistance (services, tâches) du processus suspect.
+    \item Confirmer chaque découverte par une autre source (disque, réseau).
+\end{enumerate}
+\end{boxmetier}
+
+\begin{boxmetier}{Application OPJ/Expert Judiciaire}
+L'expert indique la version de l'outil et des tables de symboles, la liste
+des greffons et leur ordre, et conserve leurs sorties brutes en annexe~: un
+autre expert doit pouvoir refaire l'examen sur la même copie et obtenir les
+mêmes listes.
+\end{boxmetier}
+
+\begin{boxmetier}{RSSI}
+Limiter les connexions des comptes d'administration du domaine aux seules
+machines d'administration~: un identifiant qui ne se trouve pas en mémoire
+d'un serveur ne peut pas y être volé.
+\end{boxmetier}
+
+\separateur
+
+\begin{boxresume}
+\textbf{Ce qu'il faut retenir de ce chapitre~:}
+\begin{itemize}
+    \item La mémoire montre ce qui tournait, avec quels parents, quelles
+          commandes et quelles connexions~; le disque montre l'histoire.
+    \item Volatility s'emploie greffon par greffon, chacun répondant à une
+          question~; \texttt{pslist} et \texttt{psscan} se comparent.
+    \item Un processus se juge sur son chemin, son parent, sa commande, son
+          heure et son réseau, jamais sur son nom.
+    \item Le vol d'identifiants se reconnaît à ses traces (fichier de
+          vidage, réutilisation du compte)~; l'extraction elle-même reste
+          souvent \NEK{}.
+    \item À NYANGA, le PID~4412, faux \texttt{svchost.exe} installé comme
+          service le 9~mars, communique avec 203.0.113.47.
+\end{itemize}
+\end{boxresume}
+
+\begin{boxinfo}
+\textbf{Points de contrôle.} Vous avez compris ce chapitre si vous savez~:
+\begin{itemize}
+    \item interpréter un écart entre \texttt{pslist} et \texttt{psscan}~;
+    \item dire pourquoi un processus est suspect à partir de ses attributs~;
+    \item distinguer ce qui est constaté de ce qui est inféré dans un vol
+          d'identifiants.
+\end{itemize}
+\end{boxinfo}
+
+% ============================================================================
+\section*{Exercices}
+% ============================================================================
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~5.1. Normal ou suspect \niveaubase}]
+Pour chaque processus, dites s'il est normal ou suspect, et pourquoi~:
+(a) \texttt{lsass.exe}, \texttt{System32}, parent \texttt{wininit.exe}~;
+(b) \texttt{lsass.exe}, \texttt{System32}, parent \texttt{explorer.exe}~;
+(c) \texttt{svchost.exe}, \texttt{System32}, parent \texttt{services.exe}~;
+(d) \texttt{svchost.exe}, \texttt{Users\textbackslash Public}, parent
+\texttt{cmd.exe}~; (e) deux processus \texttt{lsass.exe}.
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~5.2. pslist et psscan \niveaumoyen}]
+\texttt{psscan} trouve trois processus absents de \texttt{pslist}~: un
+\texttt{rundll32.exe} terminé le 9~mars à 1~h~38~; un \texttt{cmd.exe}
+terminé le 13~mars~; un \texttt{svch0st.exe} sans heure de fin.
+\begin{enumerate}[(a)]
+    \item Interprétez chacun.
+    \item Lequel demande une vérification immédiate, et laquelle~?
+    \item Que pourrait apporter la ligne de commande du \texttt{rundll32.exe},
+          si elle est encore lisible~?
+\end{enumerate}
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~5.3. Relier les sources \niveaumoyen}]
+Construisez un tableau qui relie, pour le PID~4412, chaque attribut constaté
+en mémoire à une confirmation sur le disque de SRV-AD01 ou dans la capture
+réseau. Indiquez pour chaque ligne si la confirmation existe, manque, ou
+reste à chercher.
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~5.4. Ce qu'on ne peut pas montrer \niveauexpert}]
+L'avocat de M.~KAMGA soutient que la copie de la mémoire de
+\texttt{lsass.exe} « ne prouve pas » le vol de ses identifiants.
+\begin{enumerate}[(a)]
+    \item A-t-il raison sur le plan de la constatation~? Sur celui de
+          l'analyse~?
+    \item Rédigez le passage du rapport d'expertise qui traite ce point.
+    \item Quelle mesure, en place avant l'incident, aurait permis de
+          constater l'usage des identifiants volés plutôt que de l'inférer~?
+\end{enumerate}
+\end{boxexo}
+
+\bigskip
+
+\begin{boxinfo}
+\textbf{Pour aller plus loin.}
+\begin{itemize}
+    \item M.~H.~Ligh et al., \textit{The Art of Memory
+          Forensics}~\cite{ligh2014memory}.
+    \item La documentation de Volatility~3~\cite{volatility3}.
+\end{itemize}
+\end{boxinfo}
+
+\begin{boxinfo}
+\textbf{Transition.} Le PID~4412 parle à 203.0.113.47. Qu'a-t-il envoyé, et
+quand~? La capture de la sonde réseau le dit~: Chapitre~\ref{chap:reseau}.
+\end{boxinfo}

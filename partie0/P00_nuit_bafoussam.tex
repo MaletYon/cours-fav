@@ -1,0 +1,504 @@
+% ============================================================================
+% Fichier  : partie0/P00_nuit_bafoussam.tex
+% Titre    : La Nuit du 14 Mars à Bafoussam
+% Auteur   : MINKA MI NGUIDJOÏ Thierry Emmanuel
+% Version  : 1.0 -- novembre 2024
+% Corrigés : corriges/Corr_P00.tex
+% ============================================================================
+% Faits posés (bible des cas, Claude outputs/01_fiche_plan_bible.md) :
+% NYANGA CRÉDIT, Bafoussam, 22 agences, 210 000 clients ; 23 virements
+% frauduleux de 02 h 05 à 03 h 31 le 14/03/2025, 47 300 000 FCFA, 11
+% portefeuilles ; exfiltration de 3,2 Go de SRV-FIC01 vers 203.0.113.47 de
+% 01 h 12 à 03 h 47 ; faille VULN-2024-4471 (fictive) de la passerelle VPN,
+% correctif du 15/12/2024, KEV le 19/12/2024, premier accès le 02/03/2025.
+% ============================================================================
+
+\chapter{La Nuit du 14 Mars à Bafoussam}
+\label{chap:prologue}
+\chaptermark{La nuit du 14 mars}
+
+\epigraph{%
+    « Ce que l'on fait dans la première heure\\
+    décide de ce que l'on pourra prouver dans un an. »%
+}{Principe du cours}
+
+\niveauChapitre{Introductif}{%
+    Aucun prérequis~: ce prologue ouvre le cours et en pose les questions.
+}
+
+\begin{boxobjectifs}
+\begin{itemize}
+    \item Reconnaître, dans un incident réel, les questions qui relèvent de
+          l'investigation numérique et celles qui relèvent de l'analyse de
+          vulnérabilités.
+    \item Distinguer les gestes qui préservent la preuve de ceux qui la
+          détruisent pendant la première heure.
+    \item Séparer, dans un récit d'incident, la constatation de l'analyse.
+    \item Coter une conclusion d'enquête \OUI{}, \NON{} ou \NEK{}.
+    \item Situer les métiers qui interviennent, de l'alerte à la correction.
+\end{itemize}
+\end{boxobjectifs}
+
+\bigskip
+
+% ============================================================================
+\section*{Avant de commencer : un vendredi matin}
+% ============================================================================
+
+Bafoussam, vendredi 14 mars 2025, 7~h~30. Au service des paiements de NYANGA
+CRÉDIT\footnote{NYANGA CRÉDIT, SOLITRANS LOGISTIQUE, leurs dirigeants, leurs
+prestataires, les adresses, les dates et les montants sont fictifs~;
+l'identifiant VULN-2024-4471 est fictif. Les mécanismes techniques, les
+outils, les normes et les textes cités sont exacts.}, une agente de
+permanence ouvre le rapprochement de la nuit. Elle compte vingt-trois
+virements sortants passés entre 2~h~05 et 3~h~31, tous par l'interface qui
+relie l'établissement aux opérateurs de paiement mobile, tous vers onze
+portefeuilles que personne ne connaît. Le total atteint 47\,300\,000 francs
+CFA. Aucun agent n'était en poste à ces heures-là.
+
+NYANGA CRÉDIT est un établissement de microfinance de deuxième catégorie,
+installé à Bafoussam, présent dans vingt-deux agences de l'Ouest et du
+Littoral, au service d'environ 210\,000 clients. Son informatique tient dans
+une salle du siège~: un contrôleur de domaine, un serveur comptable, un
+serveur de fichiers, l'interface de paiement mobile, et une passerelle
+d'accès à distance qui permet aux agences et aux techniciens de se connecter
+au siège.
+
+À 8~h~15, le directeur des systèmes d'information, M.~KAMGA, arrive. Le
+serveur de fichiers ralentit depuis la veille. Son premier réflexe est de le
+redémarrer, puis de restaurer la sauvegarde de la veille. La responsable de la
+sécurité, Mme~NDOUMBE, l'arrête~: elle fait débrancher le câble réseau du
+serveur, sans l'éteindre, et demande que personne ne touche plus aux
+machines du siège avant son retour. Elle revient vingt minutes plus tard avec
+une clé USB qui contient un outil de capture de la mémoire vive.
+
+\medskip
+
+Ce prologue raconte les premières heures de l'incident et les questions
+qu'elles posent. Les seize chapitres qui suivent y répondent une à une.
+
+\begin{boxalert}
+\textbf{Violation typique.} Redémarrer, nettoyer ou restaurer une machine
+compromise avant d'avoir préservé ce qu'elle contient.
+
+\smallskip
+\textbf{Règle~:} on isole avant d'agir, on préserve avant d'analyser, et on
+consigne chaque geste avec son heure et son auteur. Une machine redémarrée a
+perdu sa mémoire vive, ses connexions ouvertes et une partie de ses
+journaux~; une machine restaurée a perdu tout le reste.
+\end{boxalert}
+
+\separateur
+
+% ============================================================================
+\section{Ce que l'on sait à 9 heures}
+\label{sec:p00-9h}
+% ============================================================================
+
+À 9~h~10, le directeur général, M.~TCHOUA, réunit une cellule de crise~:
+M.~KAMGA, Mme~NDOUMBE et la juriste de l'établissement, Me~ETOUNDI. Mme~NDOUMBE
+pose sur la table ce qui est établi, et seulement cela.
+
+\begin{tableaucours}{L{5.2cm}L{4.4cm}c}{%
+    \tableauHeader{Constatation} &
+    \tableauHeader{Source} &
+    \tableauHeader{Cote}
+}
+23 virements entre 2~h~05 et 3~h~31, 47,3~M~FCFA, 11 portefeuilles &
+Journal de l'interface de paiement & \OUI{} \\
+Les virements ont utilisé la clé d'accès de l'établissement à l'interface &
+Journal de l'interface de paiement & \OUI{} \\
+Aucun agent n'était connecté au siège entre 1~h et 5~h & Registre des
+présences, journal de la passerelle & \OUI{} \\
+Le serveur de fichiers a émis un volume sortant inhabituel dans la nuit &
+Supervision du lien Internet & \OUI{} \\
+Ce volume correspond à des fichiers de clients & Aucune pièce à ce stade &
+\NEK{} \\
+L'attaquant est entré par la passerelle d'accès à distance & Hypothèse du
+DSI & \NEK{} \\
+L'attaque vient d'un employé & Rumeur dans les couloirs & \NEK{} \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~0.1. Le point de 9~h~10}\end{center}
+
+Trois lignes sont cotées \NEK{}~: aucune preuve ne permet encore de les
+établir ou de les écarter. Une hypothèse, même plausible, ne devient pas une
+constatation parce qu'un responsable la formule avec assurance. Mme~NDOUMBE
+le dit à la cellule~: « Nous savons ce qui est sorti du compte. Nous ne
+savons pas encore par où ils sont entrés. »
+
+\begin{boxdef}
+\textbf{\termecle{Constatation}}~: fait vérifiable, rattaché à une source
+identifiée (un journal, une image, une capture), que toute personne
+compétente retrouverait en refaisant l'examen.
+
+\smallskip
+\textbf{\termecle{Analyse}}~: interprétation d'une ou de plusieurs
+constatations~; elle porte un niveau de confiance (faible, moyenne, élevée)
+et peut être révisée par une constatation nouvelle.
+\end{boxdef}
+
+\begin{boxdef}
+\textbf{\termecle{Cote OUI, NON, NEK}}~: réponse à une question d'enquête
+fermée. \OUI{}~: la proposition est établie par une preuve. \NON{}~: elle est
+contredite par une preuve. \NEK{} (\textit{not enough knowledge})~: les
+preuves disponibles ne permettent pas de trancher. L'instrument vient du
+programme de recherche de l'auditologie~\cite{minka2026nek}.
+\end{boxdef}
+
+% ============================================================================
+\section{Les gestes de la première heure}
+\label{sec:p00-gestes}
+% ============================================================================
+
+Ce que Mme~NDOUMBE fait entre 8~h~15 et 10~h~30 n'a rien d'improvisé~: elle
+applique un ordre que l'on retrouve dans la RFC~3227~\cite{rfc3227} et dans
+la norme ISO/IEC~27037~\cite{iso27037_2012}, celui de la volatilité. On
+recueille d'abord ce qui disparaît le plus vite.
+
+\begin{tableaucours}{cL{3.6cm}L{4.0cm}L{3.4cm}}{%
+    \tableauHeader{Heure} &
+    \tableauHeader{Geste} &
+    \tableauHeader{Ce qu'il préserve} &
+    \tableauHeader{Ce qu'il évite}
+}
+8~h~20 & Débrancher le câble réseau du serveur de fichiers, sans l'éteindre &
+La mémoire vive, les processus, les connexions récentes & La poursuite de
+l'exfiltration, l'effacement à distance \\
+8~h~25 & Interdire toute connexion aux serveurs du siège & L'état des
+disques et des journaux & Les modifications par l'équipe elle-même \\
+8~h~40 & Désactiver la passerelle d'accès à distance & Les journaux de la
+passerelle, figés & Un nouvel accès \\
+10~h~02 & Capturer la mémoire du contrôleur de domaine (16~Go), calculer
+son empreinte & Les processus et les identifiants en mémoire & La perte au
+prochain redémarrage \\
+10~h~30 & Ouvrir un registre des actions~: heure, auteur, geste, résultat &
+La traçabilité de chaque intervention & La contestation ultérieure \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~0.2. Les gestes de la première heure}\end{center}
+
+Chaque geste a un coût. Débrancher le serveur arrête aussi le partage de
+fichiers des agences~; désactiver la passerelle prive les techniciens
+d'accès à distance. Le DSI le fait remarquer. La réponse de Mme~NDOUMBE tient
+en une phrase~: une heure d'interruption se rattrape, une preuve détruite
+ne se reconstitue pas.
+
+\begin{boxobjet}{Capture mémoire de SRV-AD01, 14 mars 2025, 10~h~02}
+\textbf{Source~:} contrôleur de domaine SRV-AD01, salle serveurs du siège,
+Bafoussam.
+
+\textbf{Pièce~:} fichier \texttt{SRV-AD01\_20250314\_1002.raw}, 16~Go,
+copié sur un disque externe neuf, étiqueté et placé sous enveloppe.
+
+\textbf{Empreinte~:} SHA-256 calculée à 10~h~41 et inscrite au registre,
+contresignée par M.~KAMGA.
+
+\textbf{Ce qu'elle peut prouver~:} les processus actifs à 10~h~02, les
+connexions réseau ouvertes, les traces d'outils exécutés en mémoire.
+
+\textbf{Ce qu'elle ne prouve pas~:} ce qui s'est passé avant le dernier
+redémarrage de la machine, ni l'identité d'une personne.
+\end{boxobjet}
+
+% ============================================================================
+\section{L'enquête : ce qu'elle établira}
+\label{sec:p00-enquete}
+% ============================================================================
+
+L'après-midi même, NYANGA CRÉDIT mandate le cabinet SANKOFA EXPERTISE, à
+Yaoundé, pour conduire la réponse à l'incident~; Mme~MBARGA dirige la
+mission. Le lendemain, l'établissement dépose plainte au parquet de
+Bafoussam. Le 17~mars, le procureur de la République réquisitionne un expert
+indépendant, M.~ABOUBAKAR, expert près la cour d'appel de l'Ouest. Deux
+enquêtes avancent désormais en parallèle~: celle du cabinet, au service de
+l'établissement, et celle de l'expert, au service de la justice. Elles
+examinent les mêmes pièces et n'ont pas les mêmes obligations.
+
+Trois semaines plus tard, les deux enquêtes établissent la même séquence.
+
+\begin{boxscenario}{Opération NYANGA. Ce que l'enquête établit}
+\textbf{Constatations.}
+\begin{itemize}
+    \item Le 2~mars à 23~h~48, le journal de la passerelle enregistre une
+          première session du compte de service \texttt{svc\_backup}, depuis
+          l'adresse 203.0.113.18, sans échec d'authentification préalable.
+    \item Le 9~mars à 1~h~37, un fichier \texttt{lsass.dmp}, copie de la
+          mémoire du processus qui gère les authentifications Windows, est
+          créé dans un dossier temporaire de SRV-AD01~; la capture mémoire
+          du 14~mars montre encore un outil d'accès à distance actif et une
+          connexion vers 203.0.113.47.
+    \item Le 12~mars, le journal de SRV-CPT01 montre la lecture du fichier
+          de configuration qui contient la clé d'accès à l'interface de
+          paiement.
+    \item Le 14~mars, de 1~h~12 à 3~h~47, la capture réseau montre 3,2~Go
+          envoyés de SRV-FIC01 vers 203.0.113.47.
+    \item La passerelle fonctionnait avec une version de micrologiciel
+          antérieure au correctif publié le 15~décembre 2024 pour la faille
+          VULN-2024-4471, qui permet de contourner l'authentification.
+\end{itemize}
+
+\textbf{Analyse} (confiance élevée). L'attaquant est entré par la
+passerelle, en exploitant VULN-2024-4471 pour ouvrir une session sous un
+compte de service~; il a récupéré des identifiants d'administration en
+mémoire, lu la clé de l'interface de paiement, copié des fichiers, puis
+déclenché les virements.
+
+\textbf{Ce qui reste \NEK{}.} L'identité des auteurs. Les adresses
+203.0.113.18 et 203.0.113.47 désignent des machines, pas des personnes.
+\end{boxscenario}
+
+La dernière constatation change la nature de l'affaire. Le correctif était
+disponible depuis 89~jours le jour de l'attaque, et depuis 77~jours lors du
+premier accès~; le 19~décembre, la faille avait été inscrite au catalogue
+des vulnérabilités exploitées tenu par l'agence américaine CISA. L'enquête,
+partie d'un virement frauduleux, aboutit à une faiblesse connue, publiée et
+corrigeable. Pourquoi n'a-t-elle pas été corrigée~? Parce que la passerelle
+ne figurait pas dans l'inventaire de l'outil de balayage de vulnérabilités~:
+personne ne l'a jamais analysée.
+
+% ============================================================================
+\section{Deux disciplines, une même affaire}
+\label{sec:p00-deux}
+% ============================================================================
+
+L'affaire NYANGA fait se rejoindre deux disciplines que l'on enseigne
+souvent séparément.
+
+\begin{tableaucours}{L{3.2cm}L{4.6cm}L{4.6cm}}{%
+    \tableauHeader{} &
+    \tableauHeader{Investigation numérique} &
+    \tableauHeader{Analyse de vulnérabilités}
+}
+Point de départ & Une trace, un incident & Une faiblesse connue, un actif \\
+Question & Que s'est-il passé, comment, depuis quand~? & Où sommes-nous
+exposés, et que corriger d'abord~? \\
+Matière & Images de disque, mémoire, captures, journaux & Inventaires,
+résultats de balayage, bulletins, scores \\
+Produit & Un rapport qui peut servir de preuve & Un plan de correction
+suivi \\
+Temps & Après l'incident & Avant l'incident, en continu \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~0.3. Deux disciplines}\end{center}
+
+Elles se nourrissent l'une l'autre. L'enquête révèle les faiblesses que
+l'attaquant a réellement empruntées~; elle dit au programme de gestion des
+vulnérabilités ce qu'il a manqué. Le programme, en retour, réduit le nombre
+d'enquêtes à conduire et fournit aux enquêteurs l'inventaire et l'historique
+des versions qui leur permettent de dater une exposition. À Douala, un autre
+acteur du cours, SOLITRANS LOGISTIQUE, montrera dans la partie~IV comment on
+construit un tel programme sur 1\,380 actifs.
+
+\begin{boxinfo}
+\textbf{Ce que le cours ne traite pas.} L'exploitation des failles relève
+de l'UE MSN-2S3-SEC03 (Ethical Hacking et Pentesting)~: ce cours apprend à
+identifier, coter et faire corriger une vulnérabilité, pas à s'en servir.
+La protection des données personnelles exposées par l'exfiltration relève de
+l'UE MSN-2S3-JUR01. L'audit et la gestion du risque relèvent de l'UE
+MSN-2S3-SEC08.
+\end{boxinfo}
+
+% ============================================================================
+\section{Les questions du cours}
+\label{sec:p00-questions}
+% ============================================================================
+
+Chaque chapitre répond à l'une des questions que la cellule de crise s'est
+posées, ou aurait dû se poser.
+
+\begin{tableaucours}{L{7.4cm}L{4.8cm}}{%
+    \tableauHeader{Question de la cellule} &
+    \tableauHeader{Chapitre}
+}
+Qu'est-ce qu'enquêter sur des traces numériques~? &
+Chapitre~\ref{chap:investigation} \\
+Comment faire pour que ce que l'on trouve serve de preuve~? &
+Chapitre~\ref{chap:preuve} \\
+Comment copier un disque ou une mémoire sans les altérer~? &
+Chapitre~\ref{chap:acquisition} \\
+Que contient le disque du serveur comptable~? & Chapitre~\ref{chap:disque} \\
+Que révèle la mémoire du contrôleur de domaine~? &
+Chapitre~\ref{chap:memoire} \\
+Qu'est-il sorti, et vers où~? & Chapitre~\ref{chap:reseau} \\
+Dans quel ordre les choses se sont-elles passées~? &
+Chapitre~\ref{chap:chronologie} \\
+Qui a le droit de faire quoi, et selon quelles règles~? &
+Chapitre~\ref{chap:normes-droit} \\
+Qu'est-ce qu'une vulnérabilité, et comment la coter~? &
+Chapitre~\ref{chap:vulnerabilite} \\
+Comment les trouver sans attaquer~? & Chapitre~\ref{chap:identifier} \\
+Comment décider de ce qu'on corrige d'abord~? & Chapitre~\ref{chap:gerer} \\
+Comment remonter de la trace à la faille~? &
+Chapitre~\ref{chap:artefact-vuln} \\
+Et si l'attaquant a effacé ses traces, ou travaille dans le nuage~? &
+Chapitre~\ref{chap:antiforensique} \\
+Comment conduire l'enquête de bout en bout~? & Chapitre~\ref{chap:enquete} \\
+Comment l'écrire, et la défendre devant un juge~? &
+Chapitre~\ref{chap:rapport} \\
+Comment mesurer ce que l'enquête ne sait pas~? &
+Chapitre~\ref{chap:auditologie} \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~0.4. Les questions et les chapitres}\end{center}
+
+% ============================================================================
+\section{Les métiers de l'affaire}
+\label{sec:p00-metiers}
+% ============================================================================
+
+Quatre métiers ont travaillé sur l'affaire NYANGA. Le cours les suit
+chapitre après chapitre.
+
+\begin{boxmetier}{RSSI}
+Mme~NDOUMBE a préservé avant d'analyser, ouvert le registre des actions et
+refusé de coter une hypothèse comme un fait. Son rôle, dans les jours qui
+suivent, est d'arbitrer entre la reprise de l'activité et la conservation
+des preuves, et de faire corriger la faille.
+\end{boxmetier}
+
+\begin{boxmetier}{Analyste en réponse à incident}
+Mme~MBARGA et son équipe contiennent l'incident, recueillent les pièces,
+reconstituent la séquence et remettent à l'établissement un rapport qui
+sert à décider. Ils travaillent vite, mais chaque pièce qu'ils touchent
+peut finir devant un tribunal.
+\end{boxmetier}
+
+\begin{boxmetier}{Application OPJ/Expert Judiciaire}
+L'adjudant-chef NANA, officier de police judiciaire, conduit l'enquête
+pénale~; M.~ABOUBAKAR, réquisitionné par le procureur, examine les pièces
+pour la justice. L'expert ne répond qu'aux questions de sa mission, et
+chacune de ses conclusions doit pouvoir être refaite par un autre expert.
+\end{boxmetier}
+
+\begin{boxmetier}{Analyste en gestion des vulnérabilités}
+Personne n'occupait ce rôle à NYANGA CRÉDIT. C'est la leçon de l'affaire~:
+un actif hors de l'inventaire est un actif que personne ne corrige.
+\end{boxmetier}
+
+% ============================================================================
+\section{Cinq réflexes}
+\label{sec:p00-reflexes}
+% ============================================================================
+
+\begin{enumerate}
+    \item Isoler sans éteindre, puis préserver dans l'ordre de la
+          volatilité.
+    \item Consigner chaque geste~: heure, auteur, action, résultat,
+          empreinte.
+    \item Séparer la constatation de l'analyse, et coter \NEK{} ce que les
+          pièces ne permettent pas de trancher.
+    \item Remonter jusqu'à la faiblesse exploitée~: une enquête qui s'arrête
+          aux auteurs laisse la porte ouverte.
+    \item Vérifier que la correction est faite, sur la machine elle-même, et
+          pas sur la foi d'un courriel.
+\end{enumerate}
+
+\separateur
+
+\begin{boxresume}
+\textbf{Ce qu'il faut retenir de ce chapitre~:}
+\begin{itemize}
+    \item Les gestes de la première heure décident des preuves
+          disponibles~: isoler, préserver dans l'ordre de la volatilité,
+          consigner.
+    \item Une constatation se rattache à une source~; une analyse porte un
+          niveau de confiance. Une hypothèse reste \NEK{} tant qu'aucune
+          pièce ne la tranche.
+    \item À NYANGA CRÉDIT, l'enquête remonte du virement frauduleux à une
+          faille corrigeable depuis 89~jours, absente de l'inventaire.
+    \item L'investigation numérique et l'analyse de vulnérabilités se
+          répondent~: l'une explique l'incident, l'autre empêche le
+          suivant.
+\end{itemize}
+\end{boxresume}
+
+\begin{boxinfo}
+\textbf{Points de contrôle.} Vous avez compris ce prologue si vous savez~:
+\begin{itemize}
+    \item citer trois gestes qui préservent la preuve et deux qui la
+          détruisent~;
+    \item réécrire une phrase de rapport en séparant la constatation et
+          l'analyse~;
+    \item coter une conclusion \OUI{}, \NON{} ou \NEK{} et justifier la
+          cote par une source.
+\end{itemize}
+\end{boxinfo}
+
+% ============================================================================
+\section*{Exercices}
+% ============================================================================
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~0.1. Préserver ou détruire \niveaubase}]
+Pour chacun des gestes suivants, dites s'il préserve ou s'il détruit de la
+preuve, et laquelle.
+\begin{enumerate}[(a)]
+    \item Lancer un antivirus complet sur le serveur de fichiers.
+    \item Photographier l'écran du serveur avant toute action.
+    \item Redémarrer le contrôleur de domaine pour « couper l'attaquant ».
+    \item Exporter les journaux de la passerelle sur un support neuf et en
+          calculer l'empreinte.
+    \item Changer immédiatement le mot de passe de \texttt{svc\_backup}
+          depuis le serveur compromis.
+\end{enumerate}
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~0.2. Constatation ou analyse \niveaumoyen}]
+Le premier compte rendu du DSI contient les phrases suivantes. Pour
+chacune, dites si c'est une constatation, une analyse ou une hypothèse, et
+proposez une cote \OUI{}, \NON{} ou \NEK{} avec sa source.
+\begin{enumerate}[(a)]
+    \item « Les virements ont été faits depuis l'interface de paiement avec
+          notre clé. »
+    \item « Un employé a forcément donné son mot de passe. »
+    \item « Le serveur de fichiers a envoyé 3,2~Go vers l'extérieur. »
+    \item « Les fichiers volés sont ceux des clients. »
+    \item « L'attaque vient d'un groupe étranger. »
+\end{enumerate}
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~0.3. Le compte des jours \niveaumoyen}]
+\begin{enumerate}[(a)]
+    \item Vérifiez les deux durées données dans le chapitre~: 77~jours entre
+          le correctif et le premier accès, 89~jours entre le correctif et
+          l'exfiltration.
+    \item La faille a été inscrite au catalogue des vulnérabilités
+          exploitées le 19~décembre 2024. Que change cette inscription pour
+          un établissement qui suit ce catalogue~?
+    \item Donnez deux raisons pour lesquelles un actif peut échapper à
+          l'inventaire d'un outil de balayage.
+\end{enumerate}
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~0.4. Deux enquêtes, deux obligations \niveauexpert}]
+Le cabinet SANKOFA EXPERTISE et l'expert judiciaire M.~ABOUBAKAR examinent
+les mêmes pièces.
+\begin{enumerate}[(a)]
+    \item Pour chacun, dites à qui il rend compte et quelle question il doit
+          trancher.
+    \item Le directeur général demande au cabinet de ne pas mentionner le
+          retard de correction dans son rapport. Que doit faire Mme~MBARGA~?
+          L'expert judiciaire serait-il tenu par la même demande~?
+    \item Rédigez, pour la cellule de crise, une note de cinq lignes qui
+          distingue ce qui est établi, ce qui est réfuté et ce qui reste
+          \NEK{} au soir du 14~mars.
+\end{enumerate}
+\end{boxexo}
+
+\bigskip
+
+\begin{boxinfo}
+\textbf{Pour aller plus loin.}
+\begin{itemize}
+    \item La RFC~3227~\cite{rfc3227}, pour l'ordre de volatilité.
+    \item Le NIST SP~800-86~\cite{nist80086}, pour l'intégration de la
+          forensique à la réponse aux incidents.
+    \item Le catalogue KEV de la CISA~\cite{cisakev}.
+\end{itemize}
+\end{boxinfo}
+
+\begin{boxinfo}
+\textbf{Transition.} Avant de toucher aux pièces de l'affaire, il faut
+savoir ce qu'est une enquête numérique~: son objet, ses principes, ses
+étapes. C'est l'objet du Chapitre~\ref{chap:investigation}.
+\end{boxinfo}

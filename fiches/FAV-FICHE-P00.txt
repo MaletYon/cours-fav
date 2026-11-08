@@ -1,0 +1,233 @@
+NDAP SUKULU · FAV · fiche FAV-FICHE-P00
+Chapitre 0 : La nuit du 14 mars à Bafoussam
+
+Version papier, à utiliser en attendant l'ouverture du portail NDAP SUKULU.
+La fiche complète compte 40 questions. Répondez sur la grille en fin de fiche.
+Durée indicative : 60 minutes. Seuil de réussite : 60 %.
+Les corrections figurent dans le livret de correction du cours.
+
+========================================================================
+Questions à choix multiple (une seule bonne réponse)
+========================================================================
+
+ 1. Combien de virements frauduleux NYANGA CRÉDIT découvre-t-elle le 14 mars ?
+      a) 11
+      b) 23
+      c) 47
+      d) 3
+
+ 2. Quel montant total les virements frauduleux atteignent-ils ?
+      a) 3 200 000 FCFA
+      b) 118 000 000 FCFA
+      c) 47 300 000 FCFA
+      d) 23 000 000 FCFA
+
+ 3. Vers combien de portefeuilles les fonds sont-ils partis ?
+      a) 11
+      b) 23
+      c) 7
+      d) 2
+
+ 4. Entre quelles heures les virements ont-ils été passés ?
+      a) Entre 7 h 30 et 9 h 10
+      b) Entre 1 h 12 et 3 h 47
+      c) Entre 22 h et minuit
+      d) Entre 2 h 05 et 3 h 31
+
+ 5. Par quelle interface les virements ont-ils été émis ?
+      a) Le guichet d'agence
+      b) L'interface de paiement mobile
+      c) La messagerie
+      d) Le serveur de fichiers
+
+ 6. Quel premier réflexe du DSI la RSSI arrête-t-elle ?
+      a) Débrancher le câble réseau
+      b) Capturer la mémoire
+      c) Redémarrer puis restaurer le serveur de fichiers
+      d) Prévenir la direction
+
+ 7. Que fait la RSSI au serveur de fichiers à 8 h 20 ?
+      a) Elle débranche son câble réseau sans l'éteindre
+      b) Elle l'éteint
+      c) Elle le restaure
+      d) Elle lance un antivirus
+
+ 8. Quel ordre la RSSI applique-t-elle pour recueillir les traces ?
+      a) L'ordre alphabétique
+      b) L'ordre des priorités métier
+      c) L'ordre de taille des fichiers
+      d) L'ordre de volatilité
+
+ 9. À quelle heure la mémoire du contrôleur de domaine est-elle capturée ?
+      a) 8 h 20
+      b) 10 h 02
+      c) 7 h 30
+      d) 15 h 50
+
+10. Quelle taille fait la capture mémoire de SRV-AD01 ?
+      a) 500 Go
+      b) 3,2 Go
+      c) 16 Go
+      d) 41 Mo
+
+11. Que permet un registre des actions ouvert dès la première heure ?
+      a) Retracer chaque intervention avec son heure et son auteur
+      b) Remplacer la chaîne de possession
+      c) Supprimer les doublons
+      d) Calculer les empreintes
+
+12. Pourquoi désactiver la passerelle d'accès à distance à 8 h 40 ?
+      a) Pour économiser l'électricité
+      b) Pour la mettre à jour
+      c) Pour en capturer la mémoire
+      d) Pour empêcher un nouvel accès et figer ses journaux
+
+13. Qu'est-ce qu'une constatation ?
+      a) Une interprétation avec un niveau de confiance
+      b) Un fait vérifiable rattaché à une source identifiée
+      c) Une hypothèse plausible
+      d) Une rumeur confirmée par un responsable
+
+14. Qu'est-ce qu'une analyse ?
+      a) Un fait vérifiable
+      b) Une copie de pièce
+      c) Une interprétation de constatations avec un niveau de confiance
+      d) Un registre d'actions
+
+15. Que signifie la cote NEK ?
+      a) Les preuves disponibles ne permettent pas de trancher
+      b) La proposition est établie
+      c) La proposition est contredite
+      d) La question est mal posée
+
+16. Que signifie la cote NON ?
+      a) La proposition est établie
+      b) On ne sait pas
+      c) La question est hors mission
+      d) La proposition est contredite par une preuve
+
+17. D'où vient l'instrument OUI, NON, NEK ?
+      a) De la norme ISO/IEC 27037
+      b) Du programme de recherche de l'auditologie
+      c) Du CVSS
+      d) Du Code de procédure pénale
+
+18. Quel cabinet NYANGA mandate-t-elle pour la réponse à l'incident ?
+      a) SOLITRANS LOGISTIQUE
+      b) AUDIX CONSEIL
+      c) SANKOFA EXPERTISE
+      d) CERTIQUAL AFRIQUE
+
+19. Qui réquisitionne l'expert M. ABOUBAKAR ?
+      a) Le procureur de la République
+      b) Le directeur général de NYANGA
+      c) La RSSI
+      d) Le cabinet SANKOFA
+
+20. Par quel compte l'attaquant ouvre-t-il sa première session le 2 mars ?
+      a) adm.kamga
+      b) formateur
+      c) ETU001
+      d) svc_backup
+
+========================================================================
+Vrai ou faux
+========================================================================
+
+21. Débrancher un serveur du réseau sans l'éteindre préserve sa mémoire vive.
+      Vrai / Faux
+
+22. Lancer un antivirus complet sur un serveur compromis préserve la preuve.
+      Vrai / Faux
+
+23. Une heure d'interruption se rattrape plus facilement qu'une preuve détruite.
+      Vrai / Faux
+
+24. Une hypothèse formulée avec assurance par un responsable devient une constatation.
+      Vrai / Faux
+
+25. Une analyse porte un niveau de confiance.
+      Vrai / Faux
+
+26. Une cote NEK est une conclusion définitive.
+      Vrai / Faux
+
+27. Le correctif de VULN-2024-4471 était disponible avant le premier accès.
+      Vrai / Faux
+
+28. Les adresses IP de l'enquête désignent des personnes.
+      Vrai / Faux
+
+29. Le cabinet privé et l'expert judiciaire ont les mêmes obligations.
+      Vrai / Faux
+
+30. L'enquête de NYANGA aboutit à une faille connue, publiée et corrigeable.
+      Vrai / Faux
+
+========================================================================
+Textes à trous
+========================================================================
+
+31. Les virements frauduleux totalisent ______ millions de FCFA.
+
+32. On recueille les traces selon l'ordre de ______.
+
+33. La mémoire de SRV-AD01 est capturée à ______.
+
+34. La cote ______ signifie que les preuves ne permettent pas de trancher.
+
+35. Un fait vérifiable rattaché à une source est une ______.
+
+36. L'attaquant ouvre sa première session le 2 mars sous le compte ______.
+
+37. Le correctif était disponible depuis ______ jours le jour de l'exfiltration.
+
+38. La faille a été inscrite au catalogue ______ le 19 décembre 2024.
+
+39. L'expert requis par le procureur s'appelle M. ______.
+
+40. L'analyse de vulnérabilités produit un plan de ______ suivi.
+
+========================================================================
+Grille de réponses   Nom : ............................  Matricule : ............
+========================================================================
+ 1. ............................................
+ 2. ............................................
+ 3. ............................................
+ 4. ............................................
+ 5. ............................................
+ 6. ............................................
+ 7. ............................................
+ 8. ............................................
+ 9. ............................................
+10. ............................................
+11. ............................................
+12. ............................................
+13. ............................................
+14. ............................................
+15. ............................................
+16. ............................................
+17. ............................................
+18. ............................................
+19. ............................................
+20. ............................................
+21. ............................................
+22. ............................................
+23. ............................................
+24. ............................................
+25. ............................................
+26. ............................................
+27. ............................................
+28. ............................................
+29. ............................................
+30. ............................................
+31. ............................................
+32. ............................................
+33. ............................................
+34. ............................................
+35. ............................................
+36. ............................................
+37. ............................................
+38. ............................................
+39. ............................................
+40. ............................................

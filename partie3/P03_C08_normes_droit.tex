@@ -1,0 +1,507 @@
+% ============================================================================
+% Fichier  : partie3/P03_C08_normes_droit.tex
+% Titre    : Normes et Droit de l'Investigation
+% Auteur   : MINKA MI NGUIDJOÏ Thierry Emmanuel
+% Version  : 1.0 -- novembre 2024
+% Corrigés : corriges/Corr_C08.tex
+% ============================================================================
+% Textes cités dans leur version officielle (Normes/loi_2010-012, lus le
+% 08/11/2024) : loi n° 2010/012, art. 26 al. 4, 29 al. 1 à 3, 30 al. 1,
+% 52, 55, 56, 65 al. 2, 69, 72, 91 al. 3. Normes ISO/IEC paraphrasées.
+% À vérifier par l'auteur : statut du Cameroun au regard de la Convention de
+% Budapest et de la Convention de Malabo ; dispositions du Code de procédure
+% pénale sur l'expertise.
+% ============================================================================
+
+\chapter{Normes et Droit de l'Investigation}
+\label{chap:normes-droit}
+\chaptermark{Normes et droit}
+
+\epigraph{%
+    « La compétence technique dit ce que l'on peut faire.\\
+    Le droit dit ce que l'on a le droit de faire. »%
+}{Principe du cours}
+
+\niveauChapitre{Fondamental}{%
+    Lecture des Chapitres~\ref{chap:investigation} et~\ref{chap:preuve}
+}
+
+\begin{boxobjectifs}
+\begin{itemize}
+    \item Situer les normes de l'investigation numérique (famille ISO/IEC
+          27037 à 27043, ISO/IEC 27035, ISO/IEC 17025, NIST) et dire ce que
+          chacune encadre.
+    \item Citer les articles de la loi n°~2010/012 qui organisent l'enquête
+          (articles~52 à~58).
+    \item Qualifier des faits au regard des infractions de la loi
+          n°~2010/012.
+    \item Identifier les obligations de l'exploitant d'un système
+          d'information qui pèsent sur la préparation d'une enquête.
+    \item Distinguer les pouvoirs de l'OPJ, de l'expert requis et de
+          l'enquêteur privé.
+    \item Décrire la voie de l'entraide judiciaire internationale.
+\end{itemize}
+\end{boxobjectifs}
+
+\bigskip
+
+% ============================================================================
+\section*{Avant de commencer : soixante jours au lieu de dix ans}
+% ============================================================================
+
+Bafoussam, 30 mars 2025. Me~ETOUNDI, la juriste de NYANGA CRÉDIT, relit avec
+Mme~NDOUMBE la loi n°~2010/012 relative à la cybersécurité et à la
+cybercriminalité au Cameroun. Elle cherche les infractions que la plainte
+peut viser. Elle trouve aussi un article qu'elle n'attendait pas~: la loi
+oblige les exploitants de systèmes d'information à conserver les données de
+connexion et de trafic pendant dix ans. Les journaux de la passerelle de
+l'établissement n'en gardaient que soixante jours.
+
+\begin{boxalert}
+\textbf{Violation typique.} Traiter le droit comme une question qui ne se
+pose qu'au moment de porter plainte.
+
+\smallskip
+\textbf{Règle~:} le droit encadre l'enquête du premier geste au dernier~:
+qui peut recueillir quoi, comment saisir, comment requérir un tiers, et ce
+que l'organisation devait avoir préparé. L'enquêteur qui l'ignore produit
+des pièces fragiles et expose son client.
+\end{boxalert}
+
+\separateur
+
+% ============================================================================
+\section{Les Normes de l'Investigation}
+\label{sec:c08-normes}
+% ============================================================================
+
+Les normes ne disent pas le droit~; elles décrivent l'état de l'art. Un juge
+ou un expert adverse qui conteste une méthode demandera si elle suit une
+pratique reconnue. Les normes fournissent cette référence.
+
+\begin{tableaucours}{L{2.8cm}L{5.4cm}L{4.0cm}}{%
+    \tableauHeader{Texte} &
+    \tableauHeader{Objet (paraphrasé)} &
+    \tableauHeader{Chapitres du cours}
+}
+ISO/IEC 27037 & Identification, recueil, acquisition et préservation de la
+preuve numérique & \ref{chap:preuve}, \ref{chap:acquisition} \\
+ISO/IEC 27041 & Assurance que les méthodes d'examen sont adaptées et
+validées & \ref{chap:disque} à \ref{chap:reseau} \\
+ISO/IEC 27042 & Analyse et interprétation de la preuve numérique &
+\ref{chap:disque} à \ref{chap:chronologie} \\
+ISO/IEC 27043 & Principes et processus de l'investigation, de la
+préparation à la clôture & \ref{chap:investigation} \\
+ISO/IEC 27035 & Gestion des incidents de sécurité de l'information &
+\ref{chap:investigation}, \ref{chap:enquete} \\
+ISO/IEC 17025 & Compétence des laboratoires d'essais et d'étalonnage, base
+de l'accréditation des laboratoires forensiques & \ref{chap:rapport} \\
+NIST SP 800-86 & Intégration de la forensique à la réponse aux incidents &
+\ref{chap:investigation} \\
+NIST SP 800-61 & Gestion des incidents de sécurité & \ref{chap:investigation} \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~8.1. Les normes de l'investigation numérique}\end{center}
+
+\begin{boxinfo}
+\textbf{ISO/IEC 27041 et la validation des outils.} La norme
+ISO/IEC~27041~\cite{iso27041_2015} demande que l'enquêteur puisse montrer
+qu'une méthode fait ce qu'il prétend. En pratique, on teste un outil sur une
+image de référence dont le contenu est connu, et l'on garde la trace du
+test. Un outil non validé n'est pas interdit, mais son résultat porte une
+confiance moindre, et l'enquêteur doit le dire.
+\end{boxinfo}
+
+% ============================================================================
+\section{Le Cadre Camerounais de l'Enquête}
+\label{sec:c08-enquete}
+% ============================================================================
+
+La loi n°~2010/012 du 21~décembre 2010 relative à la cybersécurité et à la
+cybercriminalité~\cite{loi2010012} contient un chapitre consacré à la
+procédure. Ses articles~52 à~58 organisent l'enquête.
+
+\begin{boxjuris}
+\textbf{\loicam{n°~2010/012}, article~52}~\cite{loi2010012}~:
+\textit{« (1) En cas d'infraction cybernétique, les Officiers de Police
+Judiciaire à compétence générale et les agents habilités de l'Agence,
+procèdent aux enquêtes conformément aux dispositions du Code de Procédure
+Pénale. [\ldots] (3) Les Officiers de Police Judiciaire et les agents
+habilités de l'Agence peuvent, lors des investigations, accéder aux moyens
+de transport, à tout local à usage professionnel, à l'exclusion des
+domiciles privés, en vue de rechercher, de constater les infractions, de
+demander la communication de tous les documents professionnels et en
+prendre copie, recueillir, sur convocation ou sur place, les renseignements
+et justifications. »}
+
+\medskip
+\textbf{Portée} (analyse). L'enquête pénale appartient aux OPJ et aux agents
+habilités de l'Agence nationale des technologies de l'information et de la
+communication (ANTIC). Leurs pouvoirs d'accès s'arrêtent au domicile privé,
+qui relève des règles générales de la perquisition.
+\end{boxjuris}
+
+\begin{tableaucours}{cL{9.4cm}}{%
+    \tableauHeader{Article} &
+    \tableauHeader{Objet}
+}
+52 & Enquêteurs compétents (OPJ, agents habilités de l'ANTIC) et pouvoirs
+d'accès \\
+53 & Perquisition portant sur des données, copie en présence des
+personnes, scellés (Chapitre~\ref{chap:preuve}) \\
+54 & Perquisitions et saisies selon le Code de procédure pénale, en tenant
+compte du dépérissement des preuves \\
+55 & Réquisition d'une personne qualifiée pour obtenir la version en clair
+de données transformées~; remise de la convention de déchiffrement \\
+56 & Réquisition à expert, selon les règles de la commission d'expert \\
+57 & Commissions rogatoires nationales et internationales \\
+58 & Obligations des prestataires de cryptographie envers les enquêteurs \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~8.2. Les articles de procédure de la loi n°~2010/012}\end{center}
+
+\begin{boxjuris}
+\textbf{\loicam{n°~2010/012}, article~55}~\cite{loi2010012}~:
+\textit{« (1) Lorsqu'il apparaît que les données saisies ou obtenues au
+cours de l'enquête ou de l'instruction ont fait l'objet d'opérations de
+transformation empêchant d'accéder en clair ou sont de nature à
+compromettre les informations qu'elles contiennent, le Procureur de la
+République, le Juge d'Instruction ou la juridiction de jugement peuvent
+réquisitionner toute personne physique ou morale qualifiée, en vue
+d'effectuer les opérations techniques permettant d'obtenir la version en
+clair desdites données. (2) Lorsqu'un moyen de cryptographie a été utilisé,
+les autorités judiciaires peuvent exiger la convention secrète de
+déchiffrement du cryptogramme. »}
+
+\medskip
+\textbf{\loicam{n°~2010/012}, article~56}~\cite{loi2010012}~:
+\textit{« La réquisition prévue à l'article 50 ci-dessus peut être faite à
+tout expert. Dans ce cas, son exécution est faite conformément aux
+dispositions du Code de procédure pénale relatives à la commission
+d'expert. »}
+
+\medskip
+\textbf{Portée} (analyse). L'article~55 fonde la réquisition qui permettrait
+d'ouvrir l'archive chiffrée \texttt{cpt.7z} (Chapitre~\ref{chap:disque}).
+L'article~56 fonde la désignation de M.~ABOUBAKAR~: l'expert requis agit
+selon les règles de l'expertise du Code de procédure pénale [dispositions à
+vérifier par le lecteur sur le texte officiel], et non selon un mandat de
+l'établissement.
+\end{boxjuris}
+
+% ============================================================================
+\section{Qualifier les Faits}
+\label{sec:c08-infractions}
+% ============================================================================
+
+L'enquête technique établit des faits~; la qualification les rattache à des
+infractions. Elle appartient au procureur et au juge, mais l'enquêteur doit
+savoir quels faits chaque infraction exige, pour ne pas oublier d'établir
+l'un d'eux.
+
+\begin{boxjuris}
+\textbf{\loicam{n°~2010/012}, article~65, alinéa~2}~\cite{loi2010012}~:
+\textit{« Est puni des peines prévues à l'alinéa 1 ci-dessus, tout accès non
+autorisé, à l'ensemble ou à une partie d'un réseau de communications
+électroniques ou d'un système d'information ou d'un équipement
+terminal. »}
+
+\medskip
+\textbf{\loicam{n°~2010/012}, article~72}~\cite{loi2010012}~:
+\textit{« Est puni des peines prévues par l'article 66 ci-dessus celui qui,
+de quelque manière que ce soit, sans droit, introduit, altère, efface, ou
+supprime, afin d'obtenir un bénéfice économique, les données électroniques,
+de manière à causer un préjudice patrimonial à autrui. »}
+\end{boxjuris}
+
+\begin{boxscenario}{Opération NYANGA. Les faits et les textes}
+\begin{tableaucours}{L{4.6cm}L{2.4cm}L{5.0cm}}{%
+    \tableauHeader{Fait établi} &
+    \tableauHeader{Texte possible} &
+    \tableauHeader{Élément que l'enquête doit établir}
+}
+Session du 2~mars sur la passerelle, par contournement de
+l'authentification & Art.~65 al.~2, art.~69 & Accès sans droit~;
+violation des mesures de sécurité (art.~69) \\
+Copie du dossier \texttt{Clients} & Art.~69 & Accès « afin d'obtenir des
+informations ou des données » \\
+Installation d'un service, copie de la mémoire de \texttt{lsass.exe} &
+Art.~71 & Introduction de données en vue de modifier celles du système \\
+23 virements avec la clé volée & Art.~72 & Introduction de données sans
+droit, bénéfice économique, préjudice patrimonial \\
+\end{tableaucours}
+
+\medskip
+\textbf{Analyse} (confiance moyenne, qualification réservée au parquet).
+Les faits établis aux Chapitres~\ref{chap:disque} à~\ref{chap:chronologie}
+couvrent les éléments matériels de ces infractions. L'identité des auteurs,
+\NEK{}, conditionne les poursuites, pas la qualification des faits.
+\end{boxscenario}
+
+\begin{boxjuris}
+\textbf{\loicam{n°~2010/012}, article~69}~\cite{loi2010012}~:
+\textit{« Est puni d'un emprisonnement de cinq (05) à dix (10) ans et d'une
+amende de 10.000.000 (dix millions) à 100.000.000 (cent millions) F CFA ou
+de l'une de ces deux peines seulement, celui qui accède sans droit, et en
+violation des mesures de sécurité, à l'ensemble ou à une partie d'un réseau
+de communications électroniques, d'un système d'information ou d'un
+équipement terminal, afin d'obtenir des informations ou des données, en
+relation avec un système d'information connecté à un autre système
+d'information. »}
+
+\medskip
+\textbf{Portée} (analyse). L'article~69 exige une violation des mesures de
+sécurité. Le contournement de l'authentification de la passerelle en est
+une~; l'enquête doit l'établir techniquement, ce que fera le
+Chapitre~\ref{chap:artefact-vuln}. Le même article interdit à l'enquêteur
+privé d'entrer sans autorisation dans un système, fût-ce pour suivre
+l'attaquant~: remonter jusqu'au serveur 203.0.113.47 et s'y connecter
+serait un accès sans droit.
+\end{boxjuris}
+
+% ============================================================================
+\section{Les Obligations de l'Exploitant}
+\label{sec:c08-obligations}
+% ============================================================================
+
+La loi pèse aussi sur la victime, au titre de ses obligations d'exploitant de
+système d'information. Trois dispositions intéressent directement la
+préparation d'une enquête.
+
+\begin{boxjuris}
+\textbf{\loicam{n°~2010/012}, article~29}~\cite{loi2010012}~:
+\textit{« (1) Les exploitants des systèmes d'information ont l'obligation
+de conserver les données de connexion et de trafic de leurs systèmes
+d'information pendant une période de dix (10) ans. (2) Les exploitants des
+systèmes d'information sont tenus d'installer des mécanismes de
+surveillance de contrôle d'accès aux données de leurs systèmes
+d'information. Les données conservées peuvent être accessibles lors des
+investigations judiciaires. (3) Les installations des exploitants des
+systèmes d'information peuvent faire l'objet de perquisition ou de saisie
+sur ordre d'une autorité judiciaire dans les conditions prévues par les lois
+et règlements en vigueur. »}
+
+\medskip
+\textbf{\loicam{n°~2010/012}, article~26, alinéa~4}~\cite{loi2010012}~:
+\textit{« Les plates-formes des systèmes d'information font l'objet de
+protection contre d'éventuels rayonnements et des intrusions qui pourraient
+compromettre l'intégrité des données transmises et contre toute autre
+attaque externe notamment par un système de détection d'intrusions. »}
+
+\medskip
+\textbf{\loicam{n°~2010/012}, article~30, alinéa~1}~\cite{loi2010012}~:
+\textit{« Les exploitants des systèmes d'information évaluent, révisent leurs
+systèmes de sécurité et introduisent en cas de nécessité les modifications
+appropriées dans leurs pratiques, mesures et techniques de sécurité en
+fonction de l'évolution des technologies. »}
+\end{boxjuris}
+
+\begin{boxlecture}{NYANGA CRÉDIT face à ses obligations d'exploitant}
+\begin{tableaucours}{L{6.6cm}cL{3.6cm}}{%
+    \tableauHeader{Obligation} &
+    \tableauHeader{Cote} &
+    \tableauHeader{Pièce}
+}
+Conserver dix ans les données de connexion et de trafic (art.~29 al.~1) &
+\NON{} & Passerelle~: 60~jours \\
+Surveiller le contrôle d'accès aux données (art.~29 al.~2) & \OUI{} &
+Journaux d'authentification du domaine \\
+Disposer d'un système de détection d'intrusions (art.~26 al.~4) & \OUI{} &
+Sonde installée en 2024 \\
+Réviser les mesures selon l'évolution des technologies (art.~30 al.~1) &
+\NON{} & Correctif non appliqué en 89~jours \\
+Les mécanismes ont reçu le visa de l'Agence (art.~26 al.~3) & \NEK{} &
+Aucun document produit \\
+\end{tableaucours}
+
+\medskip
+\textbf{Lecture} (analyse, confiance moyenne). Deux \OUI{}, deux \NON{}, un
+\NEK{}. Les deux \NON{} pèsent sur la victime~: la durée de conservation a
+failli effacer le premier accès, et l'absence de correction a ouvert la
+porte. Un avocat de la défense, ou un client lésé par la fuite, pourra s'en
+servir. Le rapport d'enquête ne les cache pas~; il les sépare des faits
+reprochés aux attaquants.
+\end{boxlecture}
+
+% ============================================================================
+\section{Trois Statuts, Trois Pouvoirs}
+\label{sec:c08-statuts}
+% ============================================================================
+
+\begin{tableaucours}{L{2.6cm}L{3.2cm}L{3.2cm}L{3.2cm}}{%
+    \tableauHeader{} &
+    \tableauHeader{OPJ, agent de l'ANTIC} &
+    \tableauHeader{Expert requis} &
+    \tableauHeader{Enquêteur privé}
+}
+Fondement & Art.~52 & Art.~56, Code de procédure pénale & Contrat avec
+l'organisation \\
+Mandant & Procureur, juge & L'autorité qui le requiert & Le client \\
+Accès aux locaux & Locaux professionnels (art.~52 al.~3) & Selon sa
+mission & Ceux du client seulement \\
+Saisie et scellés & Oui (art.~53) & Non, il reçoit des scellés & Non~;
+il conserve sous chaîne de possession \\
+Requérir un tiers & Oui, par réquisition & Non & Non~; il demande, sans
+contrainte \\
+Destinataire du rapport & Le parquet & L'autorité requérante & Le client \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~8.3. Les pouvoirs selon le statut}\end{center}
+
+L'enquêteur privé n'a aucun pouvoir de contrainte. Il travaille sur les
+systèmes que son client possède ou dont il peut autoriser l'examen, et il
+remet ses pièces à l'OPJ quand une plainte est déposée. C'est pourquoi la
+qualité de ses premières acquisitions compte autant~: elles deviendront les
+pièces de l'enquête pénale.
+
+% ============================================================================
+\section{L'Entraide Internationale}
+\label{sec:c08-entraide}
+% ============================================================================
+
+Les adresses 203.0.113.18, .47 et .62 de l'affaire, si elles étaient
+réelles, appartiendraient très probablement à des hébergeurs étrangers.
+Obtenir leurs données suppose l'entraide judiciaire internationale.
+
+\begin{boxjuris}
+\textbf{\loicam{n°~2010/012}, article~91, alinéa~3}~\cite{loi2010012}~:
+\textit{« En cas d'urgence, les demandes d'entraide demandées par les
+autorités camerounaises ou étrangères peuvent être transmises directement
+aux autorités de l'Etat requis pour leur exécution. Le renvoi des pièces
+d'exécution aux autorités compétentes de l'Etat requérant est effectué selon
+les mêmes modalités. »}
+
+\medskip
+\textbf{Portée} (analyse). La voie ordinaire passe par le ministère chargé
+des relations extérieures (alinéa~1)~; l'urgence autorise la transmission
+directe. Le dépérissement des données des hébergeurs justifie souvent
+l'urgence.
+\end{boxjuris}
+
+Deux conventions internationales structurent la coopération. La Convention
+du Conseil de l'Europe sur la cybercriminalité, dite de
+Budapest~\cite{budapest2001}, organise la conservation rapide des données et
+l'entraide entre ses parties. La Convention de l'Union africaine sur la
+cybersécurité et la protection des données à caractère personnel, dite de
+Malabo~\cite{ua2014malabo}, entrée en vigueur en 2023, fixe un cadre
+africain. Le statut du Cameroun au regard de chacune [à vérifier par le
+lecteur sur les sites des deux organisations] commande la voie utilisable~:
+sans convention applicable, l'entraide repose sur la réciprocité et les
+accords bilatéraux.
+
+% ============================================================================
+\section{Ce que le Droit demande à chaque Métier}
+\label{sec:c08-metiers}
+% ============================================================================
+
+\begin{boxmetier}{Analyste en réponse à incident}
+Ne jamais suivre l'attaquant hors des systèmes du client~; demander par
+écrit la conservation des données aux tiers dès le premier jour~; préparer
+ses pièces comme si elles devaient être remises à un OPJ, ce qui arrive
+souvent.
+\end{boxmetier}
+
+\begin{boxmetier}{Application OPJ/Expert Judiciaire}
+L'OPJ requiert les tiers sans délai, en invoquant le dépérissement des
+preuves (art.~54). L'expert s'en tient aux questions de sa mission et signale
+à l'autorité tout fait découvert hors de celle-ci.
+\end{boxmetier}
+
+\begin{boxmetier}{RSSI}
+Mettre la conservation des journaux en conformité avec l'article~29~: dix
+ans pour les données de connexion et de trafic. La mesure se chiffre en
+stockage, et elle conditionne toute enquête future.
+\end{boxmetier}
+
+\separateur
+
+\begin{boxresume}
+\textbf{Ce qu'il faut retenir de ce chapitre~:}
+\begin{itemize}
+    \item Les normes ISO/IEC~27037 à~27043 décrivent l'état de l'art de
+          l'investigation~; l'ISO/IEC~27041 exige des méthodes validées.
+    \item La loi n°~2010/012 confie l'enquête aux OPJ et aux agents de
+          l'ANTIC (art.~52), encadre la saisie de données (art.~53, 54), le
+          déchiffrement (art.~55) et l'expertise (art.~56).
+    \item Les faits de NYANGA relèvent notamment des articles~65 al.~2,
+          69, 71 et~72~; la qualification appartient au parquet.
+    \item L'exploitant doit conserver dix ans ses données de connexion et
+          de trafic (art.~29 al.~1)~: NYANGA ne les gardait que 60~jours.
+    \item L'enquêteur privé n'a aucun pouvoir de contrainte~; l'entraide
+          internationale passe par les autorités judiciaires.
+\end{itemize}
+\end{boxresume}
+
+\begin{boxinfo}
+\textbf{Points de contrôle.} Vous avez compris ce chapitre si vous savez~:
+\begin{itemize}
+    \item citer l'article qui fonde la saisie par copie de données~;
+    \item rattacher un fait établi à une infraction et nommer l'élément à
+          prouver~;
+    \item dire ce qu'un enquêteur privé peut et ne peut pas faire.
+\end{itemize}
+\end{boxinfo}
+
+% ============================================================================
+\section*{Exercices}
+% ============================================================================
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~8.1. Quel texte~? \niveaubase}]
+Indiquez l'article de la loi n°~2010/012 qui répond à chaque question~:
+(a) qui conduit l'enquête pénale en cas d'infraction cybernétique~?
+(b) peut-on saisir une copie des données plutôt que le serveur~? (c) comment
+obtenir la version en clair d'une archive chiffrée~? (d) combien de temps
+l'exploitant doit-il conserver ses données de trafic~? (e) comment désigner
+un expert~?
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~8.2. Ce que l'enquêteur privé ne fait pas \niveaumoyen}]
+Mme~MBARGA reçoit trois demandes de son client. Dites, pour chacune, si elle
+peut y répondre et pourquoi~: (a) se connecter au serveur 203.0.113.47 avec
+les identifiants trouvés dans l'outil de l'attaquant~; (b) examiner le
+portable personnel de M.~KAMGA, qu'il apporte de lui-même~; (c) obtenir de
+l'opérateur de paiement mobile l'identité des titulaires des onze
+portefeuilles.
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~8.3. Qualifier \niveaumoyen}]
+Pour chacun des faits suivants, proposez un article de la loi n°~2010/012
+et nommez l'élément que l'enquête doit établir~: (a) la création du compte
+\texttt{svc\_backup} par l'attaquant, s'il était établi~; (b) la balise de
+soixante secondes~; (c) l'effacement de l'archive \texttt{cpt.7z}~;
+(d) l'envoi de 3,2~Go vers l'extérieur.
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~8.4. Les obligations de la victime \niveauexpert}]
+Un client dont le dossier figure parmi les fichiers exfiltrés assigne NYANGA
+CRÉDIT en réparation.
+\begin{enumerate}[(a)]
+    \item Quels manquements aux articles~26, 29 et~30 peut-il invoquer, et
+          sur quelles pièces de l'enquête~?
+    \item NYANGA répond qu'elle est victime d'une infraction. Montrez que
+          les deux positions ne s'excluent pas.
+    \item Rédigez la recommandation du rapport d'enquête qui traite la
+          conservation des journaux, en citant le texte.
+\end{enumerate}
+\end{boxexo}
+
+\bigskip
+
+\begin{boxinfo}
+\textbf{Pour aller plus loin.}
+\begin{itemize}
+    \item La loi n°~2010/012~\cite{loi2010012}, dans son texte officiel.
+    \item Les normes ISO/IEC~27037~\cite{iso27037_2012},
+          27041~\cite{iso27041_2015}, 27042~\cite{iso27042_2015},
+          27043~\cite{iso27043_2015}.
+    \item La Convention de Budapest~\cite{budapest2001} et la Convention de
+          Malabo~\cite{ua2014malabo}.
+\end{itemize}
+\end{boxinfo}
+
+\begin{boxinfo}
+\textbf{Transition.} L'enquête a montré par où l'attaquant est entré~: une
+faille connue de la passerelle. La partie~IV change de point de vue~:
+qu'est-ce qu'une vulnérabilité, et comment la mesurer~?
+Chapitre~\ref{chap:vulnerabilite}.
+\end{boxinfo}

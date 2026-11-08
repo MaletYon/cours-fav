@@ -1,0 +1,404 @@
+% ============================================================================
+% Fichier  : partie4/P04_C11_gerer_vulnerabilites.tex
+% Titre    : Gérer les Vulnérabilités
+% Auteur   : MINKA MI NGUIDJOÏ Thierry Emmanuel
+% Version  : 1.0 -- novembre 2024
+% Corrigés : corriges/Corr_C11.tex
+% ============================================================================
+% Sources : NIST SP 800-40 r4 (gestion des correctifs comme maintenance
+% préventive) ; ISO/IEC 30111 et 29147 (traitement et divulgation côté
+% éditeur) ; ISO/IEC 27002:2022, mesure 8.8 (gestion des vulnérabilités
+% techniques, paraphrasée) ; catalogue KEV ; EPSS.
+% Faits nouveaux (bible) : politique SOLITRANS de juin 2025, classes P1 à P4
+% et délais 7/15/30/90 jours ; suivi T3 2025 à T1 2026 ; exceptions E-01 à
+% E-04 ; NYANGA adopte la méthode en septembre 2025.
+% ============================================================================
+
+\chapter{Gérer les Vulnérabilités}
+\label{chap:gerer}
+\chaptermark{Gérer les vulnérabilités}
+
+\epigraph{%
+    « Une vulnérabilité corrigée est une vulnérabilité\\
+    dont on a vérifié la correction. »%
+}{Principe du cours}
+
+\niveauChapitre{Intermédiaire}{%
+    Maîtrise des Chapitres~\ref{chap:vulnerabilite} et~\ref{chap:identifier}
+}
+
+\begin{boxobjectifs}
+\begin{itemize}
+    \item Décrire le cycle de gestion des vulnérabilités, de
+          l'identification à la vérification.
+    \item Rédiger une politique de priorité qui combine exploitation,
+          exposition et importance de l'actif, avec des délais.
+    \item Choisir entre correctif, changement de configuration et mesure
+          compensatoire.
+    \item Gérer une exception~: propriétaire, durée, mesure compensatoire,
+          revue.
+    \item Construire et lire les indicateurs d'un programme.
+\end{itemize}
+\end{boxobjectifs}
+
+\bigskip
+
+% ============================================================================
+\section*{Avant de commencer : quarante failles par semaine}
+% ============================================================================
+
+Douala, juin 2025. Mme~EBODE présente sa politique au comité de direction
+de SOLITRANS. Elle ne propose pas de corriger plus~: l'équipe système de
+M.~FOUDA traite environ quarante failles par semaine, et rien ne permettra
+de doubler ce rythme avant l'an prochain. Elle propose de corriger dans le
+bon ordre, avec des délais écrits, et de vérifier ce qui est fait. Le
+directeur financier demande combien de failles resteront ouvertes à la fin
+de l'année. Elle répond qu'il en restera beaucoup, et qu'elle saura dire
+lesquelles, pourquoi, et qui en a accepté le risque.
+
+\begin{boxalert}
+\textbf{Violation typique.} Déclarer une faille corrigée sur la foi du
+ticket fermé par l'équipe système, sans nouvelle analyse de l'actif.
+
+\smallskip
+\textbf{Règle~:} une correction se vérifie par un nouveau balayage, ou par
+une lecture directe de la version installée. Le ticket fermé est une
+déclaration~; le balayage qui ne trouve plus la faille est une constatation.
+\end{boxalert}
+
+\separateur
+
+% ============================================================================
+\section{Le Cycle de Gestion}
+\label{sec:c11-cycle}
+% ============================================================================
+
+Le guide NIST SP~800-40~\cite{nist80040} présente la gestion des correctifs
+comme une maintenance préventive, planifiée, et non comme une suite
+d'urgences. La mesure 8.8 de l'ISO/IEC~27002:2022~\cite{iso27002_2022},
+consacrée à la gestion des vulnérabilités techniques, demande d'obtenir
+l'information sur les vulnérabilités, d'évaluer l'exposition de
+l'organisation et de prendre les mesures appropriées (paraphrase).
+
+\begin{center}
+\begin{tikzpicture}[
+    etape/.style = {draw=CouleurBordDef, fill=CouleurDef, rounded corners=3pt,
+        minimum width=2.4cm, minimum height=0.9cm, align=center,
+        font=\small\bfseries\color{CouleurPrimaire}},
+    arrow/.style = {-{Stealth[length=4pt]}, thick, color=CouleurSecondaire}
+]
+\node[etape] (a) at (0,0)     {Inventorier};
+\node[etape] (b) at (3.0,0)   {Identifier};
+\node[etape] (c) at (6.0,0)   {Prioriser};
+\node[etape] (d) at (9.0,0)   {Traiter};
+\node[etape] (e) at (9.0,-1.6) {Vérifier};
+\node[etape] (f) at (4.5,-1.6) {Rendre compte};
+\draw[arrow] (a) -- (b); \draw[arrow] (b) -- (c); \draw[arrow] (c) -- (d);
+\draw[arrow] (d) -- (e); \draw[arrow] (e) -- (f); \draw[arrow] (f) -| (a);
+\end{tikzpicture}
+\end{center}
+\begin{center}{\small\itshape Figure~11.1. Le cycle de gestion des vulnérabilités}\end{center}
+
+Traiter ne veut pas toujours dire corriger. Quatre voies existent.
+
+\begin{tableaucours}{L{2.8cm}L{5.0cm}L{4.4cm}}{%
+    \tableauHeader{Voie} &
+    \tableauHeader{Exemple} &
+    \tableauHeader{Condition}
+}
+Correctif & Mise à jour de l'éditeur & Testé, appliqué dans une fenêtre,
+retour arrière prévu \\
+Configuration & Désactiver le service vulnérable, changer un réglage &
+Fonction non utilisée, ou réglage documenté par l'éditeur \\
+Mesure compensatoire & Filtrage réseau, restriction d'accès, règle de
+pare-feu applicatif & Temporaire, en attendant le correctif \\
+Acceptation & Exception formelle & Propriétaire, durée, revue (section~11.4) \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~11.1. Les quatre voies de traitement}\end{center}
+
+% ============================================================================
+\section{La Politique de Priorité}
+\label{sec:c11-politique}
+% ============================================================================
+
+Une politique de priorité traduit en règles écrites ce que le
+Chapitre~\ref{chap:vulnerabilite} a montré~: l'exploitation et l'exposition
+comptent davantage que le score seul.
+
+\begin{boxscenario}{Opération SOLITRANS. La politique de juin 2025}
+\begin{tableaucours}{cL{6.6cm}cL{2.6cm}}{%
+    \tableauHeader{Classe} &
+    \tableauHeader{Règle d'entrée} &
+    \tableauHeader{Délai} &
+    \tableauHeader{Décideur d'exception}
+}
+P1 & Inscrite au catalogue KEV, ou EPSS $\geq 0{,}5$, sur un actif exposé à
+Internet ou critique & 7 jours & Directeur général \\
+P2 & Inscrite au catalogue KEV sur un actif interne, ou CVSS-B $\geq 9{,}0$
+sur un actif exposé & 15 jours & RSSI \\
+P3 & CVSS-B $\geq 7{,}0$, hors P1 et P2 & 30 jours & RSSI \\
+P4 & Autres constats confirmés & 90 jours & Responsable des
+vulnérabilités \\
+\end{tableaucours}
+
+\medskip
+\textbf{Constatations.} Appliquée aux 2\,947 constats de mai, la politique
+place 38 constats en P1, 211 en P2, 904 en P3 et 1\,794 en P4. À quarante
+corrections par semaine, les 249 constats P1 et P2 demandent un peu plus de
+six semaines, bien au-delà du délai de 15~jours fixé pour les P2.
+
+\textbf{Analyse} (confiance élevée). La politique est tenable pour les P1,
+pas encore pour le stock initial de P2~: Mme~EBODE demande un renfort
+temporaire de deux semaines, et la fixation du délai à partir de la date
+d'entrée en vigueur pour le stock existant.
+\end{boxscenario}
+
+\begin{boxinfo}
+\textbf{Les délais courent depuis quand~?} Le délai d'une faille se compte à
+partir du moment où l'organisation pouvait la connaître~: la publication du
+correctif, ou la première détection sur son parc, selon la règle choisie.
+Une politique qui ne le précise pas permet de repousser indéfiniment
+l'échéance.
+\end{boxinfo}
+
+% ============================================================================
+\section{Corriger en Production}
+\label{sec:c11-production}
+% ============================================================================
+
+Un correctif peut casser une application. C'est la raison la plus souvent
+donnée pour ne pas l'appliquer, et elle est parfois exacte. La réponse n'est
+pas de renoncer, mais d'organiser~: un environnement de test qui reproduit
+la production pour les applications critiques, des fenêtres de maintenance
+connues des métiers, une procédure de retour arrière éprouvée, et un ordre
+de déploiement par vagues (d'abord quelques machines représentatives, puis
+le reste).
+
+\begin{boxinfo}
+\textbf{Déployer un correctif de classe P1}
+\begin{enumerate}
+    \item Lire le bulletin~: versions touchées, prérequis, effets connus.
+    \item Appliquer une mesure compensatoire immédiate si le correctif
+          demande plus de 24~heures.
+    \item Tester sur une machine représentative, avec le propriétaire
+          métier.
+    \item Déployer par vagues, en surveillant les services.
+    \item Vérifier par un nouveau balayage authentifié de chaque actif.
+    \item Lever la mesure compensatoire, et clore le constat avec la
+          preuve.
+\end{enumerate}
+\end{boxinfo}
+
+% ============================================================================
+\section{Les Exceptions}
+\label{sec:c11-exceptions}
+% ============================================================================
+
+Certaines failles ne peuvent pas être corrigées dans le délai~: le
+correctif n'existe pas, l'éditeur ne maintient plus le produit, ou
+l'application métier ne fonctionne pas avec la version corrigée. L'exception
+transforme ce fait en décision.
+
+\begin{boxdef}
+\textbf{\termecle{Exception}}~: décision écrite par laquelle un responsable
+habilité accepte, pour une durée limitée, qu'une vulnérabilité reste
+ouverte au-delà du délai, avec une mesure compensatoire et une date de
+revue.
+\end{boxdef}
+
+\begin{boxscenario}{Opération SOLITRANS. Quatre exceptions}
+\begin{tableaucours}{cL{3.6cm}L{3.4cm}cL{1.8cm}}{%
+    \tableauHeader{Réf.} &
+    \tableauHeader{Faille et actif} &
+    \tableauHeader{Mesure compensatoire} &
+    \tableauHeader{Durée} &
+    \tableauHeader{Décideur}
+}
+E-01 & P2, logiciel de dédouanement en fin de support & Accès limité à
+trois postes, réseau isolé & 6 mois & RSSI \\
+E-02 & P3, terminaux de pesage, aucun correctif & Filtrage strict, aucun
+accès Internet & 12 mois & RSSI \\
+E-03 & P1, portail des transitaires, correctif incompatible & Règle de
+pare-feu applicatif & 30 jours & Directeur général \\
+E-04 & P3, serveur d'archives & Aucune & Sans limite & Non signée \\
+\end{tableaucours}
+
+\medskip
+\textbf{Analyse} (confiance élevée). E-01 à E-03 sont des exceptions. E-04
+n'en est pas une~: sans mesure, sans durée et sans signature, c'est une
+faille ouverte que personne n'assume. Elle redevient un constat en retard.
+\end{boxscenario}
+
+% ============================================================================
+\section{Mesurer le Programme}
+\label{sec:c11-mesurer}
+% ============================================================================
+
+\begin{tableaucours}{L{4.0cm}L{5.2cm}L{3.0cm}}{%
+    \tableauHeader{Indicateur} &
+    \tableauHeader{Définition} &
+    \tableauHeader{Piège}
+}
+Délai de correction & Durée médiane entre détection et correction
+vérifiée, par classe & La moyenne masque les cas extrêmes \\
+Respect des délais & Part des constats corrigés dans le délai de leur classe
+& À calculer sur les constats échus \\
+Couverture & Part des actifs existants analysés avec authentification &
+Souvent omise \\
+KEV ouvertes & Nombre de failles du catalogue encore ouvertes & Le seul
+indicateur à suivre chaque semaine \\
+Âge du stock & Âge des constats ouverts, par tranche & Le stock vieillit
+sans bruit \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~11.2. Les indicateurs d'un programme}\end{center}
+
+\begin{boxlecture}{SOLITRANS, trois trimestres}
+\begin{tableaucours}{L{5.6cm}ccc}{%
+    \tableauHeader{Indicateur} &
+    \tableauHeader{T3 2025} &
+    \tableauHeader{T4 2025} &
+    \tableauHeader{T1 2026}
+}
+Couverture authentifiée & 71~\% & 84~\% & 93~\% \\
+Délai médian P1 (jours) & 11 & 6 & 5 \\
+P1 corrigées dans le délai & 58~\% & 81~\% & 92~\% \\
+P2 corrigées dans le délai & 34~\% & 63~\% & 77~\% \\
+KEV ouvertes en fin de trimestre & 14 & 5 & 2 \\
+Exceptions en cours, toutes signées & \NON{} & \OUI{} & \OUI{} \\
+\end{tableaucours}
+
+\medskip
+\textbf{Lecture.} Le programme progresse sur toutes les lignes. La
+couverture passe de 71 à 93~\%~: une partie des nouvelles failles du T4
+vient simplement de ce que l'on regarde mieux, et la hausse apparente du
+stock ne traduit pas une dégradation. Les deux KEV ouvertes au T1 2026 sont
+les terminaux de pesage, sous l'exception E-02.
+\end{boxlecture}
+
+\begin{boxscenario}{Opération NYANGA. Septembre 2025}
+\textbf{Constatations.} Six mois après l'incident, NYANGA CRÉDIT adopte la
+méthode de SOLITRANS~: inventaire croisé (la passerelle et quatorze autres
+équipements y entrent), balayage authentifié mensuel, politique en quatre
+classes, suivi hebdomadaire des KEV. Mme~NDOUMBE devient aussi responsable
+du programme.
+
+\textbf{Analyse} (confiance moyenne). Avec cette politique, VULN-2024-4471
+aurait été classée P1 le 19~décembre 2024, avec une échéance au
+26~décembre, soit plus de deux mois avant le premier accès.
+\end{boxscenario}
+
+% ============================================================================
+\section{Ce que la Gestion demande à chaque Métier}
+\label{sec:c11-metiers}
+% ============================================================================
+
+\begin{boxmetier}{Analyste en gestion des vulnérabilités}
+\textbf{Tenir le programme}
+\begin{enumerate}
+    \item Classer chaque constat confirmé selon la politique écrite.
+    \item Suivre chaque semaine les failles du catalogue KEV ouvertes.
+    \item Vérifier chaque correction par un nouveau balayage.
+    \item Instruire les exceptions et rappeler leurs dates de revue.
+    \item Publier les indicateurs avec la couverture.
+\end{enumerate}
+\end{boxmetier}
+
+\begin{boxmetier}{RSSI}
+Faire approuver la politique et les délais par la direction, et signer les
+exceptions de son niveau. Refuser une exception sans mesure compensatoire ni
+durée~: elle ne protège personne, sauf de la responsabilité.
+\end{boxmetier}
+
+\begin{boxmetier}{Analyste en réponse à incident}
+Après un incident, vérifier que la faille exploitée est corrigée partout où
+elle existe, et pas seulement sur la machine compromise.
+\end{boxmetier}
+
+\separateur
+
+\begin{boxresume}
+\textbf{Ce qu'il faut retenir de ce chapitre~:}
+\begin{itemize}
+    \item Le cycle va de l'inventaire à la vérification~; traiter peut
+          vouloir dire corriger, reconfigurer, compenser ou accepter.
+    \item Une politique écrite classe les failles par exploitation,
+          exposition et importance, avec des délais datés.
+    \item Une exception a un décideur, une mesure compensatoire, une durée
+          et une revue~; sinon, c'est un retard.
+    \item Une correction se vérifie par un nouveau balayage~; un ticket
+          fermé ne suffit pas.
+    \item Les indicateurs se lisent avec la couverture~: une hausse des
+          failles peut traduire un meilleur regard.
+\end{itemize}
+\end{boxresume}
+
+\begin{boxinfo}
+\textbf{Points de contrôle.} Vous avez compris ce chapitre si vous savez~:
+\begin{itemize}
+    \item classer une faille dans une politique en quatre classes~;
+    \item distinguer une exception d'un retard~;
+    \item interpréter une hausse du nombre de failles quand la couverture
+          augmente.
+\end{itemize}
+\end{boxinfo}
+
+% ============================================================================
+\section*{Exercices}
+% ============================================================================
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~11.1. Classer \niveaubase}]
+Avec la politique de SOLITRANS, classez~: (a) faille inscrite au catalogue
+KEV sur le portail des transitaires~; (b) faille de score 9,4 sur un serveur
+interne, non exploitée~; (c) faille de score 7,2 sur un poste~; (d) faille
+inscrite au catalogue KEV sur un serveur interne~; (e) faille de score 5,0
+sur une imprimante.
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~11.2. Le stock de P2 \niveaumoyen}]
+\begin{enumerate}[(a)]
+    \item Vérifiez le calcul de l'encadré « La politique de juin 2025 »~:
+          combien de semaines pour absorber les P1 et les P2 à quarante
+          corrections par semaine~?
+    \item Combien de corrections par semaine faudrait-il pour traiter les
+          211 P2 en 15 jours, après les 38 P1~?
+    \item Proposez deux solutions autres que le renfort.
+\end{enumerate}
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~11.3. Instruire une exception \niveaumoyen}]
+Le portail des transitaires présente une faille P1~; le correctif casse le
+module de facturation, et l'éditeur annonce une version compatible dans six
+semaines. Rédigez la demande d'exception complète, et dites qui doit la
+signer.
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~11.4. Lire les indicateurs \niveauexpert}]
+Au T4 2025, le nombre total de failles ouvertes de SOLITRANS augmente de
+12~\% alors que tous les indicateurs de délai s'améliorent.
+\begin{enumerate}[(a)]
+    \item Proposez deux explications compatibles avec l'encadré « SOLITRANS,
+          trois trimestres ».
+    \item Comment les départager~?
+    \item Rédigez la phrase du rapport trimestriel qui présente ce chiffre au
+          comité sans l'alarmer à tort ni le rassurer à tort.
+\end{enumerate}
+\end{boxexo}
+
+\bigskip
+
+\begin{boxinfo}
+\textbf{Pour aller plus loin.}
+\begin{itemize}
+    \item Le NIST SP~800-40~\cite{nist80040}.
+    \item L'ISO/IEC~30111~\cite{iso30111} et l'ISO/IEC~29147~\cite{iso29147},
+          pour le traitement et la divulgation du côté des éditeurs.
+\end{itemize}
+\end{boxinfo}
+
+\begin{boxinfo}
+\textbf{Transition.} Le programme de SOLITRANS empêche les incidents~;
+l'enquête de NYANGA en explique un. Le Chapitre~\ref{chap:artefact-vuln}
+relie les deux~: comment remonter d'une trace à la faille qui l'a permise.
+\end{boxinfo}

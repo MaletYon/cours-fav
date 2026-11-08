@@ -1,0 +1,233 @@
+NDAP SUKULU · FAV · fiche FAV-FICHE-C08
+Chapitre 8 : Normes et droit de l'investigation
+
+Version papier, à utiliser en attendant l'ouverture du portail NDAP SUKULU.
+La fiche complète compte 40 questions. Répondez sur la grille en fin de fiche.
+Durée indicative : 60 minutes. Seuil de réussite : 60 %.
+Les corrections figurent dans le livret de correction du cours.
+
+========================================================================
+Questions à choix multiple (une seule bonne réponse)
+========================================================================
+
+ 1. Quelle norme porte sur l'assurance que les méthodes d'examen sont adaptées ?
+      a) ISO/IEC 27037
+      b) ISO/IEC 27041
+      c) ISO/IEC 27043
+      d) ISO/IEC 17025
+
+ 2. Quelle norme porte sur l'analyse et l'interprétation de la preuve numérique ?
+      a) ISO/IEC 27041
+      b) ISO/IEC 27035
+      c) ISO/IEC 27042
+      d) ISO 9001
+
+ 3. Quelle norme porte sur la gestion des incidents de sécurité ?
+      a) ISO/IEC 27035
+      b) ISO/IEC 27037
+      c) ISO/IEC 27042
+      d) ISO 31000
+
+ 4. Quelle norme fonde l'accréditation des laboratoires forensiques ?
+      a) ISO/IEC 27001
+      b) ISO/IEC 27043
+      c) ISO 22301
+      d) ISO/IEC 17025
+
+ 5. Que fait-on pour valider un outil selon l'ISO/IEC 27041 ?
+      a) On l'achète cher
+      b) On le teste sur une image de référence au contenu connu
+      c) On le fait signer par le juge
+      d) On l'installe sur le serveur suspect
+
+ 6. Que disent les normes de l'investigation ?
+      a) Le droit applicable
+      b) Les peines
+      c) L'état de l'art
+      d) Le prix des outils
+
+ 7. Quelle loi camerounaise régit la cybersécurité et la cybercriminalité ?
+      a) La loi n° 2010/012
+      b) La loi n° 2024/017
+      c) La loi n° 2010/013
+      d) La loi OHADA
+
+ 8. Quelle est la date de la loi n° 2010/012 ?
+      a) Le 23 décembre 2024
+      b) Le 1er janvier 2010
+      c) Le 14 mars 2025
+      d) Le 21 décembre 2010
+
+ 9. Qui conduit les enquêtes en cas d'infraction cybernétique selon l'article 52 ?
+      a) Les enquêteurs privés
+      b) Les OPJ à compétence générale et les agents habilités de l'Agence
+      c) Les DSI
+      d) Les prestataires
+
+10. Quels locaux l'article 52 exclut-il des pouvoirs d'accès ?
+      a) Les locaux professionnels
+      b) Les moyens de transport
+      c) Les domiciles privés
+      d) Les centres de données
+
+11. Quelle agence est désignée par « l'Agence » dans la loi 2010/012 ?
+      a) L'ANTIC
+      b) L'ART
+      c) La CNPS
+      d) La COBAC
+
+12. Quel article permet d'obtenir la version en clair de données chiffrées ?
+      a) Article 53
+      b) Article 69
+      c) Article 29
+      d) Article 55
+
+13. Quel article permet la réquisition à expert ?
+      a) Article 52
+      b) Article 56
+      c) Article 72
+      d) Article 91
+
+14. Quel article traite des commissions rogatoires ?
+      a) Article 54
+      b) Article 26
+      c) Article 57
+      d) Article 65
+
+15. Quel article oblige les prestataires de cryptographie à remettre les conventions de déchiffrement ?
+      a) Article 58
+      b) Article 55
+      c) Article 30
+      d) Article 69
+
+16. Selon quelles règles s'exécute la réquisition à expert de l'article 56 ?
+      a) Celles du contrat
+      b) Celles de l'ISO
+      c) Celles du client
+      d) Celles du Code de procédure pénale sur la commission d'expert
+
+17. Quel article réprime tout accès non autorisé à un système d'information ?
+      a) Article 29 alinéa 1
+      b) Article 65 alinéa 2
+      c) Article 54
+      d) Article 91
+
+18. Quel article exige une violation des mesures de sécurité pour l'accès sans droit afin d'obtenir des données ?
+      a) Article 65 alinéa 2
+      b) Article 72
+      c) Article 69
+      d) Article 26
+
+19. Quel article vise l'altération de données afin d'obtenir un bénéfice économique ?
+      a) Article 72
+      b) Article 69
+      c) Article 52
+      d) Article 30
+
+20. Quelle peine d'emprisonnement prévoit l'article 69 ?
+      a) De trois mois à trois ans
+      b) De un à deux ans
+      c) Aucune
+      d) De cinq à dix ans
+
+========================================================================
+Vrai ou faux
+========================================================================
+
+21. Les normes disent le droit applicable à l'enquête.
+      Vrai / Faux
+
+22. Un outil non validé est interdit.
+      Vrai / Faux
+
+23. Les agents habilités de l'ANTIC peuvent enquêter sur les infractions cybernétiques.
+      Vrai / Faux
+
+24. L'article 52 autorise l'accès aux domiciles privés.
+      Vrai / Faux
+
+25. L'expert requis agit selon un mandat de l'établissement victime.
+      Vrai / Faux
+
+26. L'article 55 fonde la réquisition qui permettrait d'ouvrir l'archive chiffrée cpt.7z.
+      Vrai / Faux
+
+27. L'article 69 exige une violation des mesures de sécurité.
+      Vrai / Faux
+
+28. L'enquêteur qualifie lui-même définitivement les faits.
+      Vrai / Faux
+
+29. L'identité des auteurs est nécessaire à la qualification des faits.
+      Vrai / Faux
+
+30. NYANGA conservait ses données de connexion dix ans.
+      Vrai / Faux
+
+========================================================================
+Textes à trous
+========================================================================
+
+31. La loi camerounaise sur la cybersécurité est la loi n° 2010/______.
+
+32. Les enquêteurs compétents sont désignés à l'article ______.
+
+33. La réquisition à expert est prévue à l'article ______.
+
+34. L'obtention de données en clair est prévue à l'article ______.
+
+35. L'accès sans droit en violation des mesures de sécurité est réprimé par l'article ______.
+
+36. L'altération de données pour un bénéfice économique est réprimée par l'article ______.
+
+37. L'exploitant conserve les données de trafic pendant ______ ans.
+
+38. L'obligation de conservation figure à l'article ______ de la loi 2010/012.
+
+39. L'adéquation des méthodes est l'objet de l'ISO/IEC ______.
+
+40. L'analyse et l'interprétation sont l'objet de l'ISO/IEC ______.
+
+========================================================================
+Grille de réponses   Nom : ............................  Matricule : ............
+========================================================================
+ 1. ............................................
+ 2. ............................................
+ 3. ............................................
+ 4. ............................................
+ 5. ............................................
+ 6. ............................................
+ 7. ............................................
+ 8. ............................................
+ 9. ............................................
+10. ............................................
+11. ............................................
+12. ............................................
+13. ............................................
+14. ............................................
+15. ............................................
+16. ............................................
+17. ............................................
+18. ............................................
+19. ............................................
+20. ............................................
+21. ............................................
+22. ............................................
+23. ............................................
+24. ............................................
+25. ............................................
+26. ............................................
+27. ............................................
+28. ............................................
+29. ............................................
+30. ............................................
+31. ............................................
+32. ............................................
+33. ............................................
+34. ............................................
+35. ............................................
+36. ............................................
+37. ............................................
+38. ............................................
+39. ............................................
+40. ............................................

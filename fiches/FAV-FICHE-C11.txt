@@ -1,0 +1,233 @@
+NDAP SUKULU · FAV · fiche FAV-FICHE-C11
+Chapitre 11 : Gérer les vulnérabilités
+
+Version papier, à utiliser en attendant l'ouverture du portail NDAP SUKULU.
+La fiche complète compte 40 questions. Répondez sur la grille en fin de fiche.
+Durée indicative : 60 minutes. Seuil de réussite : 60 %.
+Les corrections figurent dans le livret de correction du cours.
+
+========================================================================
+Questions à choix multiple (une seule bonne réponse)
+========================================================================
+
+ 1. Comment le NIST SP 800-40 présente-t-il la gestion des correctifs ?
+      a) Comme une suite d'urgences
+      b) Comme une maintenance préventive planifiée
+      c) Comme un audit annuel
+      d) Comme un test d'intrusion
+
+ 2. Quelle mesure de l'ISO/IEC 27002:2022 porte sur les vulnérabilités techniques ?
+      a) 5.30
+      b) 8.28
+      c) 8.8
+      d) 5.19
+
+ 3. Quelle est la première étape du cycle de gestion ?
+      a) Inventorier
+      b) Prioriser
+      c) Traiter
+      d) Vérifier
+
+ 4. Quelle étape suit le traitement dans le cycle ?
+      a) Identifier
+      b) Inventorier
+      c) Prioriser
+      d) Vérifier
+
+ 5. Combien de voies de traitement le chapitre distingue-t-il ?
+      a) Deux
+      b) Quatre
+      c) Six
+      d) Une
+
+ 6. Quelle voie consiste à désactiver le service vulnérable ?
+      a) Le correctif
+      b) L'acceptation
+      c) La configuration
+      d) L'exploitation
+
+ 7. Quelle voie est temporaire, en attendant le correctif ?
+      a) La mesure compensatoire
+      b) Le correctif
+      c) L'acceptation définitive
+      d) La suppression de l'inventaire
+
+ 8. Quelle condition accompagne un correctif ?
+      a) Appliqué sans test
+      b) Appliqué le vendredi soir sans contrôle
+      c) Jamais appliqué
+      d) Testé, appliqué dans une fenêtre, retour arrière prévu
+
+ 9. Quel délai a la classe P1 chez SOLITRANS ?
+      a) 15 jours
+      b) 7 jours
+      c) 30 jours
+      d) 90 jours
+
+10. Quel délai a la classe P2 ?
+      a) 7 jours
+      b) 30 jours
+      c) 15 jours
+      d) 90 jours
+
+11. Quel délai a la classe P3 ?
+      a) 30 jours
+      b) 15 jours
+      c) 7 jours
+      d) 90 jours
+
+12. Quel délai a la classe P4 ?
+      a) 30 jours
+      b) 15 jours
+      c) 7 jours
+      d) 90 jours
+
+13. Quelle règle d'entrée définit la classe P1 ?
+      a) CVSS au moins 7,0
+      b) KEV ou EPSS au moins 0,5, sur un actif exposé ou critique
+      c) Tout constat confirmé
+      d) Les failles des imprimantes
+
+14. Qui décide d'une exception de classe P1 ?
+      a) Le RSSI
+      b) L'analyste
+      c) Le directeur général
+      d) Le prestataire
+
+15. Qui décide d'une exception de classe P2 ou P3 ?
+      a) Le RSSI
+      b) Le directeur général
+      c) L'équipe système
+      d) Le client
+
+16. Combien de constats la politique classe-t-elle en P1 ?
+      a) 211
+      b) 904
+      c) 1 794
+      d) 38
+
+17. Combien de constats la politique classe-t-elle en P2 ?
+      a) 38
+      b) 211
+      c) 904
+      d) 1 794
+
+18. Combien de semaines faut-il pour absorber P1 et P2 à quarante par semaine ?
+      a) Deux
+      b) Quinze
+      c) Un peu plus de six
+      d) Une
+
+19. Que demande Mme EBODE pour le stock initial de P2 ?
+      a) Un renfort temporaire de deux semaines
+      b) La suppression des P2
+      c) L'arrêt des balayages
+      d) Un nouveau logiciel
+
+20. À partir de quand le délai d'une faille doit-il se compter ?
+      a) Du jour où elle est corrigée
+      b) Du jour de l'audit
+      c) D'une date libre
+      d) Du moment où l'organisation pouvait la connaître
+
+========================================================================
+Vrai ou faux
+========================================================================
+
+21. Traiter une faille veut toujours dire la corriger.
+      Vrai / Faux
+
+22. Une mesure compensatoire est temporaire.
+      Vrai / Faux
+
+23. Un ticket fermé est une constatation de correction.
+      Vrai / Faux
+
+24. La politique de SOLITRANS classe les failles par exploitation, exposition et importance.
+      Vrai / Faux
+
+25. Les P2 du stock initial sont absorbables en 15 jours à quarante par semaine.
+      Vrai / Faux
+
+26. Une politique qui ne dit pas d'où courent les délais permet de repousser l'échéance.
+      Vrai / Faux
+
+27. Le directeur général décide des exceptions P1.
+      Vrai / Faux
+
+28. On déploie un correctif critique partout en même temps sans test.
+      Vrai / Faux
+
+29. Un retour arrière éprouvé fait partie de l'organisation des correctifs.
+      Vrai / Faux
+
+30. Une exception sans durée est acceptable si elle est signée.
+      Vrai / Faux
+
+========================================================================
+Textes à trous
+========================================================================
+
+31. La classe P1 a un délai de ______ jours.
+
+32. La classe P2 a un délai de ______ jours.
+
+33. La classe P4 a un délai de ______ jours.
+
+34. La gestion des correctifs est décrite par le NIST SP 800-______.
+
+35. La mesure de l'ISO/IEC 27002 sur les vulnérabilités est la mesure ______.
+
+36. La première étape du cycle est d'______.
+
+37. Une faille ouverte acceptée par écrit pour une durée limitée fait l'objet d'une ______.
+
+38. L'exception qui n'en est pas une est E-______.
+
+39. L'indicateur à suivre chaque semaine est le nombre de failles ______ ouvertes.
+
+40. On préfère la ______ à la moyenne pour le délai de correction.
+
+========================================================================
+Grille de réponses   Nom : ............................  Matricule : ............
+========================================================================
+ 1. ............................................
+ 2. ............................................
+ 3. ............................................
+ 4. ............................................
+ 5. ............................................
+ 6. ............................................
+ 7. ............................................
+ 8. ............................................
+ 9. ............................................
+10. ............................................
+11. ............................................
+12. ............................................
+13. ............................................
+14. ............................................
+15. ............................................
+16. ............................................
+17. ............................................
+18. ............................................
+19. ............................................
+20. ............................................
+21. ............................................
+22. ............................................
+23. ............................................
+24. ............................................
+25. ............................................
+26. ............................................
+27. ............................................
+28. ............................................
+29. ............................................
+30. ............................................
+31. ............................................
+32. ............................................
+33. ............................................
+34. ............................................
+35. ............................................
+36. ............................................
+37. ............................................
+38. ............................................
+39. ............................................
+40. ............................................

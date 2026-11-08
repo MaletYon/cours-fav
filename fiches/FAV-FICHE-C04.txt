@@ -1,0 +1,233 @@
+NDAP SUKULU · FAV · fiche FAV-FICHE-C04
+Chapitre 4 : L'analyse du disque
+
+Version papier, à utiliser en attendant l'ouverture du portail NDAP SUKULU.
+La fiche complète compte 40 questions. Répondez sur la grille en fin de fiche.
+Durée indicative : 60 minutes. Seuil de réussite : 60 %.
+Les corrections figurent dans le livret de correction du cours.
+
+========================================================================
+Questions à choix multiple (une seule bonne réponse)
+========================================================================
+
+ 1. Quelle structure découpe un disque en volumes ?
+      a) La MFT
+      b) La table de partitions
+      c) Le registre
+      d) Le journal USN
+
+ 2. Quel système de fichiers équipe Windows ?
+      a) ext4
+      b) APFS
+      c) NTFS
+      d) FAT de Linux
+
+ 3. Quel système de fichiers équipe la plupart des Linux ?
+      a) ext4
+      b) NTFS
+      c) APFS
+      d) HFS
+
+ 4. Où trouve-t-on souvent les restes de fichiers supprimés ?
+      a) Dans la table de partitions
+      b) Dans le BIOS
+      c) Dans le registre
+      d) Dans l'espace non alloué
+
+ 5. Comment NTFS décrit-il chaque fichier ?
+      a) Par une ligne du registre
+      b) Par un enregistrement de la table MFT
+      c) Par un raccourci
+      d) Par une entrée DNS
+
+ 6. Que signifie la lettre B dans MACB ?
+      a) Modification
+      b) Accès
+      c) Création
+      d) Changement de l'enregistrement
+
+ 7. Quel attribut NTFS les programmes peuvent-ils modifier librement ?
+      a) $STANDARD_INFORMATION
+      b) $FILE_NAME
+      c) $UsnJrnl
+      d) $MFTMirr
+
+ 8. Quel attribut seul le système met à jour lors de certaines opérations ?
+      a) $STANDARD_INFORMATION
+      b) $DATA
+      c) $Bitmap
+      d) $FILE_NAME
+
+ 9. Pourquoi la date de dernier accès vaut-elle peu ?
+      a) Elle est chiffrée
+      b) Windows ne la met pas toujours à jour et un antivirus la modifie
+      c) Elle est en UTC
+      d) Elle est absente de NTFS
+
+10. Que garde le journal $UsnJrnl ?
+      a) Les mots de passe
+      b) Les connexions réseau
+      c) Les changements des fichiers avec leur heure
+      d) Les processus
+
+11. Que fait NTFS quand on supprime un fichier ?
+      a) Il marque l'enregistrement et les blocs comme libres
+      b) Il écrase le contenu par des zéros
+      c) Il chiffre le fichier
+      d) Il l'envoie au nuage
+
+12. Quelle méthode récupère un fichier par ses octets de début de format ?
+      a) Le hachage
+      b) Le balayage
+      c) Le dédoublonnage
+      d) Le carving
+
+13. Que perd le carving par rapport à la récupération par métadonnées ?
+      a) Le contenu
+      b) Le nom et les dates
+      c) L'empreinte
+      d) La taille du disque
+
+14. Quelle signature marque le début d'une archive ZIP ?
+      a) 7z
+      b) %PDF
+      c) PK
+      d) MZ
+
+15. Quand la récupération par métadonnées échoue-t-elle ?
+      a) Quand l'enregistrement MFT a été réutilisé
+      b) Quand le disque est en NTFS
+      c) Quand le fichier est petit
+      d) Quand l'horloge dérive
+
+16. Quel événement indique une ouverture de session réussie ?
+      a) 4625
+      b) 7045
+      c) 1102
+      d) 4624
+
+17. Quel type d'ouverture désigne le bureau à distance ?
+      a) 3
+      b) 10
+      c) 2
+      d) 5
+
+18. Quel événement indique l'installation d'un service ?
+      a) 4624
+      b) 4720
+      c) 7045
+      d) 1102
+
+19. Quel événement indique l'effacement du journal de sécurité ?
+      a) 1102
+      b) 4688
+      c) 7045
+      d) 4625
+
+20. Quel événement indique la création d'un compte ?
+      a) 4624
+      b) 1102
+      c) 4688
+      d) 4720
+
+========================================================================
+Vrai ou faux
+========================================================================
+
+21. L'espace non alloué ne contient jamais de données utiles.
+      Vrai / Faux
+
+22. Les petits fichiers peuvent tenir entièrement dans leur enregistrement MFT.
+      Vrai / Faux
+
+23. Un écart incohérent entre les deux jeux de dates peut signaler une falsification.
+      Vrai / Faux
+
+24. On peut fonder seule une conclusion sur la date de dernier accès.
+      Vrai / Faux
+
+25. Supprimer un fichier sous NTFS efface immédiatement son contenu.
+      Vrai / Faux
+
+26. Le carving retrouve le nom du fichier.
+      Vrai / Faux
+
+27. L'événement 4688 existe toujours, même sans audit activé.
+      Vrai / Faux
+
+28. Le Prefetch est utile sur un poste de travail.
+      Vrai / Faux
+
+29. Les artefacts dépendent de la configuration du système.
+      Vrai / Faux
+
+30. Le compte adm.kamga s'était connecté à SRV-CPT01 dans les trente jours précédents.
+      Vrai / Faux
+
+========================================================================
+Textes à trous
+========================================================================
+
+31. Le système de fichiers de Windows est ______.
+
+32. La table principale de NTFS s'appelle la ______.
+
+33. Les quatre dates d'un fichier se notent ______.
+
+34. Le journal des changements de NTFS est le $______.
+
+35. La récupération par signatures s'appelle le ______.
+
+36. L'ouverture de session réussie est l'événement ______.
+
+37. L'installation d'un service est l'événement ______.
+
+38. L'effacement du journal de sécurité est l'événement ______.
+
+39. Le bureau à distance correspond au type d'ouverture ______.
+
+40. Le fichier de clé de l'interface s'appelle ______.
+
+========================================================================
+Grille de réponses   Nom : ............................  Matricule : ............
+========================================================================
+ 1. ............................................
+ 2. ............................................
+ 3. ............................................
+ 4. ............................................
+ 5. ............................................
+ 6. ............................................
+ 7. ............................................
+ 8. ............................................
+ 9. ............................................
+10. ............................................
+11. ............................................
+12. ............................................
+13. ............................................
+14. ............................................
+15. ............................................
+16. ............................................
+17. ............................................
+18. ............................................
+19. ............................................
+20. ............................................
+21. ............................................
+22. ............................................
+23. ............................................
+24. ............................................
+25. ............................................
+26. ............................................
+27. ............................................
+28. ............................................
+29. ............................................
+30. ............................................
+31. ............................................
+32. ............................................
+33. ............................................
+34. ............................................
+35. ............................................
+36. ............................................
+37. ............................................
+38. ............................................
+39. ............................................
+40. ............................................

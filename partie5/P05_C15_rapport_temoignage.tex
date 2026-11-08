@@ -1,0 +1,367 @@
+% ============================================================================
+% Fichier  : partie5/P05_C15_rapport_temoignage.tex
+% Titre    : Le Rapport et le Témoignage
+% Auteur   : MINKA MI NGUIDJOÏ Thierry Emmanuel
+% Version  : 1.0 -- novembre 2024
+% Corrigés : corriges/Corr_C15.tex
+% ============================================================================
+% Sources : ISO/IEC 27042 (interprétation et rapport, paraphrasée) ; ISO/IEC
+% 17025 (compétence des laboratoires) ; loi n° 2010/012, art. 56 (rappel).
+% Faits nouveaux (bible) : rapport d'expertise de M. ABOUBAKAR déposé le
+% 28/05/2025, 46 pages et 9 annexes ; audience du 15/02/2026 devant le
+% tribunal de grande instance de la Mifi (Bafoussam) : deux titulaires de
+% portefeuilles poursuivis pour recel ; l'expert n'attribue pas l'intrusion.
+% ============================================================================
+
+\chapter{Le Rapport et le Témoignage}
+\label{chap:rapport}
+\chaptermark{Le rapport et le témoignage}
+
+\epigraph{%
+    « Un rapport que seul son auteur comprend\\
+    n'a convaincu personne. »%
+}{Principe du cours}
+
+\niveauChapitre{Intermédiaire}{%
+    Maîtrise du Chapitre~\ref{chap:enquete}
+}
+
+\begin{boxobjectifs}
+\begin{itemize}
+    \item Adapter un rapport à son destinataire~: direction, autorité
+          judiciaire, équipe technique.
+    \item Structurer un rapport d'expertise de façon qu'il soit vérifiable.
+    \item Écrire chaque conclusion avec sa constatation, son analyse et son
+          niveau de confiance.
+    \item Dire les limites de l'examen sans les cacher ni s'y réfugier.
+    \item Préparer une déposition et répondre à une question hostile.
+\end{itemize}
+\end{boxobjectifs}
+
+\bigskip
+
+% ============================================================================
+\section*{Avant de commencer : une question simple}
+% ============================================================================
+
+Bafoussam, tribunal de grande instance de la Mifi, 15 février 2026. Deux
+titulaires de portefeuilles de paiement mobile, qui ont reçu une partie des
+fonds détournés, sont poursuivis pour recel. M.~ABOUBAKAR, l'expert requis
+par le procureur, dépose à la barre. L'avocat de la défense lui pose une
+question simple~: « Monsieur l'expert, pouvez-vous dire au tribunal que mes
+clients ont piraté NYANGA CRÉDIT~? » La réponse tient en une phrase, et
+l'expert l'a préparée.
+
+\begin{boxalert}
+\textbf{Violation typique.} Laisser un rapport, ou une déposition, aller
+au-delà de ce que les pièces établissent, parce que le destinataire attend
+une réponse ferme.
+
+\smallskip
+\textbf{Règle~:} l'expert répond à la question posée, avec ce que les pièces
+établissent, et dit clairement ce qu'elles n'établissent pas. Une réponse
+\NEK{} bien formulée sert la justice mieux qu'une certitude fragile.
+\end{boxalert}
+
+\separateur
+
+% ============================================================================
+\section{Trois Destinataires, Trois Rapports}
+\label{sec:c15-destinataires}
+% ============================================================================
+
+\begin{tableaucours}{L{2.6cm}L{3.4cm}L{3.2cm}L{3.0cm}}{%
+    \tableauHeader{Destinataire} &
+    \tableauHeader{Ce qu'il doit décider} &
+    \tableauHeader{Forme} &
+    \tableauHeader{Écueil}
+}
+Direction & Fermer la porte, financer, informer & Note de deux pages,
+recommandations datées & Trop de technique \\
+Autorité judiciaire & Établir des faits, qualifier & Rapport d'expertise
+complet, annexes & Sortir de la mission \\
+Équipe technique & Corriger, détecter & Rapport détaillé, indicateurs,
+règles & Pas de priorités \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~15.1. Trois rapports pour une même enquête}\end{center}
+
+Les trois rapports reposent sur les mêmes constatations. Ils diffèrent par
+ce qu'ils retiennent et par leur langue. La note à la direction ne contient
+pas de vecteur CVSS~; le rapport d'expertise ne contient pas de
+recommandation budgétaire~; le rapport technique contient les deux.
+
+% ============================================================================
+\section{Le Rapport d'Expertise}
+\label{sec:c15-expertise}
+% ============================================================================
+
+L'ISO/IEC~27042~\cite{iso27042_2015} demande que le rapport permette à un
+tiers compétent de comprendre ce qui a été fait, d'en évaluer la validité et
+de le refaire (paraphrase). Le plan suivant répond à cette exigence.
+
+\begin{tableaucours}{cL{3.6cm}L{8.0cm}}{%
+    \tableauHeader{} &
+    \tableauHeader{Partie} &
+    \tableauHeader{Contenu}
+}
+1 & Mission & Autorité requérante, fondement (art.~56 de la loi
+n°~2010/012), questions posées, mot pour mot \\
+2 & Pièces reçues & Scellés, état à réception, empreintes vérifiées \\
+3 & Opérations & Chaque opération, datée, avec outils, versions et copies
+utilisées \\
+4 & Constatations & Les faits, sans interprétation, avec leur source \\
+5 & Discussion & Les interprétations, les autres explications examinées,
+le niveau de confiance \\
+6 & Limites & Ce qui n'a pas pu être examiné, et pourquoi \\
+7 & Réponses aux questions & Une réponse par question, cotée \\
+8 & Annexes & Sorties brutes, tableaux, chronologie, formulaires \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~15.2. Le plan d'un rapport d'expertise}\end{center}
+
+\subsection{Écrire une conclusion}
+
+Chaque conclusion du rapport suit le même schéma~: la constatation, avec sa
+source~; l'analyse, avec les autres explications examinées~; le niveau de
+confiance, et ce qui le fonde. Le vocabulaire de la confiance doit être
+défini dans le rapport et tenu partout.
+
+\begin{tableaucours}{L{2.8cm}L{9.4cm}}{%
+    \tableauHeader{Niveau} &
+    \tableauHeader{Usage dans ce livre}
+}
+Élevée & Plusieurs pièces indépendantes concordent, aucune explication
+concurrente plausible ne subsiste \\
+Moyenne & Les pièces concordent mais l'une est fragile, ou une explication
+concurrente reste possible \\
+Faible & Une seule pièce, ou des explications concurrentes aussi plausibles \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~15.3. Les niveaux de confiance}\end{center}
+
+\begin{boxscenario}{Opération NYANGA. Une réponse du rapport d'expertise}
+\textit{Question~3 de la mission~: « Dire par quel moyen l'accès au système
+d'information de NYANGA CRÉDIT a été obtenu. »}
+
+\medskip
+\textbf{Constatation.} La passerelle d'accès à distance fonctionnait le
+2~mars 2025 avec le micrologiciel 7.2.1 (scellé NC-02, export de
+configuration). Le bulletin de l'éditeur du 12~décembre 2024 désigne cette
+version comme vulnérable à un contournement de l'authentification. Le
+journal de la passerelle (NC-02) enregistre, le 2~mars entre 23~h~46 et
+23~h~48, quatre requêtes depuis l'adresse 203.0.113.18 conformes aux
+indicateurs publiés par l'éditeur, suivies de l'ouverture d'une session du
+compte \texttt{svc\_backup} sans authentification préalable.
+
+\textbf{Discussion.} Deux autres explications ont été examinées~:
+l'utilisation d'un mot de passe connu, qui n'explique pas la session sans
+authentification~; le vol d'une session existante, écarté faute de session
+légitime dans les neuf jours précédents.
+
+\textbf{Réponse} (confiance élevée). L'accès a été obtenu par l'exploitation
+d'une vulnérabilité de la passerelle permettant de contourner
+l'authentification.
+\end{boxscenario}
+
+\subsection{Dire les limites}
+
+La partie consacrée aux limites protège l'expert autant que le lecteur.
+Elle énumère ce que l'examen n'a pas couvert~: la mémoire de SRV-CPT01,
+jamais capturée~; le système de la passerelle, illisible sans l'éditeur~;
+la période du 3 au 8~mars, sans trace~; la provenance des journaux de
+l'interface de paiement. Pour chaque limite, elle dit l'effet sur les
+conclusions. Une limite non écrite devient, à l'audience, une faille de
+l'expertise.
+
+% ============================================================================
+\section{L'Indépendance et la Compétence}
+\label{sec:c15-independance}
+% ============================================================================
+
+L'expert requis tient sa légitimité de deux qualités~: son indépendance à
+l'égard des parties, et sa compétence. La première exclut d'avoir travaillé
+pour l'une d'elles sur l'affaire. C'est pourquoi le procureur n'a pas requis
+Mme~MBARGA, mandatée et payée par NYANGA CRÉDIT, mais M.~ABOUBAKAR. La
+seconde se démontre par la formation, l'expérience et la méthode~; pour un
+laboratoire, l'accréditation selon l'ISO/IEC~17025~\cite{iso17025_2017}
+atteste de la compétence technique et de la maîtrise des méthodes.
+
+\begin{boxinfo}
+\textbf{L'enquêteur privé comme témoin.} Mme~MBARGA peut être entendue comme
+témoin des opérations qu'elle a réalisées~: acquisitions, chaîne de
+possession, premières constatations. Elle ne se substitue pas à l'expert,
+et l'expert ne se contente pas de reprendre ses conclusions~: il refait ou
+contrôle ce qui fonde les siennes.
+\end{boxinfo}
+
+% ============================================================================
+\section{Déposer à l'Audience}
+\label{sec:c15-audience}
+% ============================================================================
+
+L'audience n'est pas un séminaire technique. Le tribunal, les avocats et
+les prévenus n'ont pas lu les annexes. L'expert y gagne à préparer trois
+choses~: une chronologie d'une page, lisible à distance~; une définition en
+une phrase de chaque terme technique qu'il emploiera~; et la liste des
+questions hostiles probables, avec leur réponse.
+
+\begin{tableaucours}{L{5.4cm}L{6.8cm}}{%
+    \tableauHeader{Question hostile} &
+    \tableauHeader{Réponse fondée sur le dossier}
+}
+« Vos outils ne sont-ils pas faillibles~? » & Les conclusions principales
+reposent sur deux sources indépendantes, lues avec des outils dont les
+versions et les sorties sont en annexe \\
+« Le disque est resté une nuit sur un bureau. » & L'intégrité est établie
+par les empreintes~; la conclusion qu'il soutient est confirmée par une
+autre pièce, à la chaîne complète \\
+« Pouvez-vous exclure une erreur d'horloge~? » & Les dérives ont été
+mesurées et corrigées~; les écarts restants sont inférieurs à la minute \\
+« Mes clients ont-ils piraté l'établissement~? » & Les pièces ne permettent
+pas de le dire (voir ci-dessous) \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~15.4. Préparer les questions hostiles}\end{center}
+
+\begin{boxscenario}{Opération NYANGA. La réponse de l'expert}
+\textbf{Réponse de M.~ABOUBAKAR.} « Non, Maître. Les pièces que j'ai
+examinées établissent comment le système a été pénétré et comment les fonds
+ont été transférés. Elles ne permettent pas d'identifier les personnes qui
+ont commis l'intrusion. Elles établissent, par les relevés de l'opérateur,
+que deux des onze portefeuilles qui ont reçu les fonds sont ouverts au nom
+de vos clients. Ce que vos clients savaient de l'origine de ces fonds n'est
+pas une question technique. »
+
+\medskip
+\textbf{Analyse.} L'expert répond à la question, sépare ce qui est établi de
+ce qui ne l'est pas, et laisse au tribunal ce qui relève du tribunal.
+L'avocat n'obtient ni une attribution qu'il pourrait contester, ni un refus
+de répondre qu'il pourrait exploiter.
+\end{boxscenario}
+
+\begin{boxlecture}{Les réponses de l'expertise}
+\begin{tableaucours}{L{7.6cm}c}{%
+    \tableauHeader{Question de la mission} &
+    \tableauHeader{Réponse}
+}
+Moyen de l'accès & \OUI{} \\
+Séquence des opérations de l'attaquant & \OUI{} (sauf 3 au 8~mars, \NEK{}) \\
+Données copiées & \OUI{} \\
+Destination des fonds & \OUI{} (onze portefeuilles) \\
+Identité des auteurs de l'intrusion & \NEK{} \\
+\end{tableaucours}
+
+\medskip
+\textbf{Lecture.} Quatre réponses établies, une non tranchée. Le \NEK{} sur
+les auteurs n'affaiblit pas l'expertise~; il en marque l'honnêteté. Les
+poursuites pour recel reposent sur d'autres éléments, que la justice réunit
+par d'autres moyens.
+\end{boxlecture}
+
+% ============================================================================
+\section{Ce que le Rapport demande à chaque Métier}
+\label{sec:c15-metiers}
+% ============================================================================
+
+\begin{boxmetier}{Application OPJ/Expert Judiciaire}
+\textbf{Rédiger et défendre une expertise}
+\begin{enumerate}
+    \item Recopier les questions de la mission, mot pour mot.
+    \item Séparer, pour chaque conclusion, constatation, discussion et
+          réponse.
+    \item Définir les niveaux de confiance et les tenir.
+    \item Écrire les limites et leur effet.
+    \item Préparer la chronologie d'une page et les questions hostiles.
+\end{enumerate}
+\end{boxmetier}
+
+\begin{boxmetier}{Analyste en réponse à incident}
+Écrire le rapport technique pour qu'il puisse devenir une pièce de
+procédure~: chaque affirmation sourcée, chaque opération datée. Il le
+deviendra plus souvent qu'on ne le prévoit.
+\end{boxmetier}
+
+\begin{boxmetier}{RSSI}
+Lire les limites du rapport avant ses conclusions~: elles disent ce que
+l'organisation doit encore préparer pour la prochaine enquête.
+\end{boxmetier}
+
+\separateur
+
+\begin{boxresume}
+\textbf{Ce qu'il faut retenir de ce chapitre~:}
+\begin{itemize}
+    \item Une même enquête donne trois rapports, pour la direction, la
+          justice et l'équipe technique.
+    \item Le rapport d'expertise recopie la mission, décrit les opérations,
+          sépare constatations et discussion, écrit ses limites et répond
+          question par question.
+    \item Les niveaux de confiance se définissent et se tiennent.
+    \item L'indépendance exclut d'avoir travaillé pour une partie~; la
+          compétence se démontre.
+    \item À l'audience, l'expert répond à la question posée et laisse au
+          tribunal ce qui lui revient.
+\end{itemize}
+\end{boxresume}
+
+\begin{boxinfo}
+\textbf{Points de contrôle.} Vous avez compris ce chapitre si vous savez~:
+\begin{itemize}
+    \item rédiger une réponse d'expertise en trois temps~;
+    \item écrire une section de limites et dire l'effet de chacune~;
+    \item répondre à une question hostile sans dépasser les pièces.
+\end{itemize}
+\end{boxinfo}
+
+% ============================================================================
+\section*{Exercices}
+% ============================================================================
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~15.1. Quel rapport~? \niveaubase}]
+Dites dans quel rapport (direction, justice, technique) figure chacun des
+éléments suivants~: (a) le vecteur CVSS de VULN-2024-4471~; (b) le coût de
+l'incident~; (c) la sortie brute de \texttt{windows.netscan}~; (d) la
+recommandation sur la conservation des journaux~; (e) les questions de la
+mission.
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~15.2. Réécrire une conclusion \niveaumoyen}]
+Réécrivez en trois temps (constatation, discussion, réponse cotée) la phrase
+suivante, tirée d'un brouillon de rapport~: « Il est évident que les
+pirates ont volé le mot de passe de M.~KAMGA pour vider les comptes. »
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~15.3. La section des limites \niveaumoyen}]
+Rédigez la section « Limites » du rapport d'expertise de NYANGA. Pour chaque
+limite, indiquez la ou les conclusions affectées et la manière dont elles le
+sont.
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~15.4. Trois questions hostiles \niveauexpert}]
+Préparez la réponse de l'expert aux trois questions suivantes, en vous
+appuyant sur le dossier~: (a) « Pourquoi n'avez-vous pas examiné la
+passerelle elle-même~? »~; (b) « Les journaux de l'interface de paiement
+vous ont été transmis par courriel par une société privée~: comment savoir
+qu'ils sont authentiques~? »~; (c) « Votre rapport reprend-il simplement
+celui du cabinet payé par la victime~? »
+\end{boxexo}
+
+\bigskip
+
+\begin{boxinfo}
+\textbf{Pour aller plus loin.}
+\begin{itemize}
+    \item L'ISO/IEC~27042~\cite{iso27042_2015}, sur l'interprétation et la
+          présentation des résultats.
+    \item L'ISO/IEC~17025~\cite{iso17025_2017}, pour la compétence des
+          laboratoires.
+\end{itemize}
+\end{boxinfo}
+
+\begin{boxinfo}
+\textbf{Transition.} Le rapport dit ce que l'enquête sait et ce qu'elle ne
+sait pas. Peut-on mesurer cette part d'ignorance, la comparer d'une enquête
+à l'autre, la réduire méthodiquement~? C'est la question de recherche du
+Chapitre~\ref{chap:auditologie}.
+\end{boxinfo}

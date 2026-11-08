@@ -1,0 +1,233 @@
+NDAP SUKULU · FAV · fiche FAV-FICHE-C01
+Chapitre 1 : L'investigation numérique
+
+Version papier, à utiliser en attendant l'ouverture du portail NDAP SUKULU.
+La fiche complète compte 40 questions. Répondez sur la grille en fin de fiche.
+Durée indicative : 60 minutes. Seuil de réussite : 60 %.
+Les corrections figurent dans le livret de correction du cours.
+
+========================================================================
+Questions à choix multiple (une seule bonne réponse)
+========================================================================
+
+ 1. Qu'est-ce qu'une trace numérique ?
+      a) Une preuve déjà admise par un juge
+      b) Une donnée qui garde la marque d'une action ou d'un état passé
+      c) Un fichier chiffré
+      d) Une alerte de sécurité
+
+ 2. Quand une trace devient-elle une preuve ?
+      a) Quand elle est imprimée
+      b) Quand un responsable la valide
+      c) Quand on connaît son origine, son intégrité et son sens
+      d) Quand elle est ancienne
+
+ 3. Quel terme anglais désigne l'investigation numérique ?
+      a) Digital forensics
+      b) Penetration testing
+      c) Threat hunting
+      d) Patch management
+
+ 4. Qui a formulé l'idée que tout contact laisse une trace ?
+      a) Claude Shannon
+      b) Brian Carrier
+      c) Richards Heuer
+      d) Edmond Locard
+
+ 5. Que dit le principe d'échange appliqué à l'enquêteur ?
+      a) L'enquêteur ne laisse aucune trace
+      b) L'enquêteur laisse aussi ses traces sur la machine examinée
+      c) Seul l'attaquant laisse des traces
+      d) Les traces disparaissent toujours
+
+ 6. Quelle propriété de la trace numérique impose de travailler sur une copie ?
+      a) Elle est toujours chiffrée
+      b) Elle est toujours volatile
+      c) Elle est copiable à l'identique
+      d) Elle est rare
+
+ 7. Pourquoi une date numérique doit-elle être préservée avec soin ?
+      a) Elle se modifie sans rature visible
+      b) Elle ne change jamais
+      c) Elle est imprimée
+      d) Elle dépend du juge
+
+ 8. De quoi dépend le sens d'une heure enregistrée ?
+      a) Du nom du fichier
+      b) De la taille du disque
+      c) Du système d'exploitation seul
+      d) De son fuseau et de la dérive de l'horloge
+
+ 9. Quelle norme fixe les lignes directrices de recueil et de préservation de la preuve ?
+      a) ISO 9001
+      b) ISO/IEC 27037
+      c) ISO/IEC 27001
+      d) ISO 31000
+
+10. Quel principe permet à un tiers de reconstituer chaque geste de l'enquêteur ?
+      a) La reproductibilité
+      b) La proportionnalité
+      c) La traçabilité
+      d) La confidentialité
+
+11. Comment appelle-t-on l'obtention du même résultat par la même personne avec les mêmes outils ?
+      a) La répétabilité
+      b) La reproductibilité
+      c) La justification
+      d) La traçabilité
+
+12. Comment appelle-t-on l'obtention d'un résultat compatible par une autre personne avec d'autres outils ?
+      a) La répétabilité
+      b) La traçabilité
+      c) L'intervention minimale
+      d) La reproductibilité
+
+13. Quel principe exige que chaque choix de méthode puisse être expliqué ?
+      a) La répétabilité
+      b) La justification
+      c) La volatilité
+      d) La recevabilité
+
+14. Quelle règle de conduite impose de ne pas modifier une pièce sauf nécessité expliquée ?
+      a) La proportionnalité
+      b) La confidentialité
+      c) L'intervention minimale
+      d) La publicité
+
+15. Quelle règle impose de ne recueillir que ce qui répond aux questions de l'enquête ?
+      a) La proportionnalité
+      b) L'exhaustivité
+      c) La volatilité
+      d) La répétabilité
+
+16. Combien de phases le NIST SP 800-86 décrit-il ?
+      a) Trois
+      b) Cinq
+      c) Six
+      d) Quatre
+
+17. Quelle phase du NIST extrait les éléments pertinents de la masse recueillie ?
+      a) La collecte
+      b) L'examen
+      c) L'analyse
+      d) Le rapport
+
+18. Quelle phase du NIST relie les éléments pour répondre aux questions posées ?
+      a) La collecte
+      b) L'examen
+      c) L'analyse
+      d) Le rapport
+
+19. Quelle norme commence le processus d'investigation avant l'incident ?
+      a) ISO/IEC 27043
+      b) ISO/IEC 27002
+      c) NIST SP 800-61
+      d) RFC 3227
+
+20. Quelle classe de processus couvre ce que l'organisation fait avant tout incident ?
+      a) L'initialisation
+      b) L'acquisition
+      c) L'investigation
+      d) La préparation
+
+========================================================================
+Vrai ou faux
+========================================================================
+
+21. Toute trace numérique est une preuve.
+      Vrai / Faux
+
+22. Le principe d'échange oblige l'enquêteur autant que l'attaquant.
+      Vrai / Faux
+
+23. Une trace numérique est souvent volatile.
+      Vrai / Faux
+
+24. La répétabilité et la reproductibilité désignent la même chose.
+      Vrai / Faux
+
+25. Un outil non validé est interdit en enquête.
+      Vrai / Faux
+
+26. Le NIST SP 800-86 commence avant l'incident.
+      Vrai / Faux
+
+27. La synchronisation des horloges relève de la préparation.
+      Vrai / Faux
+
+28. La réponse à incident entre en tension avec la préservation.
+      Vrai / Faux
+
+29. Une enquête interne a les mêmes exigences de preuve qu'une enquête judiciaire.
+      Vrai / Faux
+
+30. On retient l'hypothèse qui a le plus d'indices favorables.
+      Vrai / Faux
+
+========================================================================
+Textes à trous
+========================================================================
+
+31. Une trace devient ______ quand on connaît son origine, son intégrité et son sens.
+
+32. Le principe d'échange a été formulé par Edmond ______.
+
+33. Les lignes directrices de recueil de la preuve sont fixées par l'ISO/IEC ______.
+
+34. Obtenir un résultat compatible avec d'autres outils s'appelle la ______.
+
+35. Le guide NIST SP 800-______ décrit quatre phases.
+
+36. La première phase du NIST est la ______.
+
+37. La classe de processus qui précède l'incident est la ______.
+
+38. L'analyse des hypothèses concurrentes est due à Richards ______.
+
+39. On retient l'hypothèse qui a le moins d'______.
+
+40. Ne chercher que ce qui confirme son idée est le biais de ______.
+
+========================================================================
+Grille de réponses   Nom : ............................  Matricule : ............
+========================================================================
+ 1. ............................................
+ 2. ............................................
+ 3. ............................................
+ 4. ............................................
+ 5. ............................................
+ 6. ............................................
+ 7. ............................................
+ 8. ............................................
+ 9. ............................................
+10. ............................................
+11. ............................................
+12. ............................................
+13. ............................................
+14. ............................................
+15. ............................................
+16. ............................................
+17. ............................................
+18. ............................................
+19. ............................................
+20. ............................................
+21. ............................................
+22. ............................................
+23. ............................................
+24. ............................................
+25. ............................................
+26. ............................................
+27. ............................................
+28. ............................................
+29. ............................................
+30. ............................................
+31. ............................................
+32. ............................................
+33. ............................................
+34. ............................................
+35. ............................................
+36. ............................................
+37. ............................................
+38. ............................................
+39. ............................................
+40. ............................................

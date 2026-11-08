@@ -1,0 +1,233 @@
+NDAP SUKULU · FAV · fiche FAV-FICHE-C02
+Chapitre 2 : La preuve numérique et la chaîne de possession
+
+Version papier, à utiliser en attendant l'ouverture du portail NDAP SUKULU.
+La fiche complète compte 40 questions. Répondez sur la grille en fin de fiche.
+Durée indicative : 60 minutes. Seuil de réussite : 60 %.
+Les corrections figurent dans le livret de correction du cours.
+
+========================================================================
+Questions à choix multiple (une seule bonne réponse)
+========================================================================
+
+ 1. Qu'est-ce que la recevabilité d'une pièce ?
+      a) Son poids dans la décision
+      b) Son aptitude à être versée au débat
+      c) Sa taille
+      d) Son ancienneté
+
+ 2. Qu'est-ce que la force probante d'une pièce ?
+      a) Son aptitude à entrer au débat
+      b) Son format
+      c) Le poids que le décideur lui accorde
+      d) Son coût
+
+ 3. Que construit principalement l'enquêteur ?
+      a) La force probante
+      b) La recevabilité
+      c) Le jugement
+      d) La qualification
+
+ 4. Quel principe la procédure pénale de tradition civiliste retient-elle en général ?
+      a) La preuve écrite seule
+      b) La preuve testimoniale seule
+      c) L'aveu seul
+      d) La preuve par tout moyen, appréciée librement
+
+ 5. Quel fondement de la force probante désigne qui a détenu la pièce à chaque instant ?
+      a) La provenance
+      b) La continuité
+      c) L'intégrité
+      d) L'interprétation
+
+ 6. Que prouve une empreinte SHA-256 identique à deux moments ?
+      a) Que la copie est complète
+      b) Que la pièce vient du système annoncé
+      c) Que le contenu n'a pas changé entre les deux calculs
+      d) Que l'auteur est identifié
+
+ 7. Quelle fonction est l'empreinte de référence aujourd'hui ?
+      a) SHA-256
+      b) MD5
+      c) SHA-1
+      d) CRC32
+
+ 8. Depuis quand calcule-t-on des collisions MD5 ?
+      a) 2017
+      b) 1991
+      c) 2023
+      d) 2004
+
+ 9. En quelle année une collision pratique de SHA-1 a-t-elle été publiée ?
+      a) 2004
+      b) 2017
+      c) 2010
+      d) 2020
+
+10. Sur quoi porte la faiblesse de MD5 ?
+      a) Les préimages
+      b) La longueur
+      c) Les collisions
+      d) La vitesse
+
+11. Quelle taille fait une empreinte SHA-256 ?
+      a) 256 bits
+      b) 128 bits
+      c) 160 bits
+      d) 512 bits
+
+12. Qu'est-ce que la résistance aux collisions ?
+      a) La rapidité du calcul
+      b) La compression des données
+      c) Le chiffrement du fichier
+      d) L'impossibilité pratique de trouver deux données de même empreinte
+
+13. Pourquoi calculer l'empreinte le plus tôt possible ?
+      a) Elle coûte moins cher le matin
+      b) Elle ne prouve rien sur la période qui précède son premier calcul
+      c) Elle se périme
+      d) La loi l'exige à la minute
+
+14. Que révèle le journal de l'outil d'acquisition que l'empreinte ne révèle pas ?
+      a) L'auteur des faits
+      b) La provenance juridique
+      c) Les secteurs illisibles, donc la complétude
+      d) Le prix du disque
+
+15. Qu'est-ce que la chaîne de possession ?
+      a) La documentation continue des détenteurs, transferts et opérations d'une pièce
+      b) La liste des suspects
+      c) Le contrat du prestataire
+      d) La chronologie de l'attaque
+
+16. Quelle norme demande que la chaîne réponde à qui, quand, où, comment et pourquoi ?
+      a) ISO 9001
+      b) ISO/IEC 27005
+      c) ISO 22301
+      d) ISO/IEC 27037
+
+17. Qu'est-ce qu'un scellé ?
+      a) Une empreinte cryptographique
+      b) Un conditionnement qui ne s'ouvre pas sans laisser de marque
+      c) Un procès-verbal
+      d) Un disque chiffré
+
+18. Que note-t-on à chaque ouverture d'un scellé ?
+      a) Seulement la date
+      b) Le prix
+      c) Qui l'a ouvert, pourquoi, et le numéro du nouveau scellé
+      d) Rien
+
+19. À qui la mise sous scellé appartient-elle dans la procédure pénale ?
+      a) À l'officier de police judiciaire
+      b) À l'enquêteur privé
+      c) Au DSI
+      d) Au prestataire
+
+20. Quel article de la loi 2010/012 admet la saisie par copie des données ?
+      a) Article 69
+      b) Article 29
+      c) Article 91
+      d) Article 53
+
+========================================================================
+Vrai ou faux
+========================================================================
+
+21. Une pièce recevable est toujours convaincante.
+      Vrai / Faux
+
+22. Une pièce obtenue par un accès non autorisé peut être écartée.
+      Vrai / Faux
+
+23. Modifier un seul bit d'une image change entièrement son empreinte SHA-256.
+      Vrai / Faux
+
+24. MD5 seul est irrecevable.
+      Vrai / Faux
+
+25. Une empreinte identique prouve que la copie est complète.
+      Vrai / Faux
+
+26. L'empreinte prouve la provenance de la pièce.
+      Vrai / Faux
+
+27. L'empreinte et la chaîne de possession se complètent.
+      Vrai / Faux
+
+28. Une chaîne reconstituée après coup convainc autant qu'une chaîne tenue au fil de l'eau.
+      Vrai / Faux
+
+29. L'article 53 permet que la saisie porte sur une copie réalisée devant les personnes présentes.
+      Vrai / Faux
+
+30. L'article 54 renvoie au Code de procédure pénale.
+      Vrai / Faux
+
+========================================================================
+Textes à trous
+========================================================================
+
+31. Le poids accordé à une pièce s'appelle sa force ______.
+
+32. L'empreinte de référence est calculée avec SHA-______.
+
+33. Les collisions MD5 sont calculables depuis ______.
+
+34. La documentation continue des détenteurs d'une pièce est la chaîne de ______.
+
+35. Un conditionnement qui ne s'ouvre pas sans marque est un ______.
+
+36. La saisie par copie de données est prévue à l'article ______ de la loi 2010/012.
+
+37. L'article 54 impose de tenir compte du ______ des preuves.
+
+38. NC-01 est resté ______ sans consignation.
+
+39. La capture d'écran WhatsApp porte le scellé NC-______.
+
+40. L'expert crée le scellé NC-01-______.
+
+========================================================================
+Grille de réponses   Nom : ............................  Matricule : ............
+========================================================================
+ 1. ............................................
+ 2. ............................................
+ 3. ............................................
+ 4. ............................................
+ 5. ............................................
+ 6. ............................................
+ 7. ............................................
+ 8. ............................................
+ 9. ............................................
+10. ............................................
+11. ............................................
+12. ............................................
+13. ............................................
+14. ............................................
+15. ............................................
+16. ............................................
+17. ............................................
+18. ............................................
+19. ............................................
+20. ............................................
+21. ............................................
+22. ............................................
+23. ............................................
+24. ............................................
+25. ............................................
+26. ............................................
+27. ............................................
+28. ............................................
+29. ............................................
+30. ............................................
+31. ............................................
+32. ............................................
+33. ............................................
+34. ............................................
+35. ............................................
+36. ............................................
+37. ............................................
+38. ............................................
+39. ............................................
+40. ............................................

@@ -1,0 +1,233 @@
+NDAP SUKULU · FAV · fiche FAV-FICHE-C10
+Chapitre 10 : Identifier les vulnérabilités sans les exploiter
+
+Version papier, à utiliser en attendant l'ouverture du portail NDAP SUKULU.
+La fiche complète compte 40 questions. Répondez sur la grille en fin de fiche.
+Durée indicative : 60 minutes. Seuil de réussite : 60 %.
+Les corrections figurent dans le livret de correction du cours.
+
+========================================================================
+Questions à choix multiple (une seule bonne réponse)
+========================================================================
+
+ 1. Pourquoi l'outil de NYANGA n'a-t-il jamais signalé la faille de la passerelle ?
+      a) L'outil était en panne
+      b) La passerelle ne figurait pas dans la liste des cibles
+      c) La faille n'existait pas
+      d) Le correctif était appliqué
+
+ 2. D'où venait la liste des cibles de l'outil de NYANGA ?
+      a) De la sonde réseau
+      b) Du prestataire
+      c) De la base de gestion des configurations
+      d) De la NVD
+
+ 3. Quel est le premier contrôle de tout programme de vulnérabilités ?
+      a) L'inventaire des actifs
+      b) Le rapport annuel
+      c) Le test d'intrusion
+      d) La formation
+
+ 4. Que manque la base de gestion des configurations ?
+      a) Ce qui a été déclaré
+      b) Les serveurs Windows
+      c) Les adresses IP
+      d) Ce qui a été installé sans déclaration
+
+ 5. Que manque le serveur DHCP ?
+      a) Les postes de travail
+      b) Les appareils à adresse fixe
+      c) Les appareils qui demandent une adresse
+      d) Les imprimantes en DHCP
+
+ 6. Que manque la découverte réseau ?
+      a) Tout ce qui répond
+      b) Les serveurs
+      c) Ce qui est éteint, filtré ou hors des plages
+      d) Les commutateurs allumés
+
+ 7. Combien d'actifs la base de SOLITRANS déclare-t-elle ?
+      a) 1 380
+      b) 1 512
+      c) 132
+      d) 2 947
+
+ 8. Combien d'actifs la découverte croisée trouve-t-elle chez SOLITRANS ?
+      a) 1 380
+      b) 3 812
+      c) 132
+      d) 1 512
+
+ 9. Combien d'actifs non déclarés SOLITRANS découvre-t-elle ?
+      a) 412
+      b) 132
+      c) 38
+      d) 9
+
+10. Quelle catégorie d'actifs non déclarés est la plus nombreuse ?
+      a) Imprimantes
+      b) Commutateurs
+      c) Caméras et enregistreurs vidéo
+      d) Postes de prestataires
+
+11. Combien de terminaux de pesage et de lecture de conteneurs étaient non déclarés ?
+      a) 28
+      b) 41
+      c) 13
+      d) 17
+
+12. Quelle méthode voit ce que voit un attaquant depuis le réseau ?
+      a) Le balayage authentifié
+      b) L'agent
+      c) L'analyse de configuration
+      d) Le balayage non authentifié
+
+13. Quelle méthode lit les paquets installés avec un compte en lecture ?
+      a) Le balayage non authentifié
+      b) Le balayage authentifié
+      c) Le test d'intrusion
+      d) Le carving
+
+14. Quelle méthode couvre les portables hors du réseau ?
+      a) Le balayage non authentifié
+      b) La découverte DHCP
+      c) L'agent
+      d) L'analyse des flux
+
+15. Quelle méthode compare une configuration à une référence comme les CIS Benchmarks ?
+      a) L'analyse de configuration
+      b) L'agent
+      c) Le balayage non authentifié
+      d) L'EPSS
+
+16. Quelle est la faiblesse du balayage non authentifié ?
+      a) Il exige un compte
+      b) Il ne voit rien du réseau
+      c) Il modifie les fichiers
+      d) Il déduit les versions et produit de nombreux faux positifs
+
+17. Quelle est la faiblesse du balayage authentifié ?
+      a) Il n'est pas précis
+      b) Les échecs de connexion peuvent être silencieux
+      c) Il exploite la faille
+      d) Il ne lit pas les versions
+
+18. Que ne voit pas l'analyse de configuration ?
+      a) Les réglages dangereux
+      b) Les services activés
+      c) Les failles logicielles
+      d) Les comptes par défaut
+
+19. Quel guide du NIST décrit les techniques d'évaluation de sécurité ?
+      a) NIST SP 800-115
+      b) NIST SP 800-86
+      c) NIST SP 800-61
+      d) NIST SP 800-40
+
+20. Quels outils trouvent une bibliothèque vulnérable embarquée dans une application ?
+      a) Les balayages classiques
+      b) Les sondes réseau
+      c) Les antivirus
+      d) Les outils d'analyse de composants logiciels
+
+========================================================================
+Vrai ou faux
+========================================================================
+
+21. On ne corrige que ce que l'on connaît.
+      Vrai / Faux
+
+22. Une seule source suffit à construire l'inventaire.
+      Vrai / Faux
+
+23. L'annuaire Active Directory voit les équipements réseau.
+      Vrai / Faux
+
+24. Un actif sur onze échappait à toute analyse chez SOLITRANS.
+      Vrai / Faux
+
+25. Le balayage non authentifié est plus précis sur les versions que le balayage authentifié.
+      Vrai / Faux
+
+26. Aucune des quatre méthodes d'identification n'exploite la faille.
+      Vrai / Faux
+
+27. L'analyse de configuration trouve les réglages dangereux sans CVE.
+      Vrai / Faux
+
+28. Un faux positif est une faille présente non signalée.
+      Vrai / Faux
+
+29. Un correctif rétroporté peut faire apparaître une faille déjà corrigée.
+      Vrai / Faux
+
+30. Une équipe qui corrige des failles inexistantes perd confiance dans le rapport.
+      Vrai / Faux
+
+========================================================================
+Textes à trous
+========================================================================
+
+31. Le premier contrôle d'un programme de vulnérabilités est l'______.
+
+32. SOLITRANS découvre ______ actifs non déclarés.
+
+33. La découverte croisée trouve ______ actifs.
+
+34. Le balayage qui lit les paquets installés est dit ______.
+
+35. Le programme installé sur la machine qui remonte son état est un ______.
+
+36. Les références de configuration citées sont les CIS ______.
+
+37. Les techniques d'évaluation sont décrites par le NIST SP 800-______.
+
+38. Une faille signalée mais absente est un faux ______.
+
+39. Une faille présente non signalée est un faux ______.
+
+40. Un correctif appliqué sans changer le numéro de version est un correctif ______.
+
+========================================================================
+Grille de réponses   Nom : ............................  Matricule : ............
+========================================================================
+ 1. ............................................
+ 2. ............................................
+ 3. ............................................
+ 4. ............................................
+ 5. ............................................
+ 6. ............................................
+ 7. ............................................
+ 8. ............................................
+ 9. ............................................
+10. ............................................
+11. ............................................
+12. ............................................
+13. ............................................
+14. ............................................
+15. ............................................
+16. ............................................
+17. ............................................
+18. ............................................
+19. ............................................
+20. ............................................
+21. ............................................
+22. ............................................
+23. ............................................
+24. ............................................
+25. ............................................
+26. ............................................
+27. ............................................
+28. ............................................
+29. ............................................
+30. ............................................
+31. ............................................
+32. ............................................
+33. ............................................
+34. ............................................
+35. ............................................
+36. ............................................
+37. ............................................
+38. ............................................
+39. ............................................
+40. ............................................

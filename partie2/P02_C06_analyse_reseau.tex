@@ -1,0 +1,382 @@
+% ============================================================================
+% Fichier  : partie2/P02_C06_analyse_reseau.tex
+% Titre    : L'Analyse du Réseau
+% Auteur   : MINKA MI NGUIDJOÏ Thierry Emmanuel
+% Version  : 1.0 -- novembre 2024
+% Corrigés : corriges/Corr_C06.tex
+% ============================================================================
+% Sources : Bejtlich (2013) pour la supervision de la sécurité réseau ;
+% Sanders (2017) pour l'analyse de paquets ; Wireshark, tshark, Zeek
+% (présentés sans citation) ; RFC 5737 (adresses de documentation).
+% Faits nouveaux (bible) : adresses internes SRV-AD01 10.20.1.10, SRV-FIC01
+% 10.20.1.20, SRV-CPT01 10.20.1.30 ; lien Internet de 20 Mbit/s ; flux
+% SRV-FIC01 -> 203.0.113.47:443 du 14/03 de 1 h 12 à 3 h 47, 3,2 Go montant,
+% 11 Mo descendant, SNI cdn-update.example.net, certificat auto-signé du
+% 01/03/2025 ; balise de SRV-AD01 toutes les 60 s (+/- 6 s) ; virements
+% émis depuis 203.0.113.62, hors du réseau de NYANGA ; journal de l'outil de
+% copie sur SRV-FIC01 : 18 412 fichiers du dossier Clients.
+% ============================================================================
+
+\chapter{L'Analyse du Réseau}
+\label{chap:reseau}
+\chaptermark{L'analyse du réseau}
+
+\epigraph{%
+    « Le chiffrement cache le contenu.\\
+    Il ne cache ni la taille, ni l'heure, ni la destination. »%
+}{Principe du cours}
+
+\niveauChapitre{Intermédiaire}{%
+    Maîtrise des Chapitres~\ref{chap:acquisition} et~\ref{chap:memoire}
+}
+
+\begin{boxobjectifs}
+\begin{itemize}
+    \item Distinguer les sources réseau~: capture complète, flux, journaux
+          d'équipements, alertes de sonde.
+    \item Lire une capture avec un analyseur de paquets et en extraire les
+          conversations utiles.
+    \item Caractériser une exfiltration par le volume, la durée, le débit
+          et la destination.
+    \item Reconnaître une balise de commande par sa régularité.
+    \item Tirer d'un flux chiffré tout ce qu'il dit sans être déchiffré.
+    \item Dire ce que l'absence d'un flux dans une capture établit, et ce
+          qu'elle n'établit pas.
+\end{itemize}
+\end{boxobjectifs}
+
+\bigskip
+
+% ============================================================================
+\section*{Avant de commencer : 48 heures de trafic}
+% ============================================================================
+
+Yaoundé, 24 mars 2025. La capture de la sonde de NYANGA CRÉDIT (scellé
+NC-04) couvre le lien Internet du siège du 13~mars à 8~h au 14~mars à 8~h~:
+37~Go de paquets. M.~FOTSO, analyste de SANKOFA EXPERTISE, a trois questions
+de Mme~MBARGA~: qu'est-ce qui est sorti, vers où, et à quel moment~; le
+programme du contrôleur de domaine parlait-il à la même adresse~; les
+virements de la nuit sont-ils passés par ce lien~?
+
+\begin{boxalert}
+\textbf{Violation typique.} Conclure qu'un échange n'a pas eu lieu parce
+qu'on ne le trouve pas dans la capture.
+
+\smallskip
+\textbf{Règle~:} une capture ne voit que ce qui passe par le point où elle
+est placée, pendant la période qu'elle couvre. Avant d'écrire « aucun flux
+vers telle adresse », on dit où était la sonde, ce qu'elle voyait, et si le
+flux pouvait emprunter un autre chemin.
+\end{boxalert}
+
+\separateur
+
+% ============================================================================
+\section{Quatre Sources Réseau}
+\label{sec:c06-sources}
+% ============================================================================
+
+\begin{tableaucours}{L{2.8cm}L{4.0cm}L{2.6cm}L{2.8cm}}{%
+    \tableauHeader{Source} &
+    \tableauHeader{Contenu} &
+    \tableauHeader{Durée typique} &
+    \tableauHeader{Limite}
+}
+Capture complète (PCAP) & Tous les paquets, en-têtes et contenu & Heures à
+jours (volume) & Coût de stockage~; contenu souvent chiffré \\
+Flux (NetFlow, IPFIX) & Qui a parlé à qui, quand, combien d'octets & Mois &
+Pas de contenu \\
+Journaux d'équipements & Pare-feu, proxy, DNS~: décisions et requêtes &
+Semaines à mois & Ce que l'équipement a jugé utile de noter \\
+Alertes de sonde & Événements jugés suspects par des règles & Mois & Ne
+voit que ce que les règles décrivent \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~6.1. Les sources de l'analyse réseau}\end{center}
+
+R.~Bejtlich, dans son ouvrage sur la supervision de la sécurité
+réseau~\cite{bejtlich2013nsm}, montre que ces sources se complètent~: les
+flux et les journaux couvrent une longue période sans contenu, la capture
+complète couvre une période courte avec tout le détail. Une enquête commence
+souvent par les flux, pour repérer la fenêtre utile, puis descend dans la
+capture.
+
+% ============================================================================
+\section{Lire une Capture}
+\label{sec:c06-lire}
+% ============================================================================
+
+L'analyseur de paquets Wireshark, et sa version en ligne de commande tshark,
+décodent les protocoles et regroupent les paquets en
+\termecle{conversations} (une paire d'adresses et de ports). Les outils de
+supervision comme Zeek transforment une capture en journaux par protocole~:
+connexions, requêtes DNS, échanges TLS, transferts HTTP. On travaille dans
+cet ordre.
+
+\begin{enumerate}
+    \item Les statistiques de conversations~: quelles paires ont échangé le
+          plus d'octets, dans quel sens.
+    \item Les requêtes DNS~: quels noms ont été résolus, vers quelles
+          adresses.
+    \item Les échanges TLS~: nom de serveur annoncé (SNI), certificat
+          présenté, versions.
+    \item Le détail des paquets, seulement pour les conversations retenues.
+\end{enumerate}
+
+\begin{boxinfo}
+\textbf{Toujours sur une copie, toujours avec un filtre écrit.} On ouvre la
+copie de travail de la capture, jamais le scellé, et l'on consigne chaque
+filtre appliqué (par exemple \texttt{ip.addr == 203.0.113.47}). Le filtre
+fait partie de la méthode~: un autre analyste doit pouvoir le rejouer.
+\end{boxinfo}
+
+% ============================================================================
+\section{Caractériser une Exfiltration}
+\label{sec:c06-exfiltration}
+% ============================================================================
+
+Une exfiltration se reconnaît moins à son contenu, souvent chiffré, qu'à sa
+forme~: un volume sortant important, un rapport entre octets envoyés et
+reçus très déséquilibré, une destination inhabituelle, un horaire anormal,
+un débit soutenu.
+
+\begin{boxscenario}{Opération NYANGA. La conversation de 1 h 12}
+\textbf{Constatations} (copie de NC-04).
+\begin{itemize}
+    \item Le 14~mars, de 1~h~12 à 3~h~47, une conversation TLS relie
+          SRV-FIC01 (10.20.1.20) à 203.0.113.47, port~443.
+    \item Octets envoyés par SRV-FIC01~: 3,2~Go~; octets reçus~: 11~Mo.
+    \item Le client annonce le nom \texttt{cdn-update.example.net}~; le
+          serveur présente un certificat auto-signé émis le 1\textsuperscript{er}~mars
+          2025.
+    \item Aucune autre conversation de SRV-FIC01 vers Internet sur les
+          24~heures de la capture.
+\end{itemize}
+
+\textbf{Calcul.} Durée~: 2~h~35, soit 9\,300~s. Débit moyen~: $3{,}2 \times
+10^{9} / 9\,300 \approx 344\,000$~octets par seconde, soit environ
+2,75~Mbit/s, sur un lien de 20~Mbit/s. Rapport envoyé sur reçu~: environ
+290.
+
+\textbf{Analyse} (confiance élevée). Un serveur de fichiers n'envoie pas
+3,2~Go en pleine nuit vers un serveur au certificat auto-signé récent qui
+se fait passer pour un service de mise à jour. La forme du flux est celle
+d'une exfiltration. Le débit, limité à un septième du lien, est compatible
+avec un outil réglé pour ne pas saturer la ligne et passer inaperçu.
+\end{boxscenario}
+
+\subsection{Ce que le chiffrement laisse voir}
+
+\begin{tableaucours}{L{4.2cm}L{8.0cm}}{%
+    \tableauHeader{Élément visible} &
+    \tableauHeader{Ce qu'il apprend}
+}
+Adresses, ports, heures & Qui, vers où, quand \\
+Volumes dans chaque sens & Envoi ou réception, ordre de grandeur des
+données \\
+Nom annoncé (SNI) & Le service que le client prétend joindre \\
+Certificat du serveur & Émetteur, date de création, auto-signature \\
+Rythme des paquets & Transfert continu, balise régulière, session
+interactive \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~6.2. Ce que laisse voir un flux chiffré}\end{center}
+
+Le contenu, lui, reste inaccessible sans les clés. Pour savoir quels
+fichiers sont partis, il faut une autre source. À NYANGA, elle se trouve sur
+SRV-FIC01 lui-même~: l'outil de copie utilisé par l'attaquant a laissé un
+journal dans le dossier de l'utilisateur, retrouvé dans l'acquisition du
+18~mars (NC-07). Il liste 18\,412 fichiers du dossier \texttt{Clients},
+pour un total de 3,19~Go, avec des heures de début et de fin qui encadrent
+la conversation réseau.
+
+% ============================================================================
+\section{Reconnaître une Balise}
+\label{sec:c06-balise}
+% ============================================================================
+
+\begin{boxdef}
+\textbf{\termecle{Balise}} (\textit{beacon})~: connexion qu'un programme
+malveillant établit à intervalles réguliers vers son serveur de commande,
+pour signaler sa présence et recevoir des ordres. Sa régularité la trahit,
+même quand le contenu est chiffré et le volume faible.
+\end{boxdef}
+
+\begin{boxscenario}{Opération NYANGA. Toutes les soixante secondes}
+\textbf{Constatations.} Sur les 24~heures de la capture, SRV-AD01
+(10.20.1.10) ouvre 1\,431 connexions courtes vers 203.0.113.47:443.
+L'intervalle entre deux connexions est compris entre 54 et 66~secondes~;
+chaque échange fait entre 1,2 et 2,8~Ko, sauf onze échanges de 40 à
+900~Ko, tous situés entre 0~h~50 et 3~h~50 le 14~mars.
+
+\textbf{Calcul.} 24~heures font 1\,440 minutes~: 1\,431 connexions
+correspondent à une connexion par minute, à neuf près.
+
+\textbf{Analyse} (confiance élevée). C'est la balise du PID~4412 vu en
+mémoire (Chapitre~\ref{chap:memoire}), réglée sur 60~secondes avec une
+variation de 10~\%. Les onze échanges plus volumineux, pendant la nuit,
+correspondent à des ordres plus lourds~: ils précèdent et accompagnent
+l'exfiltration depuis SRV-FIC01.
+\end{boxscenario}
+
+% ============================================================================
+\section{Ce que la Capture ne Voit pas}
+\label{sec:c06-absence}
+% ============================================================================
+
+La troisième question de Mme~MBARGA reçoit une réponse inattendue. La
+capture ne contient aucun échange avec l'interface de paiement pendant la
+nuit. Les journaux de l'interface (NC-05) indiquent que les vingt-trois
+virements ont été émis depuis l'adresse 203.0.113.62, qui n'appartient pas à
+NYANGA CRÉDIT. L'interface est hébergée par le prestataire, sur Internet~:
+l'attaquant a utilisé la clé volée depuis sa propre machine, sans passer par
+le réseau du siège.
+
+\begin{boxlecture}{Les trois questions au réseau}
+\begin{tableaucours}{L{7.0cm}cL{3.4cm}}{%
+    \tableauHeader{Proposition} &
+    \tableauHeader{Cote} &
+    \tableauHeader{Sources}
+}
+3,2~Go sont sortis de SRV-FIC01 vers 203.0.113.47 la nuit du 14~mars &
+\OUI{} & NC-04 \\
+Les fichiers sortis sont ceux du dossier \texttt{Clients} & \OUI{} &
+Journal de l'outil (NC-07) \\
+Le programme de SRV-AD01 communiquait avec la même adresse & \OUI{} & NC-04,
+NC-01 \\
+Les virements sont passés par le lien du siège & \NON{} & NC-04, NC-05 \\
+Aucune autre donnée n'est sortie par un autre chemin & \NEK{} & La sonde ne
+voit que le lien Internet du siège \\
+\end{tableaucours}
+
+\medskip
+\textbf{Lecture.} Trois \OUI{}, un \NON{}, un \NEK{}. Le \NON{} sur les
+virements est solide parce que les deux sources se recoupent~: absence dans
+la capture, et adresse d'émission externe dans les journaux de l'interface.
+Le \NEK{} rappelle que les agences ont leur propre accès Internet, hors de la
+vue de la sonde.
+\end{boxlecture}
+
+% ============================================================================
+\section{Ce que l'Analyse Réseau demande à chaque Métier}
+\label{sec:c06-metiers}
+% ============================================================================
+
+\begin{boxmetier}{Analyste en réponse à incident}
+\textbf{Analyser une capture}
+\begin{enumerate}
+    \item Situer la sonde~: lien observé, période, pertes éventuelles.
+    \item Partir des statistiques de conversations, pas des paquets.
+    \item Pour chaque conversation suspecte~: volumes, durée, débit,
+          rythme, nom annoncé, certificat.
+    \item Rattacher chaque flux à un processus (mémoire) et à des fichiers
+          (disque).
+    \item Écrire les filtres utilisés.
+\end{enumerate}
+\end{boxmetier}
+
+\begin{boxmetier}{RSSI}
+Placer la sonde là où passent les flux qui comptent, et savoir ce qu'elle
+ne voit pas. À NYANGA, les vingt-deux agences sortent sur Internet par leurs
+propres accès~: elles sont hors du champ de la sonde.
+\end{boxmetier}
+
+\begin{boxmetier}{Application OPJ/Expert Judiciaire}
+L'adresse 203.0.113.47 désigne une machine à un instant donné. Pour aller
+vers une personne, l'enquête doit obtenir, par réquisition ou par entraide
+internationale, les données du fournisseur qui l'exploitait~: le
+Chapitre~\ref{chap:normes-droit} en donne les fondements.
+\end{boxmetier}
+
+\separateur
+
+\begin{boxresume}
+\textbf{Ce qu'il faut retenir de ce chapitre~:}
+\begin{itemize}
+    \item Capture complète, flux, journaux et alertes se complètent~; on
+          part du large pour descendre vers le détail.
+    \item Une exfiltration se caractérise par son volume, son déséquilibre,
+          son débit, son horaire et sa destination~; une balise par sa
+          régularité.
+    \item Un flux chiffré laisse voir les adresses, les volumes, le nom
+          annoncé, le certificat et le rythme~; son contenu se cherche
+          ailleurs.
+    \item L'absence d'un flux dans une capture ne vaut \NON{} que si l'on
+          sait que le flux devait passer par la sonde.
+    \item À NYANGA, 3,2~Go du dossier \texttt{Clients} sont partis de
+          SRV-FIC01~; les virements, eux, ont été émis de l'extérieur.
+\end{itemize}
+\end{boxresume}
+
+\begin{boxinfo}
+\textbf{Points de contrôle.} Vous avez compris ce chapitre si vous savez~:
+\begin{itemize}
+    \item calculer le débit moyen d'une conversation~;
+    \item reconnaître une balise dans une liste de connexions~;
+    \item dire pourquoi l'absence d'un flux ne prouve pas toujours son
+          inexistence.
+\end{itemize}
+\end{boxinfo}
+
+% ============================================================================
+\section*{Exercices}
+% ============================================================================
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~6.1. Quelle source~? \niveaubase}]
+Pour chaque question, dites quelle source réseau y répond le mieux~:
+(a) SRV-FIC01 a-t-il parlé à 203.0.113.47 il y a trois mois~? (b) quel nom
+de domaine le contrôleur de domaine a-t-il résolu avant sa première balise~?
+(c) que contenait la requête HTTP non chiffrée d'un poste vers un site
+inconnu~? (d) la sonde a-t-elle signalé quelque chose cette nuit-là~?
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~6.2. Le calcul du débit \niveaumoyen}]
+Une seconde conversation, découverte dans les flux d'une agence, montre
+900~Mo envoyés en 1~h~15.
+\begin{enumerate}[(a)]
+    \item Calculez le débit moyen en octets par seconde et en Mbit/s.
+    \item L'agence dispose d'un lien de 4~Mbit/s. Qu'en déduisez-vous sur le
+          réglage de l'outil~?
+    \item Cette conversation change-t-elle une cote de l'encadré « Les trois
+          questions au réseau »~?
+\end{enumerate}
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~6.3. Une balise ou pas \niveaumoyen}]
+Voici les heures de connexion d'un poste vers une même adresse~: 10:00:03,
+10:05:01, 10:10:04, 10:15:02, 10:20:03, puis 11:47:30, 12:13:05.
+\begin{enumerate}[(a)]
+    \item Lesquelles évoquent une balise, et de quelle période~?
+    \item Proposez une explication légitime de ce rythme.
+    \item Quelles vérifications feriez-vous avant de conclure~?
+\end{enumerate}
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~6.4. Le NON des virements \niveauexpert}]
+\begin{enumerate}[(a)]
+    \item Expliquez pourquoi la seule absence des virements dans la capture
+          ne suffirait pas à coter \NON{} la proposition « les virements
+          sont passés par le lien du siège ».
+    \item Quelle pièce indépendante permet ce \NON{}~? Quelle est sa propre
+          faiblesse (Chapitre~\ref{chap:preuve})~?
+    \item Proposez une démarche pour renforcer la cote, en vous plaçant du
+          côté de l'enquête judiciaire.
+\end{enumerate}
+\end{boxexo}
+
+\bigskip
+
+\begin{boxinfo}
+\textbf{Pour aller plus loin.}
+\begin{itemize}
+    \item R.~Bejtlich, \textit{The Practice of Network Security
+          Monitoring}~\cite{bejtlich2013nsm}.
+    \item C.~Sanders, \textit{Practical Packet Analysis}~\cite{sanders2017packet}.
+\end{itemize}
+\end{boxinfo}
+
+\begin{boxinfo}
+\textbf{Transition.} Le disque, la mémoire et le réseau ont chacun parlé,
+chacun avec ses heures. Il reste à les mettre dans un même ordre, sur une
+même échelle de temps~: Chapitre~\ref{chap:chronologie}.
+\end{boxinfo}

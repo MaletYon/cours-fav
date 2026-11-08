@@ -1,0 +1,233 @@
+NDAP SUKULU · FAV · fiche FAV-FICHE-C15
+Chapitre 15 : Le rapport et le témoignage
+
+Version papier, à utiliser en attendant l'ouverture du portail NDAP SUKULU.
+La fiche complète compte 40 questions. Répondez sur la grille en fin de fiche.
+Durée indicative : 60 minutes. Seuil de réussite : 60 %.
+Les corrections figurent dans le livret de correction du cours.
+
+========================================================================
+Questions à choix multiple (une seule bonne réponse)
+========================================================================
+
+ 1. Combien de rapports une même enquête peut-elle donner selon le chapitre ?
+      a) Un
+      b) Trois
+      c) Deux
+      d) Dix
+
+ 2. Quel rapport prend la forme d'une note de deux pages avec recommandations datées ?
+      a) Le rapport d'expertise
+      b) Le rapport technique
+      c) Le rapport à la direction
+      d) Le procès-verbal
+
+ 3. Quel écueil guette le rapport à la direction ?
+      a) Trop de technique
+      b) Pas assez de technique
+      c) Trop d'annexes judiciaires
+      d) Le manque de vecteurs CVSS
+
+ 4. Quel écueil guette le rapport à l'autorité judiciaire ?
+      a) Trop de recommandations budgétaires
+      b) Pas assez de vecteurs
+      c) Trop court
+      d) Sortir de la mission
+
+ 5. Quel écueil guette le rapport technique ?
+      a) Trop de priorités
+      b) L'absence de priorités
+      c) Le langage juridique
+      d) Le manque de mission
+
+ 6. Quel rapport contient le vecteur CVSS et les recommandations budgétaires ?
+      a) La note à la direction
+      b) Le rapport d'expertise
+      c) Le rapport technique
+      d) Aucun
+
+ 7. Quelle norme demande qu'un tiers compétent puisse comprendre et refaire l'examen ?
+      a) ISO/IEC 27042
+      b) ISO/IEC 27001
+      c) ISO 9001
+      d) ISO/IEC 27005
+
+ 8. Quelle est la première partie d'un rapport d'expertise ?
+      a) Les annexes
+      b) Les limites
+      c) Les constatations
+      d) La mission
+
+ 9. Comment recopie-t-on les questions de la mission ?
+      a) En les résumant
+      b) Mot pour mot
+      c) En les reformulant
+      d) On ne les recopie pas
+
+10. Quelle partie contient les interprétations et les autres explications examinées ?
+      a) Les constatations
+      b) Les pièces reçues
+      c) La discussion
+      d) La mission
+
+11. Quelle partie dit ce qui n'a pas pu être examiné ?
+      a) Les limites
+      b) La discussion
+      c) Les opérations
+      d) Les annexes
+
+12. Que contiennent les annexes du rapport d'expertise ?
+      a) La facture
+      b) Les avis du client
+      c) Les articles de presse
+      d) Sorties brutes, tableaux, chronologie, formulaires
+
+13. Combien de parties compte le plan du rapport d'expertise ?
+      a) Quatre
+      b) Huit
+      c) Douze
+      d) Trois
+
+14. Dans quel ordre écrit-on une conclusion ?
+      a) Niveau de confiance, analyse, constatation
+      b) Réponse, puis rien
+      c) Constatation, analyse, niveau de confiance
+      d) Analyse seule
+
+15. Quand la confiance est-elle élevée ?
+      a) Plusieurs pièces indépendantes concordent sans explication concurrente plausible
+      b) Une seule pièce existe
+      c) Le client est d'accord
+      d) L'outil est cher
+
+16. Quand la confiance est-elle moyenne ?
+      a) Aucune pièce
+      b) Toutes les pièces sont parfaites
+      c) Le juge l'a dit
+      d) Les pièces concordent mais l'une est fragile ou une explication concurrente reste possible
+
+17. Quand la confiance est-elle faible ?
+      a) Plusieurs pièces concordantes
+      b) Une seule pièce ou des explications concurrentes aussi plausibles
+      c) Une signature numérique
+      d) Un aveu
+
+18. Que doit faire le rapport du vocabulaire de la confiance ?
+      a) L'éviter
+      b) Le changer selon les chapitres
+      c) Le définir et le tenir partout
+      d) L'ignorer
+
+19. Quelle est la question 3 de la mission de l'expert ?
+      a) Dire par quel moyen l'accès a été obtenu
+      b) Dire qui est coupable
+      c) Dire combien coûte l'incident
+      d) Dire quand aura lieu le procès
+
+20. Quelle confiance porte la réponse à la question 3 ?
+      a) Faible
+      b) Moyenne
+      c) Aucune
+      d) Élevée
+
+========================================================================
+Vrai ou faux
+========================================================================
+
+21. La note à la direction contient le vecteur CVSS.
+      Vrai / Faux
+
+22. Les trois rapports reposent sur les mêmes constatations.
+      Vrai / Faux
+
+23. Le rapport d'expertise contient des recommandations budgétaires.
+      Vrai / Faux
+
+24. Le rapport d'expertise sépare constatations et discussion.
+      Vrai / Faux
+
+25. Les questions de la mission se reformulent librement.
+      Vrai / Faux
+
+26. Un niveau de confiance se définit et se tient dans tout le rapport.
+      Vrai / Faux
+
+27. Une seule pièce suffit à une confiance élevée.
+      Vrai / Faux
+
+28. L'expert attribue l'intrusion aux prévenus.
+      Vrai / Faux
+
+29. Les prévenus sont titulaires de deux des onze portefeuilles.
+      Vrai / Faux
+
+30. La réponse à la question 3 examine deux explications concurrentes.
+      Vrai / Faux
+
+========================================================================
+Textes à trous
+========================================================================
+
+31. La première partie d'un rapport d'expertise est la ______.
+
+32. On recopie les questions de la mission mot pour ______.
+
+33. La partie qui contient les interprétations est la ______.
+
+34. La partie qui dit ce qui n'a pas été examiné s'appelle les ______.
+
+35. Le premier temps d'une conclusion est la ______.
+
+36. Plusieurs pièces indépendantes concordantes donnent une confiance ______.
+
+37. Le rapport d'expertise est déposé le ______ mai 2025.
+
+38. L'audience a lieu devant le tribunal de grande instance de la ______.
+
+39. Deux titulaires de portefeuilles sont poursuivis pour ______.
+
+40. La compétence des laboratoires relève de l'ISO/IEC ______.
+
+========================================================================
+Grille de réponses   Nom : ............................  Matricule : ............
+========================================================================
+ 1. ............................................
+ 2. ............................................
+ 3. ............................................
+ 4. ............................................
+ 5. ............................................
+ 6. ............................................
+ 7. ............................................
+ 8. ............................................
+ 9. ............................................
+10. ............................................
+11. ............................................
+12. ............................................
+13. ............................................
+14. ............................................
+15. ............................................
+16. ............................................
+17. ............................................
+18. ............................................
+19. ............................................
+20. ............................................
+21. ............................................
+22. ............................................
+23. ............................................
+24. ............................................
+25. ............................................
+26. ............................................
+27. ............................................
+28. ............................................
+29. ............................................
+30. ............................................
+31. ............................................
+32. ............................................
+33. ............................................
+34. ............................................
+35. ............................................
+36. ............................................
+37. ............................................
+38. ............................................
+39. ............................................
+40. ............................................

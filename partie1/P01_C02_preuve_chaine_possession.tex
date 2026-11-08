@@ -1,0 +1,484 @@
+% ============================================================================
+% Fichier  : partie1/P01_C02_preuve_chaine_possession.tex
+% Titre    : La Preuve Numérique et la Chaîne de Possession
+% Auteur   : MINKA MI NGUIDJOÏ Thierry Emmanuel
+% Version  : 1.0 -- novembre 2024
+% Corrigés : corriges/Corr_C02.tex
+% ============================================================================
+% Sources : ISO/IEC 27037:2012 (paraphrasée) ; loi n° 2010/012, art. 53 et 54
+% (texte officiel, cité) ; FIPS 180-4 et état de l'art sur les collisions
+% MD5/SHA-1 (présenté sans citation d'article).
+% Faits nouveaux (bible) : chaîne de possession de la capture mémoire
+% (scellé NC-01) ; trou de 17 h 40 dans la nuit du 14 au 15 mars ; scellés
+% NC-01 à NC-06.
+% ============================================================================
+
+\chapter{La Preuve Numérique et la Chaîne de Possession}
+\label{chap:preuve}
+\chaptermark{Preuve et chaîne de possession}
+
+\epigraph{%
+    « Une pièce dont on ne peut pas dire où elle était\\
+    ne vaut pas mieux qu'une pièce perdue. »%
+}{Principe du cours}
+
+\niveauChapitre{Fondamental}{%
+    Maîtrise du Chapitre~\ref{chap:investigation}
+}
+
+\begin{boxobjectifs}
+\begin{itemize}
+    \item Distinguer la recevabilité d'une preuve et sa force probante.
+    \item Expliquer ce qu'une empreinte cryptographique prouve, et ce
+          qu'elle ne prouve pas.
+    \item Choisir une fonction de hachage adaptée et justifier ce choix.
+    \item Tenir une chaîne de possession complète, du recueil à la
+          restitution.
+    \item Identifier une rupture de la chaîne et en mesurer les
+          conséquences.
+    \item Appliquer les articles~53 et~54 de la loi n°~2010/012 à une
+          perquisition portant sur des données.
+\end{itemize}
+\end{boxobjectifs}
+
+\bigskip
+
+% ============================================================================
+\section*{Avant de commencer : un disque sur un bureau}
+% ============================================================================
+
+Bafoussam, samedi 15 mars 2025, 9~h~30. Mme~MBARGA demande où se trouve le
+disque externe qui contient la capture mémoire du contrôleur de domaine. Il
+est sur le bureau de M.~KAMGA, dans une enveloppe kraft fermée par un ruban
+adhésif. Personne ne l'a mis sous clé pendant la nuit. La porte du bureau
+du DSI ne ferme pas, et l'équipe de ménage passe le vendredi soir.
+
+L'empreinte de la capture avait été calculée la veille à 10~h~41 et inscrite
+au registre. Mme~MBARGA la recalcule devant M.~KAMGA et Mme~NDOUMBE~: elle
+est identique. Le contenu n'a donc pas changé. Mais l'avocat de la défense,
+dans dix-huit mois, posera une autre question~: pendant ces dix-sept heures,
+qui pouvait toucher ce disque~?
+
+\begin{boxalert}
+\textbf{Violation typique.} Croire qu'une empreinte identique suffit à
+défendre une pièce, et négliger la trace écrite de ceux qui l'ont détenue.
+
+\smallskip
+\textbf{Règle~:} l'empreinte prouve que le contenu n'a pas changé entre deux
+calculs~; la chaîne de possession prouve qui détenait la pièce, où, et dans
+quelles conditions. Les deux se complètent et aucune ne remplace l'autre.
+\end{boxalert}
+
+\separateur
+
+% ============================================================================
+\section{Recevable et Probante}
+\label{sec:c02-recevable}
+% ============================================================================
+
+Deux questions se posent devant toute pièce, et elles ne se confondent pas.
+
+\begin{boxdef}
+\textbf{\termecle{Recevabilité}}~: aptitude d'une pièce à être versée au
+débat. Une pièce obtenue en violation de la loi, par exemple par un accès
+non autorisé à un système, peut être écartée.
+
+\smallskip
+\textbf{\termecle{Force probante}}~: poids que le décideur accorde à une
+pièce recevable. Elle dépend de la fiabilité de la source, de l'intégrité de
+la pièce, de la qualité de la méthode et de la clarté de son interprétation.
+\end{boxdef}
+
+En matière pénale, le droit camerounais, comme la plupart des droits issus
+de la tradition civiliste, admet en principe la preuve par tout moyen et
+laisse le juge apprécier librement la valeur des pièces [disposition du Code
+de procédure pénale à vérifier par le lecteur sur le texte officiel]. Ce
+principe ouvre la porte à la preuve numérique, mais il ne la rend pas
+automatiquement convaincante. Une pièce numérique contestée sur son
+intégrité ou sur sa provenance sera recevable et peu probante~: le juge la
+lira, puis lui accordera peu de poids. L'enquêteur travaille donc moins pour
+la recevabilité, que la loi accorde largement, que pour la force probante,
+qu'il doit construire.
+
+\begin{tableaucours}{L{4.0cm}L{8.2cm}}{%
+    \tableauHeader{Ce qui fonde la force probante} &
+    \tableauHeader{Ce que l'enquêteur doit pouvoir montrer}
+}
+Provenance & De quel système, de quel emplacement, à quelle heure la pièce
+a été tirée \\
+Intégrité & Que le contenu examiné est celui qui a été recueilli \\
+Continuité & Qui a détenu la pièce, à chaque instant, et dans quelles
+conditions \\
+Méthode & Comment la pièce a été acquise et examinée, avec quels outils et
+quelles versions \\
+Interprétation & Ce que la pièce signifie, et les autres explications
+possibles \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~2.1. Les fondements de la force probante}\end{center}
+
+% ============================================================================
+\section{L'Empreinte Cryptographique}
+\label{sec:c02-empreinte}
+% ============================================================================
+
+\begin{boxdef}
+\textbf{\termecle{Fonction de hachage cryptographique}}~: fonction qui
+associe à une donnée de taille quelconque une valeur de taille fixe,
+l'\textbf{empreinte} (\textit{hash}), de sorte qu'il soit pratiquement
+impossible de trouver deux données différentes de même empreinte
+(résistance aux collisions), ou de construire une donnée qui ait une
+empreinte donnée (résistance aux préimages).
+\end{boxdef}
+
+Si l'on modifie un seul bit d'une image disque de 500~Go, son empreinte
+SHA-256 change entièrement. Recalculer l'empreinte à chaque étape et
+constater qu'elle n'a pas varié démontre donc que le contenu est resté le
+même, sans avoir à comparer les deux copies octet par octet.
+
+\subsection{Quelle fonction choisir}
+
+\begin{tableaucours}{L{2.0cm}cL{4.6cm}L{3.8cm}}{%
+    \tableauHeader{Fonction} &
+    \tableauHeader{Taille} &
+    \tableauHeader{État} &
+    \tableauHeader{Usage en enquête}
+}
+MD5 & 128 bits & Collisions calculables depuis 2004~; on fabrique deux
+fichiers distincts de même empreinte & Complément pour comparer à
+d'anciennes bases, jamais seule \\
+SHA-1 & 160 bits & Collision pratique publiée en 2017 & Complément
+seulement \\
+SHA-256 & 256 bits & Aucune attaque pratique connue & Empreinte de
+référence \\
+SHA-512, SHA-3 & 512 bits et plus & Aucune attaque pratique connue &
+Possibles, moins répandues dans les outils \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~2.2. Fonctions de hachage et usage en enquête}\end{center}
+
+La faiblesse de MD5 porte sur les collisions, pas directement sur les
+préimages~: un attaquant peut fabriquer deux fichiers de même empreinte, il
+ne peut pas, à ce jour, fabriquer un fichier qui ait l'empreinte d'un
+fichier donné. Une image acquise avec sa seule empreinte MD5 reste donc
+défendable en pratique, mais elle offre à la partie adverse un argument
+qu'une empreinte SHA-256 lui refuse. On calcule aujourd'hui SHA-256, et l'on
+ajoute MD5 quand un outil ou une base de référence l'exige.
+
+\subsection{Ce que l'empreinte ne prouve pas}
+
+\begin{itemize}
+    \item Elle ne prouve pas que la copie est complète~: une acquisition qui
+          a sauté des secteurs illisibles a une empreinte stable et un
+          contenu lacunaire. Le journal de l'outil d'acquisition le dit.
+    \item Elle ne prouve pas que la pièce vient du système annoncé~: c'est
+          le rôle de la provenance, consignée au recueil.
+    \item Elle ne prouve rien sur la période qui précède son premier
+          calcul~: une capture modifiée avant d'être hachée garde, ensuite,
+          une empreinte parfaitement stable.
+\end{itemize}
+
+La troisième limite explique pourquoi on calcule l'empreinte le plus tôt
+possible, idéalement pendant l'acquisition, et pourquoi on la fait
+constater par une seconde personne.
+
+% ============================================================================
+\section{La Chaîne de Possession}
+\label{sec:c02-chaine}
+% ============================================================================
+
+\begin{boxdef}
+\textbf{\termecle{Chaîne de possession}} (\textit{chain of custody})~:
+documentation continue qui retrace, pour chaque pièce, chaque personne qui
+l'a détenue, chaque transfert, chaque lieu de conservation et chaque
+opération réalisée, depuis le recueil jusqu'à la restitution ou la
+destruction.
+\end{boxdef}
+
+L'ISO/IEC~27037~\cite{iso27037_2012} demande que cette documentation permette
+de répondre, pour chaque pièce, à des questions simples~: qui l'a recueillie,
+quand, où, comment et pourquoi~; qui l'a détenue ensuite et à quel moment
+elle a changé de mains~; quelles opérations ont été faites sur elle. On
+paraphrase ici ces exigences sous la forme d'un formulaire.
+
+\begin{boxprocedure}
+\textbf{Le formulaire de chaîne de possession d'une pièce}
+\begin{enumerate}
+    \item Identifiant unique de la pièce et numéro de scellé.
+    \item Description~: nature, marque, modèle, numéro de série, capacité.
+    \item Provenance~: système, emplacement physique, propriétaire.
+    \item Recueil~: date, heure, lieu, personne, méthode, outil et version.
+    \item Empreintes~: algorithme, valeur, heure du calcul, témoin.
+    \item Conditionnement~: enveloppe, sac antistatique, scellé, photo.
+    \item Pour chaque transfert~: remettant, destinataire, date, heure,
+          motif, état du scellé, signatures.
+    \item Pour chaque examen~: personne, date, opération, copie utilisée.
+    \item Conservation~: lieu, conditions (local fermé, armoire forte).
+    \item Sort final~: restitution, destruction, archivage, avec
+          autorisation.
+\end{enumerate}
+\end{boxprocedure}
+
+\subsection{Le scellé}
+
+Un scellé est un conditionnement qui ne s'ouvre pas sans laisser de marque~:
+sac numéroté à fermeture inviolable, enveloppe signée sur les rabats et
+recouverte d'un adhésif transparent. Le numéro du scellé figure dans le
+formulaire. À chaque ouverture, on note qui l'a ouvert, pourquoi, et le
+numéro du nouveau scellé. Dans la procédure pénale, la mise sous scellé
+relève de l'officier de police judiciaire, comme le rappelle l'article~53 de
+la loi n°~2010/012.
+
+\begin{boxjuris}
+\textbf{\loicam{n°~2010/012}, article~53}~\cite{loi2010012}~:
+\textit{« (1) Les perquisitions en matière de cybercriminalité sont
+susceptibles de porter sur des données qui peuvent être des supports
+physiques ou des copies réalisées en présence des personnes qui assistent à
+la perquisition. (2) Lorsqu'une copie des données saisies a été faite,
+celle-ci peut être détruite sur instruction du Procureur de la République
+pour des raisons de sécurité. (3) Sur accord du Procureur de la République,
+seuls seront gardés sous scellé par l'Officier de Police Judiciaire, les
+objets, documents et données utilisées à la manifestation de la vérité.
+(4) Les personnes présentes lors de la perquisition peuvent être
+réquisitionnées de fournir les renseignements sur les objets, documents et
+données saisis. »}
+
+\medskip
+\textbf{\loicam{n°~2010/012}, article~54}~\cite{loi2010012}~:
+\textit{« Les perquisitions et les saisies sont effectuées conformément aux
+dispositions du Code de Procédure Pénale en tenant compte du dépérissement
+des preuves. »}
+
+\medskip
+\textbf{Portée} (analyse). L'article~53 admet que la saisie porte sur une
+copie des données, réalisée devant les personnes présentes~: c'est la base
+légale de l'acquisition sur place, sans emporter le serveur. L'article~54
+fait du dépérissement des preuves un critère de la conduite des saisies, ce
+qui justifie de capturer d'abord ce qui disparaît le plus vite.
+\end{boxjuris}
+
+% ============================================================================
+\section{La Chaîne de NYANGA}
+\label{sec:c02-nyanga}
+% ============================================================================
+
+\begin{boxscenario}{Opération NYANGA. Le parcours du scellé NC-01}
+\begin{tableaucours}{L{2.6cm}L{2.6cm}L{3.0cm}L{3.8cm}}{%
+    \tableauHeader{Date et heure} &
+    \tableauHeader{Détenteur} &
+    \tableauHeader{Lieu} &
+    \tableauHeader{Opération}
+}
+14/03, 10~h~02 & Mme NDOUMBE & Salle serveurs & Capture mémoire de
+SRV-AD01 \\
+14/03, 10~h~41 & Mme NDOUMBE & Salle serveurs & Empreinte SHA-256,
+contresignée par M.~KAMGA \\
+14/03, 15~h~50 & M. KAMGA & Bureau du DSI & Enveloppe kraft, ruban
+adhésif, sans numéro \\
+15/03, 9~h~30 & Mme MBARGA & Bureau du DSI & Empreinte recalculée,
+identique~; mise sous scellé NC-01 \\
+15/03, 11~h~00 & Mme MBARGA & Salle de crise & Copie de travail, empreinte
+vérifiée \\
+16/03, 10~h~15 & Adjudant-chef NANA & Brigade de recherches & Remise sur
+réquisition, scellé intact, procès-verbal \\
+17/03, 14~h~00 & M. ABOUBAKAR & Laboratoire de l'expert & Ouverture du
+scellé, copie, nouveau scellé NC-01-E1 \\
+\end{tableaucours}
+
+\medskip
+\textbf{Constatations.} La pièce a été détenue par cinq personnes
+successives. Entre le 14~mars à 15~h~50 et le 15~mars à 9~h~30, soit
+17~h~40, elle est restée dans un bureau ouvert, sans scellé numéroté et sans
+consignation. Les empreintes calculées le 14 à 10~h~41 et le 15 à 9~h~30
+sont identiques.
+
+\textbf{Analyse} (confiance élevée sur l'intégrité, moyenne sur la
+continuité). Le contenu n'a pas changé~: l'égalité des empreintes l'établit.
+La continuité, elle, présente un trou. Il n'affaiblit pas l'intégrité, mais
+il affaiblit la réponse à une autre objection~: la substitution d'un disque
+par un autre de même contenu est sans effet, mais la manipulation du disque
+pendant la nuit, par exemple pour en copier le contenu, ne peut être exclue.
+Le rapport doit mentionner ce trou, et non le taire.
+\end{boxscenario}
+
+\begin{boxlecture}{Les six scellés de l'affaire au 17 mars}
+\begin{tableaucours}{L{1.4cm}L{4.6cm}ccc}{%
+    \tableauHeader{Scellé} &
+    \tableauHeader{Pièce} &
+    \tableauHeader{Intégrité} &
+    \tableauHeader{Continuité} &
+    \tableauHeader{Provenance}
+}
+NC-01 & Capture mémoire de SRV-AD01 & \OUI{} & \NEK{} & \OUI{} \\
+NC-02 & Journaux de la passerelle (export) & \OUI{} & \OUI{} & \OUI{} \\
+NC-03 & Image disque de SRV-CPT01 & \OUI{} & \OUI{} & \OUI{} \\
+NC-04 & Capture réseau de la sonde & \OUI{} & \OUI{} & \OUI{} \\
+NC-05 & Journaux de l'interface de paiement & \OUI{} & \OUI{} & \NEK{} \\
+NC-06 & Capture d'écran WhatsApp d'un technicien & \NEK{} & \NON{} & \NEK{} \\
+\end{tableaucours}
+
+\medskip
+\textbf{Lecture.} Sur dix-huit cotes, treize \OUI{}, une \NON{} et quatre
+\NEK{}. NC-05 a été envoyé par le prestataire de l'interface sous forme de
+fichier joint à un courriel~: son intégrité depuis l'envoi est établie, mais
+rien ne dit comment le prestataire l'a extrait. NC-06 ne sert qu'à orienter
+l'enquête~; on ne fonde aucune conclusion sur elle. NC-01 reste utilisable,
+avec la réserve sur la nuit du 14 au 15.
+\end{boxlecture}
+
+% ============================================================================
+\section{Les Ruptures et leurs Remèdes}
+\label{sec:c02-ruptures}
+% ============================================================================
+
+\begin{tableaucours}{L{3.6cm}L{4.2cm}L{4.4cm}}{%
+    \tableauHeader{Rupture} &
+    \tableauHeader{Conséquence} &
+    \tableauHeader{Remède}
+}
+Empreinte calculée tard & Rien ne prouve l'état d'avant & L'écrire, et
+dater l'acquisition par d'autres sources (journal de l'outil) \\
+Trou dans la détention & Une manipulation ne peut être exclue & Le dire
+dans le rapport, recueillir les témoignages, vérifier les journaux d'accès
+au local \\
+Original examiné & L'original a pu changer & Recalculer l'empreinte,
+documenter l'opération, travailler ensuite sur copie \\
+Pièce transmise par courriel & Provenance invérifiable avant l'envoi &
+Demander l'extraction en présence d'un témoin ou par procès-verbal \\
+Scellé ouvert sans trace & La continuité est rompue & Nouveau scellé,
+procès-verbal d'ouverture, signatures \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~2.3. Ruptures de chaîne et remèdes}\end{center}
+
+Une rupture ne rend pas la pièce inutilisable. Elle en réduit la force
+probante, d'autant plus que la pièce est seule à soutenir une conclusion.
+Quand plusieurs pièces indépendantes convergent, la faiblesse de l'une est
+compensée par les autres~: à NYANGA, l'outil d'accès à distance vu dans la
+capture mémoire (NC-01) est aussi visible dans la capture réseau (NC-04),
+par ses connexions vers 203.0.113.47. La conclusion ne repose pas sur NC-01
+seule.
+
+% ============================================================================
+\section{Ce que la Preuve demande à chaque Métier}
+\label{sec:c02-metiers}
+% ============================================================================
+
+\begin{boxmetier}{Application OPJ/Expert Judiciaire}
+\textbf{Recevoir un scellé}
+\begin{enumerate}
+    \item Vérifier le numéro et l'état du scellé avant toute ouverture.
+    \item Ouvrir en présence d'un témoin, photographier, consigner.
+    \item Recalculer l'empreinte et la comparer à celle du formulaire.
+    \item Travailler sur une copie, et resceller l'original.
+    \item Signaler dans le rapport toute rupture constatée dans la chaîne
+          reçue.
+\end{enumerate}
+\end{boxmetier}
+
+\begin{boxmetier}{Analyste en réponse à incident}
+Le formulaire de chaîne de possession s'ouvre dès le recueil, même quand
+personne ne parle encore de plainte. Le coût est de quelques minutes par
+pièce~; une chaîne reconstituée après coup ne convainc personne.
+\end{boxmetier}
+
+\begin{boxmetier}{RSSI}
+Prévoir, avant l'incident, le matériel de conditionnement (sacs numérotés,
+étiquettes, disques neufs) et un lieu de conservation fermé. À NYANGA, il
+n'y avait ni l'un ni l'autre, d'où l'enveloppe kraft sur le bureau du DSI.
+\end{boxmetier}
+
+\separateur
+
+\begin{boxresume}
+\textbf{Ce qu'il faut retenir de ce chapitre~:}
+\begin{itemize}
+    \item La recevabilité dit si une pièce entre au débat~; la force
+          probante dit ce qu'elle pèse. L'enquêteur construit la seconde.
+    \item L'empreinte SHA-256 prouve que le contenu n'a pas changé entre
+          deux calculs~; elle ne prouve ni la complétude, ni la provenance,
+          ni l'état d'avant le premier calcul.
+    \item La chaîne de possession retrace chaque détenteur, chaque
+          transfert, chaque opération~; un trou se dit, il ne se cache pas.
+    \item Les articles~53 et~54 de la loi n°~2010/012 admettent la saisie
+          par copie et imposent de tenir compte du dépérissement des
+          preuves.
+    \item À NYANGA, NC-01 a une intégrité établie et une continuité \NEK{}
+          sur 17~h~40~; la conclusion qu'elle soutient est confirmée par
+          NC-04.
+\end{itemize}
+\end{boxresume}
+
+\begin{boxinfo}
+\textbf{Points de contrôle.} Vous avez compris ce chapitre si vous savez~:
+\begin{itemize}
+    \item expliquer pourquoi MD5 seul ne suffit plus, et ce qui reste vrai
+          à son sujet~;
+    \item remplir un formulaire de chaîne de possession~;
+    \item coter l'intégrité, la continuité et la provenance d'une pièce.
+\end{itemize}
+\end{boxinfo}
+
+% ============================================================================
+\section*{Exercices}
+% ============================================================================
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~2.1. Ce que dit l'empreinte \niveaubase}]
+Vrai ou faux~? Justifiez.
+\begin{enumerate}[(a)]
+    \item Deux empreintes SHA-256 identiques prouvent que deux fichiers sont
+          identiques.
+    \item Une empreinte identique prouve que l'image disque est complète.
+    \item Une image hachée en MD5 seulement est irrecevable.
+    \item Il suffit de calculer l'empreinte au moment du rapport.
+\end{enumerate}
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~2.2. Remplir le formulaire \niveaumoyen}]
+Le 15~mars à 16~h~00, SANKOFA EXPERTISE acquiert l'image du disque de
+SRV-CPT01 (scellé NC-03). Rédigez le formulaire de chaîne de possession de
+cette pièce jusqu'à sa remise à l'OPJ le 16~mars, en inventant de façon
+cohérente les éléments manquants (outil, version, empreintes, témoins).
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~2.3. La nuit du 14 au 15 \niveaumoyen}]
+\begin{enumerate}[(a)]
+    \item Rédigez le paragraphe du rapport qui mentionne le trou de la
+          chaîne de NC-01, en séparant constatation et analyse.
+    \item Quelles vérifications complémentaires proposez-vous pour réduire
+          l'incertitude sur cette nuit~?
+    \item Le trou change-t-il une conclusion de l'enquête~? Justifiez à
+          l'aide de NC-04.
+\end{enumerate}
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~2.4. NC-05 et le prestataire \niveauexpert}]
+Le prestataire de l'interface de paiement a envoyé ses journaux en pièce
+jointe d'un courriel. L'avocat de la défense soutiendra qu'ils ont pu être
+modifiés chez le prestataire.
+\begin{enumerate}[(a)]
+    \item Quelles cotes donnez-vous à cette pièce, et pourquoi~?
+    \item Comment l'OPJ aurait-il dû obtenir ces journaux~? Appuyez-vous
+          sur les articles~53 et~54.
+    \item Quelles pièces indépendantes permettent de corroborer les heures
+          des virements~?
+\end{enumerate}
+\end{boxexo}
+
+\bigskip
+
+\begin{boxinfo}
+\textbf{Pour aller plus loin.}
+\begin{itemize}
+    \item L'ISO/IEC~27037~\cite{iso27037_2012}, sur l'identification, le
+          recueil et la préservation.
+    \item Le guide de l'ACPO~\cite{acpo2012}, pour ses quatre principes de
+          conduite.
+\end{itemize}
+\end{boxinfo}
+
+\begin{boxinfo}
+\textbf{Transition.} La chaîne de possession garde la pièce~; encore
+faut-il l'avoir acquise sans l'altérer. Copier un disque, capturer une
+mémoire, figer un journal~: c'est l'objet du Chapitre~\ref{chap:acquisition}.
+\end{boxinfo}

@@ -1,0 +1,454 @@
+% ============================================================================
+% Fichier  : partie4/P04_C09_vulnerabilite.tex
+% Titre    : Qu'est-ce qu'une Vulnérabilité
+% Auteur   : MINKA MI NGUIDJOÏ Thierry Emmanuel
+% Version  : 1.0 -- novembre 2024
+% Corrigés : corriges/Corr_C09.tex
+% ============================================================================
+% Sources : programme CVE (MITRE), CWE, NVD (NIST) ; CVSS v4.0 (FIRST, 2023)
+% et v3.1 (2019) ; EPSS (FIRST) ; catalogue KEV (CISA) ; SSVC (CISA, 2020).
+% Les scores CVSS v4.0 donnés (9,3 et 10,0) correspondent aux vecteurs cités
+% (calculateur du FIRST) ; les autres valeurs sont fictives et marquées
+% comme telles. Identifiants VULN-2025-xxxx fictifs.
+% Faits nouveaux (bible) : vecteur de VULN-2024-4471 ; quatre
+% vulnérabilités d'exemple chez SOLITRANS (V-A à V-D).
+% ============================================================================
+
+\chapter{Qu'est-ce qu'une Vulnérabilité}
+\label{chap:vulnerabilite}
+\chaptermark{Qu'est-ce qu'une vulnérabilité}
+
+\epigraph{%
+    « Un score dit la gravité d'une faille dans l'absolu.\\
+    Il ne dit pas qu'elle sera exploitée chez vous. »%
+}{Principe du cours}
+
+\niveauChapitre{Fondamental}{%
+    Lecture du Chapitre~\ref{chap:prologue}
+}
+
+\begin{boxobjectifs}
+\begin{itemize}
+    \item Définir une vulnérabilité et la distinguer de la faiblesse, de la
+          menace et du risque.
+    \item Lire un identifiant CVE et le rattacher à une faiblesse CWE.
+    \item Lire un vecteur CVSS v4.0 et en expliquer chaque métrique.
+    \item Interpréter un score EPSS et une inscription au catalogue KEV.
+    \item Expliquer pourquoi la gravité technique ne suffit pas à décider
+          d'une priorité.
+\end{itemize}
+\end{boxobjectifs}
+
+\bigskip
+
+% ============================================================================
+\section*{Avant de commencer : 412 critiques}
+% ============================================================================
+
+Douala, mai 2025. SOLITRANS LOGISTIQUE\footnote{SOLITRANS LOGISTIQUE, ses
+salariés, ses sites et ses chiffres sont fictifs~; les référentiels cités
+(CVE, CWE, CVSS, EPSS, KEV, SSVC) sont exacts.}, transitaire et
+logisticien du port, vient de réaliser son premier balayage complet de
+vulnérabilités sur ses 1\,380 actifs. Le rapport de l'outil compte 3\,812
+constats, dont 412 qualifiés de « critiques » par leur score. Mme~EBODE,
+responsable de la gestion des vulnérabilités depuis trois semaines, doit
+dire au comité de direction ce qu'on corrige d'abord. Le RSSI, M.~NJIKE, a
+une réponse simple~: « les 412 critiques, dans l'ordre du score ». Mme~EBODE
+sait que l'équipe système corrige environ quarante failles par semaine. Il
+faudrait dix semaines pour les seules critiques.
+
+\begin{boxalert}
+\textbf{Violation typique.} Confondre la gravité technique d'une
+vulnérabilité, mesurée par un score, avec le risque qu'elle fait courir à
+l'organisation.
+
+\smallskip
+\textbf{Règle~:} le score de base décrit la faille telle qu'elle est partout.
+La priorité de correction dépend aussi de ce que l'on sait de son
+exploitation et de la place de l'actif dans l'organisation.
+\end{boxalert}
+
+\separateur
+
+% ============================================================================
+\section{Faiblesse, Vulnérabilité, Menace, Risque}
+\label{sec:c09-definitions}
+% ============================================================================
+
+\begin{boxdef}
+\textbf{\termecle{Faiblesse}}~: type d'erreur de conception ou de
+programmation susceptible de créer des vulnérabilités, par exemple une
+authentification mal vérifiée ou une entrée non contrôlée. Le catalogue CWE
+(\textit{Common Weakness Enumeration}) les recense~\cite{mitrecwe}.
+
+\smallskip
+\textbf{\termecle{Vulnérabilité}}~: défaut présent dans une version précise
+d'un produit, qui peut être exploité pour porter atteinte à la
+confidentialité, à l'intégrité ou à la disponibilité. Le programme CVE
+(\textit{Common Vulnerabilities and Exposures}) lui attribue un identifiant
+unique~\cite{mitrecve}.
+
+\smallskip
+\textbf{\termecle{Menace}}~: source potentielle d'atteinte, par exemple un
+groupe qui exploite une famille de failles.
+
+\smallskip
+\textbf{\termecle{Risque}}~: combinaison de la vraisemblance qu'une menace
+exploite une vulnérabilité et de la gravité de l'atteinte qui en résulte
+pour l'organisation.
+\end{boxdef}
+
+La faille de la passerelle de NYANGA CRÉDIT illustre la chaîne. La
+faiblesse est un contrôle d'authentification incomplet (CWE-287,
+authentification incorrecte). La vulnérabilité est son instance dans le
+micrologiciel 7.2.1 de la passerelle, désignée dans ce livre par
+l'identifiant fictif VULN-2024-4471. La menace, ce sont les groupes qui
+l'exploitaient dès décembre 2024. Le risque, pour NYANGA, combinait une
+passerelle exposée sur Internet, non corrigée, et un accès direct au
+contrôleur de domaine.
+
+\subsection{Le cycle de vie d'un identifiant CVE}
+
+Un chercheur, un éditeur ou un utilisateur découvre une faille. Une
+\termecle{autorité de numérotation} (CNA), souvent l'éditeur lui-même,
+réserve un identifiant de la forme \texttt{CVE-AAAA-NNNNN}, puis le publie
+avec une description quand le correctif ou l'avis est prêt. La base
+nationale américaine NVD~\cite{nistnvd} enrichit ensuite l'enregistrement~:
+produits et versions concernés, score, faiblesse CWE. Entre la publication
+et l'enrichissement, plusieurs jours peuvent passer~; l'analyste qui attend
+le score de la NVD perd ce temps.
+
+% ============================================================================
+\section{Le Score CVSS}
+\label{sec:c09-cvss}
+% ============================================================================
+
+Le \termecle{CVSS} (\textit{Common Vulnerability Scoring System}), tenu par
+le FIRST, mesure la gravité d'une vulnérabilité sur une échelle de 0 à 10.
+Sa version~4.0, publiée en 2023~\cite{first2023cvss4}, remplace
+progressivement la version~3.1~\cite{first2019cvss31}.
+
+\subsection{Quatre groupes de métriques}
+
+\begin{tableaucours}{L{2.8cm}L{5.4cm}L{4.0cm}}{%
+    \tableauHeader{Groupe} &
+    \tableauHeader{Ce qu'il mesure} &
+    \tableauHeader{Qui le renseigne}
+}
+Base & Les propriétés de la faille, identiques partout & L'éditeur, la
+NVD \\
+Menace (\textit{Threat}) & La maturité de l'exploitation connue & L'analyste,
+à partir du renseignement \\
+Environnement & L'importance de l'actif et les mesures en place & L'organisation \\
+Supplémentaire & Des informations sans effet sur le score (automatisable,
+effort de reprise) & L'éditeur, l'analyste \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~9.1. Les groupes de métriques de CVSS v4.0}\end{center}
+
+La version~4.0 exige que l'on dise quels groupes ont servi~: CVSS-B pour la
+seule base, CVSS-BT avec la menace, CVSS-BE avec l'environnement, CVSS-BTE
+avec les trois. Un « 9,3 » sans cette mention est ambigu.
+
+\subsection{Les métriques de base}
+
+\begin{tableaucours}{L{1.6cm}L{4.4cm}L{6.2cm}}{%
+    \tableauHeader{Code} &
+    \tableauHeader{Métrique} &
+    \tableauHeader{Valeurs}
+}
+AV & Vecteur d'attaque & Réseau (N), adjacent (A), local (L), physique (P) \\
+AC & Complexité de l'attaque & Faible (L), élevée (H) \\
+AT & Conditions préalables (nouvelle en 4.0) & Aucune (N), présentes (P) \\
+PR & Privilèges requis & Aucun (N), faibles (L), élevés (H) \\
+UI & Interaction de l'utilisateur & Aucune (N), passive (P), active (A) \\
+VC, VI, VA & Impact sur le système vulnérable (confidentialité, intégrité,
+disponibilité) & Élevé (H), faible (L), nul (N) \\
+SC, SI, SA & Impact sur les systèmes suivants & Élevé (H), faible (L), nul
+(N) \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~9.2. Les métriques de base de CVSS v4.0}\end{center}
+
+La distinction entre système vulnérable et systèmes suivants remplace la
+notion de « portée » de la version~3.1. Elle permet de dire qu'une faille de
+la passerelle n'atteint pas seulement la passerelle, mais aussi les systèmes
+auxquels elle donne accès.
+
+\begin{boxobjet}{Vecteur CVSS v4.0 de VULN-2024-4471}
+\textbf{Vecteur publié par l'éditeur (fictif, construit pour le cours)~:}
+\texttt{CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N}.
+
+\textbf{Score CVSS-B~:} 9,3, critique.
+
+\textbf{Lecture~:} exploitable depuis Internet, sans condition, sans
+compte, sans action d'un utilisateur, avec un impact élevé sur la
+passerelle elle-même.
+
+\textbf{Ce que l'éditeur ne pouvait pas savoir~:} qu'à NYANGA, la passerelle
+ouvrait un accès direct au contrôleur de domaine. L'analyste de NYANGA, en
+renseignant SC, SI et SA à « élevé » dans le groupe environnemental, aurait
+obtenu un score de 10,0 pour son propre contexte.
+\end{boxobjet}
+
+\subsection{Les seuils de gravité}
+
+\begin{tableaucours}{L{3.4cm}L{3.4cm}}{%
+    \tableauHeader{Score} &
+    \tableauHeader{Gravité}
+}
+0,0 & Aucune \\
+0,1 à 3,9 & Faible \\
+4,0 à 6,9 & Moyenne \\
+7,0 à 8,9 & Élevée \\
+9,0 à 10,0 & Critique \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~9.3. Les seuils de gravité du CVSS}\end{center}
+
+\begin{boxinfo}
+\textbf{Un score ne se calcule pas de tête.} En version~4.0, le score se
+déduit du vecteur par une table de correspondance publiée par le FIRST, et
+non par une formule simple comme en version~3.1. On utilise le calculateur
+officiel, et l'on note toujours le vecteur à côté du score~: c'est le
+vecteur qui permet de discuter le score.
+\end{boxinfo}
+
+% ============================================================================
+\section{EPSS : la Probabilité d'Exploitation}
+\label{sec:c09-epss}
+% ============================================================================
+
+L'\termecle{EPSS} (\textit{Exploit Prediction Scoring System}), lui aussi
+tenu par le FIRST~\cite{firstepss}, estime chaque jour, pour chaque CVE
+publiée, la probabilité qu'elle fasse l'objet de tentatives d'exploitation
+observées dans les trente jours suivants. Il s'appuie sur un modèle
+statistique alimenté par des données d'exploitation réelles. Il donne une
+probabilité, entre 0 et 1, et un centile, qui situe la CVE parmi toutes les
+autres.
+
+Le CVSS et l'EPSS répondent à deux questions différentes. Le premier dit
+« si cette faille est exploitée, à quel point est-ce grave~? »~; le second
+dit « quelle est la chance qu'elle soit exploitée bientôt~? ». Les données
+publiées par le projet EPSS~\cite{firstepss} montrent qu'une faible part
+des CVE publiées fait l'objet d'une exploitation observée~: un score
+critique n'annonce donc pas une exploitation, et un score moyen ne
+l'exclut pas.
+
+% ============================================================================
+\section{KEV : ce qui est Exploité}
+\label{sec:c09-kev}
+% ============================================================================
+
+Le catalogue KEV (\textit{Known Exploited Vulnerabilities}), tenu par
+l'agence américaine CISA~\cite{cisakev}, recense les vulnérabilités dont
+l'exploitation est constatée. Une inscription n'est pas une prévision~:
+c'est un fait. Le catalogue fixe une échéance de correction pour les
+agences fédérales américaines, mais toute organisation peut s'en servir
+comme d'une liste de failles à traiter sans attendre.
+
+\begin{tableaucours}{L{2.4cm}L{4.2cm}L{3.0cm}L{2.6cm}}{%
+    \tableauHeader{Indicateur} &
+    \tableauHeader{Question} &
+    \tableauHeader{Nature} &
+    \tableauHeader{Fréquence}
+}
+CVSS-B & Quelle gravité si exploitée~? & Mesure technique & À la
+publication \\
+EPSS & Quelle chance d'exploitation dans 30 jours~? & Probabilité estimée
+& Quotidienne \\
+KEV & Est-elle déjà exploitée~? & Fait constaté & À l'inscription \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~9.4. Trois indicateurs, trois questions}\end{center}
+
+% ============================================================================
+\section{SSVC : Décider plutôt que Noter}
+\label{sec:c09-ssvc}
+% ============================================================================
+
+La CISA propose aussi une méthode de décision, le SSVC
+(\textit{Stakeholder-Specific Vulnerability Categorization})~\cite{cisa2022ssvc}.
+Au lieu d'un score, elle conduit, par un arbre de questions, à l'une de
+quatre décisions~: suivre (\textit{Track}), suivre de près
+(\textit{Track*}), traiter rapidement (\textit{Attend}), agir sans délai
+(\textit{Act}). Les questions portent sur l'état de l'exploitation (aucune,
+preuve de concept, active), la possibilité d'automatiser l'attaque,
+l'impact technique, et l'importance de l'actif pour la mission.
+
+Le SSVC rend explicite ce que le score cache~: la décision dépend de
+l'organisation. La même faille peut appeler « agir » sur une passerelle
+exposée et « suivre » sur un serveur de test isolé.
+
+% ============================================================================
+\section{Quatre Failles chez SOLITRANS}
+\label{sec:c09-solitrans}
+% ============================================================================
+
+\begin{boxscenario}{Opération SOLITRANS. Quatre lignes du rapport de balayage}
+\begin{tableaucours}{L{1.0cm}L{3.8cm}cccL{1.8cm}}{%
+    \tableauHeader{Réf.} &
+    \tableauHeader{Actif} &
+    \tableauHeader{CVSS-B} &
+    \tableauHeader{EPSS} &
+    \tableauHeader{KEV} &
+    \tableauHeader{Exposé}
+}
+V-A & Serveur d'impression, réseau interne & 9,8 & 0,002 & Non & Non \\
+V-B & Portail des transitaires, Internet & 7,5 & 0,640 & Oui & Oui \\
+V-C & Base de suivi des conteneurs, interne & 8,8 & 0,031 & Non & Non \\
+V-D & Pare-feu du site de Kribi, Internet & 6,5 & 0,410 & Oui & Oui \\
+\end{tableaucours}
+
+\smallskip
+{\footnotesize Valeurs fictives, construites pour l'exercice. EPSS~:
+probabilité estimée d'exploitation dans les trente jours.}
+
+\medskip
+\textbf{Constatations.} Rangées par score de base, les failles donnent
+l'ordre V-A, V-C, V-B, V-D. Rangées par exploitation constatée puis par
+probabilité, elles donnent V-B, V-D, V-C, V-A.
+
+\textbf{Analyse} (confiance élevée). Les deux failles exploitées, sur des
+actifs exposés à Internet, passent avant les deux autres, malgré leurs
+scores inférieurs. V-A, la plus « grave » sur le papier, touche un serveur
+d'impression interne et n'est pas exploitée~: elle reste à corriger, mais
+pas cette semaine.
+\end{boxscenario}
+
+\begin{boxlecture}{Que sait-on de chaque faille~?}
+\begin{tableaucours}{L{5.6cm}cccc}{%
+    \tableauHeader{Question} &
+    \tableauHeader{V-A} & \tableauHeader{V-B} & \tableauHeader{V-C} &
+    \tableauHeader{V-D}
+}
+La faille est exploitée dans le monde & \NEK{} & \OUI{} & \NEK{} & \OUI{} \\
+L'actif est joignable depuis Internet & \NON{} & \OUI{} & \NON{} & \OUI{} \\
+La faille est présente (constat vérifié) & \NEK{} & \OUI{} & \OUI{} &
+\OUI{} \\
+\end{tableaucours}
+
+\medskip
+\textbf{Lecture.} Une absence d'inscription au catalogue KEV n'est pas une
+preuve de non-exploitation~: V-A et V-C sont \NEK{}, pas \NON{}. Et V-A n'a
+pas encore été vérifiée~: l'outil l'a déduite de la version annoncée par le
+service, ce qui peut produire un faux positif (Chapitre~\ref{chap:identifier}).
+\end{boxlecture}
+
+% ============================================================================
+\section{Ce que la Notion demande à chaque Métier}
+\label{sec:c09-metiers}
+% ============================================================================
+
+\begin{boxmetier}{Analyste en gestion des vulnérabilités}
+\textbf{Lire une vulnérabilité}
+\begin{enumerate}
+    \item Identifier la CVE, la faiblesse CWE et les versions touchées.
+    \item Lire le vecteur CVSS, pas seulement le score, et noter la version
+          du CVSS.
+    \item Relever l'EPSS du jour et l'inscription éventuelle au catalogue
+          KEV.
+    \item Situer l'actif~: exposition, importance, mesures en place.
+    \item En déduire une décision, de type SSVC, et la justifier.
+\end{enumerate}
+\end{boxmetier}
+
+\begin{boxmetier}{RSSI}
+Fixer la règle de priorité par écrit, en combinant exploitation, exposition
+et importance de l'actif, et la faire approuver. Une règle fondée sur le
+seul score conduit l'équipe à corriger le mauvais serveur en premier.
+\end{boxmetier}
+
+\begin{boxmetier}{Analyste en réponse à incident}
+Pendant une enquête, le catalogue KEV et l'EPSS orientent la recherche du
+point d'entrée~: une faille exploitée, présente sur un actif exposé, est la
+première hypothèse à tester.
+\end{boxmetier}
+
+\separateur
+
+\begin{boxresume}
+\textbf{Ce qu'il faut retenir de ce chapitre~:}
+\begin{itemize}
+    \item La faiblesse (CWE) est un type d'erreur~; la vulnérabilité (CVE)
+          son instance dans un produit~; le risque dépend de la menace et
+          du contexte.
+    \item Le CVSS v4.0 a quatre groupes de métriques~; on précise CVSS-B,
+          -BT, -BE ou -BTE, et l'on donne toujours le vecteur.
+    \item L'EPSS estime la probabilité d'exploitation dans les trente
+          jours~; le catalogue KEV constate l'exploitation.
+    \item Le SSVC remplace le score par une décision qui dépend de
+          l'organisation.
+    \item Chez SOLITRANS, l'ordre par score et l'ordre par exploitation et
+          exposition s'inversent.
+\end{itemize}
+\end{boxresume}
+
+\begin{boxinfo}
+\textbf{Points de contrôle.} Vous avez compris ce chapitre si vous savez~:
+\begin{itemize}
+    \item expliquer chaque élément d'un vecteur CVSS v4.0~;
+    \item dire ce que l'EPSS et le catalogue KEV ajoutent au score~;
+    \item justifier un ordre de correction différent de l'ordre des scores.
+\end{itemize}
+\end{boxinfo}
+
+% ============================================================================
+\section*{Exercices}
+% ============================================================================
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~9.1. Faiblesse ou vulnérabilité \niveaubase}]
+Classez chaque élément comme faiblesse, vulnérabilité, menace ou risque~:
+(a) l'injection SQL~; (b) l'injection SQL de la page de connexion du portail
+des transitaires, version 3.4~; (c) un groupe qui vend des accès à des
+réseaux d'entreprise~; (d) la perte possible des données de 4\,000 clients
+si le portail est compromis.
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~9.2. Lire un vecteur \niveaumoyen}]
+Expliquez en français le vecteur suivant, métrique par métrique~:
+\texttt{CVSS:4.0/AV:L/AC:L/AT:N/PR:L/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N}.
+Cette faille peut-elle servir de point d'entrée depuis Internet~? À quoi
+sert-elle typiquement dans une attaque~?
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~9.3. Trois indicateurs \niveaumoyen}]
+Une faille a un score CVSS-B de 5,3, un EPSS de 0,92 et figure au catalogue
+KEV. Une autre a un score de 9,8, un EPSS de 0,001 et n'y figure pas.
+\begin{enumerate}[(a)]
+    \item Laquelle corrigez-vous d'abord sur un serveur exposé à Internet~?
+    \item Et si les deux étaient sur un serveur interne isolé~?
+    \item Que manque-t-il pour décider avec certitude~?
+\end{enumerate}
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~9.4. Le contexte de NYANGA \niveauexpert}]
+\begin{enumerate}[(a)]
+    \item Expliquez pourquoi l'éditeur a coté SC, SI et SA à « nul » pour
+          VULN-2024-4471, et pourquoi NYANGA aurait dû les coter
+          autrement.
+    \item Le 19~décembre 2024, quelle décision SSVC NYANGA aurait-elle dû
+          prendre~? Justifiez chaque branche de l'arbre.
+    \item Le jour de l'inscription au catalogue, l'EPSS de la faille
+          dépassait 0,9 (valeur fictive). Ce chiffre ajoutait-il quelque
+          chose à l'inscription~? Discutez.
+\end{enumerate}
+\end{boxexo}
+
+\bigskip
+
+\begin{boxinfo}
+\textbf{Pour aller plus loin.}
+\begin{itemize}
+    \item La spécification CVSS~4.0~\cite{first2023cvss4}.
+    \item Le site de l'EPSS~\cite{firstepss} et le catalogue
+          KEV~\cite{cisakev}.
+    \item Le guide SSVC de la CISA~\cite{cisa2022ssvc}.
+\end{itemize}
+\end{boxinfo}
+
+\begin{boxinfo}
+\textbf{Transition.} Coter suppose d'avoir trouvé. Comment savoir quelles
+vulnérabilités on a, sans attaquer ses propres systèmes~?
+Chapitre~\ref{chap:identifier}.
+\end{boxinfo}

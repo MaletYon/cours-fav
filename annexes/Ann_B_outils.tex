@@ -1,0 +1,85 @@
+% ============================================================================
+% Fichier  : annexes/Ann_B_outils.tex
+% Titre    : Référentiel des Outils
+% Version  : 1.0 -- novembre 2024
+% ============================================================================
+
+\chapter{Référentiel des Outils}
+\label{ann:outils}
+
+Les outils cités dans le cours sont rangés par usage. La plupart sont libres
+ou gratuits. L'annexe n'est pas une liste d'achats~: un outil ne vaut que par
+la méthode de celui qui l'emploie, sa version notée et sa validation sur une
+pièce de référence (Chapitre~\ref{chap:normes-droit}, ISO/IEC~27041).
+
+\begin{boxalert}
+\textbf{Règle de l'autorisation écrite.} Aucun outil d'acquisition,
+d'analyse ou de balayage ne s'emploie sur un système sans l'autorisation
+écrite de celui qui en a le droit, et, le cas échéant, de l'hébergeur ou du
+prestataire. Sans autorisation, l'usage peut constituer un accès non
+autorisé au sens de l'article~65, alinéa~2, de la loi n°~2010/012.
+\end{boxalert}
+
+\section*{Acquisition}
+
+\begin{tableaucours}{L{3.6cm}L{5.0cm}L{3.6cm}}{%
+    \tableauHeader{Outil} &
+    \tableauHeader{Usage} &
+    \tableauHeader{Chapitre}
+}
+Bloqueur d'écriture matériel & Acquisition à froid sans écriture sur la
+source & \ref{chap:acquisition} \\
+FTK Imager & Images de disques (brut, E01), captures mémoire, calcul
+d'empreintes & \ref{chap:acquisition} \\
+\texttt{dd}, \texttt{dc3dd}, \texttt{ewfacquire} & Images brutes ou E01 sous
+Linux & \ref{chap:acquisition} \\
+WinPmem, DumpIt & Capture mémoire sous Windows & \ref{chap:acquisition} \\
+LiME, AVML & Capture mémoire sous Linux & \ref{chap:acquisition} \\
+\texttt{sha256sum} & Calcul et vérification d'empreintes &
+\ref{chap:preuve} \\
+\end{tableaucours}
+
+\section*{Analyse}
+
+\begin{tableaucours}{L{3.6cm}L{5.0cm}L{3.6cm}}{%
+    \tableauHeader{Outil} &
+    \tableauHeader{Usage} &
+    \tableauHeader{Chapitre}
+}
+The Sleuth Kit, Autopsy & Systèmes de fichiers, fichiers supprimés,
+artefacts & \ref{chap:disque} \\
+Volatility~3 & Analyse de captures mémoire & \ref{chap:memoire} \\
+Wireshark, tshark & Analyse de captures réseau & \ref{chap:reseau} \\
+Zeek & Journaux par protocole à partir d'une capture & \ref{chap:reseau} \\
+log2timeline, Plaso & Super-chronologies & \ref{chap:chronologie} \\
+Visionneuses d'événements Windows & Lecture des journaux EVTX &
+\ref{chap:disque} \\
+\end{tableaucours}
+
+\section*{Vulnérabilités}
+
+\begin{tableaucours}{L{3.6cm}L{5.0cm}L{3.6cm}}{%
+    \tableauHeader{Outil ou ressource} &
+    \tableauHeader{Usage} &
+    \tableauHeader{Chapitre}
+}
+Scanners de vulnérabilités (libres ou commerciaux) & Balayage authentifié ou
+non & \ref{chap:identifier} \\
+Calculateur CVSS du FIRST & Score à partir d'un vecteur &
+\ref{chap:vulnerabilite} \\
+EPSS (FIRST) & Probabilité d'exploitation, interface de consultation &
+\ref{chap:vulnerabilite} \\
+Catalogue KEV (CISA) & Liste des failles exploitées &
+\ref{chap:vulnerabilite}, \ref{chap:gerer} \\
+NVD, CVE, CWE & Descriptions et références des failles &
+\ref{chap:vulnerabilite} \\
+CIS Benchmarks & Références de configuration & \ref{chap:identifier} \\
+\end{tableaucours}
+
+\section*{Dans NDAP SUKULU}
+
+Les dix laboratoires du cours n'exigent aucune installation~: leurs pièces
+(images réduites, captures, journaux, tableurs de balayage) se lisent avec
+les outils du bureau d'analyse de la plateforme ou, pour la version en
+ligne, avec un tableur et un éditeur de texte. Chaque laboratoire fournit
+son manifeste d'empreintes SHA-256, à vérifier avant tout examen.

@@ -1,0 +1,456 @@
+% ============================================================================
+% Fichier  : partie2/P02_C03_acquerir_preserver.tex
+% Titre    : Acquérir et Préserver
+% Auteur   : MINKA MI NGUIDJOÏ Thierry Emmanuel
+% Version  : 1.0 -- novembre 2024
+% Corrigés : corriges/Corr_C03.tex
+% ============================================================================
+% Sources : RFC 3227 (ordre de volatilité) ; ISO/IEC 27037 (identification,
+% recueil, acquisition, préservation, paraphrasée) ; NIST SP 800-86.
+% Outils cités (existants) : bloqueurs d'écriture, formats brut, E01 (EWF),
+% AFF4 ; outils de capture mémoire WinPmem, DumpIt, LiME, AVML.
+% Faits nouveaux (bible) : acquisition de SRV-CPT01 le 15/03, 16 h 00 à
+% 19 h 25, E01, NC-03 ; SRV-FIC01 chiffré BitLocker, acquisition logique à
+% chaud le 18/03 (NC-07) ; journaux de la passerelle : rotation à 60 jours.
+% ============================================================================
+
+\chapter{Acquérir et Préserver}
+\label{chap:acquisition}
+\chaptermark{Acquérir et préserver}
+
+\epigraph{%
+    « On n'examine jamais l'original.\\
+    On examine une copie dont on peut prouver qu'elle lui est égale. »%
+}{Principe du cours}
+
+\niveauChapitre{Fondamental}{%
+    Maîtrise du Chapitre~\ref{chap:preuve}
+}
+
+\begin{boxobjectifs}
+\begin{itemize}
+    \item Appliquer l'ordre de volatilité à une situation concrète.
+    \item Choisir entre acquisition à froid et acquisition à chaud, et
+          justifier ce choix.
+    \item Acquérir un disque avec un bloqueur d'écriture, dans un format
+          adapté, et vérifier l'acquisition.
+    \item Capturer la mémoire vive en connaissant l'empreinte que laisse
+          l'outil.
+    \item Préserver des journaux avant leur rotation et des données
+          détenues par des tiers.
+    \item Documenter une acquisition de façon qu'un autre puisse la
+          contrôler.
+\end{itemize}
+\end{boxobjectifs}
+
+\bigskip
+
+% ============================================================================
+\section*{Avant de commencer : un serveur chiffré}
+% ============================================================================
+
+Bafoussam, mardi 18 mars 2025. Mme~MBARGA veut l'image du serveur de
+fichiers SRV-FIC01, celui qui a envoyé 3,2~Go vers l'extérieur. Le serveur
+est toujours allumé, débranché du réseau depuis le vendredi. M.~KAMGA
+rappelle un détail~: son disque de données est chiffré par BitLocker, et la
+clé de récupération est conservée chez le prestataire qui a installé la
+machine, à Douala. Si l'on éteint le serveur pour en extraire le disque, on
+obtiendra une copie parfaite d'un volume chiffré, illisible tant que la clé
+n'arrive pas. Si on le laisse allumé, le volume est déverrouillé et lisible,
+mais toute copie faite à chaud modifie un peu la machine.
+
+\begin{boxalert}
+\textbf{Violation typique.} Appliquer mécaniquement la règle « on éteint
+puis on copie le disque » à une machine dont le chiffrement rendra le disque
+illisible une fois éteinte.
+
+\smallskip
+\textbf{Règle~:} on choisit la méthode d'acquisition d'après ce que l'on
+perdrait avec chacune, et l'on écrit la raison du choix. La meilleure
+méthode est celle qui conserve le plus de preuve utile au prix de la plus
+petite altération documentée.
+\end{boxalert}
+
+\separateur
+
+% ============================================================================
+\section{L'Ordre de Volatilité}
+\label{sec:c03-volatilite}
+% ============================================================================
+
+La RFC~3227~\cite{rfc3227} recommande de recueillir les traces de la plus
+volatile à la moins volatile. On en tire l'ordre suivant pour un serveur.
+
+\begin{tableaucours}{cL{4.6cm}L{2.6cm}L{4.2cm}}{%
+    \tableauHeader{Rang} &
+    \tableauHeader{Trace} &
+    \tableauHeader{Durée de vie} &
+    \tableauHeader{Moyen d'acquisition}
+}
+1 & Registres, cache du processeur & Nanosecondes & Hors de portée en
+pratique \\
+2 & Mémoire vive~: processus, connexions, tables de routage et ARP, clés
+en mémoire & Jusqu'à l'extinction & Capture de la mémoire \\
+3 & Fichiers temporaires, fichier d'échange & Heures à jours & Image du
+disque \\
+4 & Disques & Mois à années & Image du disque \\
+5 & Journaux distants, données de supervision & Selon la rotation &
+Export, réquisition \\
+6 & Configuration physique, topologie & Stable & Photographies, schéma \\
+7 & Supports d'archive & Années & Copie \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~3.1. L'ordre de volatilité (d'après la RFC~3227)}\end{center}
+
+Le rang~5 surprend souvent~: un journal distant paraît durable, alors que
+sa rotation peut l'effacer en quelques jours. Les journaux de la passerelle
+de NYANGA CRÉDIT ne gardent que 60~jours~: le premier accès du 2~mars
+disparaîtrait le 1\textsuperscript{er}~mai. Leur export, le 14~mars, était
+une urgence au même titre que la capture mémoire.
+
+% ============================================================================
+\section{À Froid ou à Chaud}
+\label{sec:c03-froid-chaud}
+% ============================================================================
+
+\begin{boxdef}
+\textbf{\termecle{Acquisition à froid}} (\textit{dead acquisition})~: copie
+d'un support après extinction de la machine, à l'aide d'un bloqueur
+d'écriture. Elle ne modifie pas le support et perd tout ce qui était en
+mémoire.
+
+\smallskip
+\textbf{\termecle{Acquisition à chaud}} (\textit{live acquisition})~:
+recueil sur une machine allumée (mémoire, volume déverrouillé, état du
+système). Elle conserve le volatil et laisse une empreinte de l'outil sur la
+machine, qu'il faut documenter.
+\end{boxdef}
+
+\begin{tableaucours}{L{4.4cm}L{3.8cm}L{4.0cm}}{%
+    \tableauHeader{Situation} &
+    \tableauHeader{Méthode} &
+    \tableauHeader{Raison}
+}
+Serveur allumé, attaque possiblement en cours & À chaud d'abord (mémoire),
+puis à froid & Processus et connexions perdus à l'extinction \\
+Volume chiffré, clé indisponible & À chaud (copie logique du volume
+déverrouillé) & Volume illisible une fois éteint \\
+Poste éteint à l'arrivée & À froid & Rien de volatil à préserver \\
+Machine virtuelle & Instantané de l'hyperviseur, puis copie des fichiers
+de disque & Mémoire et disque figés ensemble, sans outil dans la machine \\
+Service en nuage & Export par l'interface du fournisseur, réquisition &
+Aucun accès au matériel \\
+Serveur critique qui ne peut s'arrêter & À chaud, copie logique ciblée &
+Arrêt impossible~; périmètre écrit et justifié \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~3.2. Choisir la méthode d'acquisition}\end{center}
+
+% ============================================================================
+\section{Acquérir un Disque}
+\label{sec:c03-disque}
+% ============================================================================
+
+\subsection{Le bloqueur d'écriture}
+
+Un système d'exploitation écrit sur tout support qu'on lui présente~: il met
+à jour des dates d'accès, monte des volumes, écrit des journaux. Le
+\termecle{bloqueur d'écriture} s'interpose entre le support et la station
+d'acquisition et laisse passer les lectures en refusant les écritures. Le
+bloqueur matériel est un boîtier placé sur le câble~; le bloqueur logiciel
+est un réglage du système de la station. Le premier est préféré en enquête
+judiciaire, parce que son comportement se teste et se documente
+indépendamment du système. On vérifie un bloqueur avant usage, sur un
+support de test, et l'on note la vérification.
+
+\subsection{Les formats d'image}
+
+\begin{tableaucours}{L{2.2cm}L{4.8cm}L{5.2cm}}{%
+    \tableauHeader{Format} &
+    \tableauHeader{Caractéristiques} &
+    \tableauHeader{Usage}
+}
+Brut (\texttt{dd}, \texttt{.raw}) & Copie secteur par secteur, sans
+métadonnées ni compression & Universel, lisible par tout outil~; empreinte
+et notes dans des fichiers séparés \\
+E01 (EWF) & Métadonnées intégrées (enquêteur, numéro de pièce, notes),
+compression, contrôle par blocs, empreinte stockée & Format courant des
+outils d'enquête~; bon compromis \\
+AFF4 & Format ouvert, métadonnées riches, adapté aux très gros volumes et à
+la mémoire & Moins répandu, utile pour les acquisitions volumineuses \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~3.3. Formats d'image}\end{center}
+
+\subsection{Les pièges du stockage moderne}
+
+Les disques à mémoire flash (SSD) gèrent eux-mêmes l'effacement des blocs
+libérés~: la commande TRIM permet au contrôleur d'effacer réellement des
+données supprimées, parfois quelques minutes après la suppression. Deux
+acquisitions successives d'un SSD allumé peuvent donc différer, sans que
+personne ait écrit dessus, et la récupération de fichiers supprimés y est
+moins fructueuse que sur un disque magnétique. Les secteurs défectueux d'un
+disque magnétique usé, eux, produisent des lectures incomplètes~: l'outil
+d'acquisition les journalise et l'enquêteur reporte leur nombre dans son
+rapport.
+
+\begin{boxprocedure}
+\textbf{Acquérir un disque à froid}
+\begin{enumerate}
+    \item Photographier la machine, ses câbles et ses étiquettes~; noter le
+          numéro de série du disque.
+    \item Vérifier le bloqueur d'écriture sur un support de test, et le
+          consigner.
+    \item Relier le disque au bloqueur, puis à la station d'acquisition.
+    \item Choisir le format (E01 par défaut), saisir les métadonnées~:
+          numéro de pièce, enquêteur, description.
+    \item Acquérir, en calculant SHA-256 (et MD5 si une base l'exige).
+    \item Lire le journal de l'outil~: secteurs illisibles, erreurs,
+          durée.
+    \item Vérifier l'image~: recalculer l'empreinte de l'image et la
+          comparer à celle du support.
+    \item Faire une copie de travail, vérifier son empreinte, et sceller
+          l'image de référence.
+\end{enumerate}
+\end{boxprocedure}
+
+% ============================================================================
+\section{Capturer la Mémoire}
+\label{sec:c03-memoire}
+% ============================================================================
+
+La mémoire vive contient ce qu'aucun disque ne garde~: la liste des
+processus actifs, les connexions réseau ouvertes, les commandes saisies, les
+clés de chiffrement des volumes ouverts, et parfois des programmes qui
+n'existent qu'en mémoire. On la capture avec un outil exécuté sur la machine
+elle-même~: WinPmem ou DumpIt sous Windows, LiME ou AVML sous Linux. Ces
+outils sont libres ou gratuits et largement documentés.
+
+\begin{boxinfo}
+\textbf{Une acquisition qui ne se répète pas.} La mémoire change pendant la
+capture~: les processus continuent de tourner, et l'outil lui-même occupe de
+la mémoire. On ne pourra jamais recalculer l'empreinte de la source pour la
+comparer à celle de la capture. L'empreinte de la mémoire capturée prouve
+seulement que la capture n'a pas changé depuis. C'est pourquoi l'on
+documente avec soin l'heure, l'outil, sa version, le support utilisé et ce
+qui tournait sur la machine.
+\end{boxinfo}
+
+\begin{tableaucours}{L{4.0cm}L{8.2cm}}{%
+    \tableauHeader{Précaution} &
+    \tableauHeader{Raison}
+}
+Lancer l'outil depuis un support externe & Ne pas écrire l'outil sur le
+disque à examiner \\
+Écrire la capture sur un support externe & Ne pas écraser l'espace libre
+du disque, où dorment des fichiers supprimés \\
+Ne rien installer & Une installation modifie le registre et le disque \\
+Noter l'heure système et l'heure réelle & Mesurer la dérive de l'horloge \\
+Consigner chaque commande & L'empreinte de l'enquêteur doit pouvoir être
+distinguée de celle de l'attaquant \\
+\end{tableaucours}
+\vspace{-0.8em}
+\begin{center}{\small\itshape Tableau~3.4. Précautions de la capture mémoire}\end{center}
+
+% ============================================================================
+\section{Les Journaux et les Données des Tiers}
+\label{sec:c03-journaux}
+% ============================================================================
+
+Les journaux sont souvent la seule trace d'un événement ancien. On les
+préserve par un export complet, avec son empreinte, plutôt que par une
+recherche filtrée~: un filtre écrit le 14~mars sur les mots « svc\_backup »
+aurait laissé de côté les autres comptes, alors qu'on ne savait pas encore
+lesquels l'attaquant avait utilisés.
+
+Les données détenues par des tiers (opérateur de paiement mobile, fournisseur
+d'accès, hébergeur, éditeur d'un service en nuage) ne se copient pas~: on les
+demande, et en matière pénale on les requiert. Le Chapitre~\ref{chap:normes-droit}
+précise les fondements de ces demandes. Deux réflexes valent dans tous les
+cas~: demander très tôt la conservation des données, avant même leur
+communication, et demander comment elles ont été extraites.
+
+% ============================================================================
+\section{Les Acquisitions de NYANGA}
+\label{sec:c03-nyanga}
+% ============================================================================
+
+\begin{boxscenario}{Opération NYANGA. Trois serveurs, trois méthodes}
+\textbf{Constatations.}
+\begin{itemize}
+    \item SRV-AD01~: capture mémoire à chaud le 14~mars (NC-01)~; le serveur,
+          indispensable à toutes les connexions, est ensuite remplacé par un
+          contrôleur de secours, puis acquis à froid le 16~mars.
+    \item SRV-CPT01~: non chiffré~; arrêt contrôlé le 15~mars à 15~h~55,
+          acquisition à froid par bloqueur matériel de 16~h~00 à 19~h~25, au
+          format E01 (NC-03)~; aucun secteur illisible.
+    \item SRV-FIC01~: volume de données chiffré par BitLocker, clé chez le
+          prestataire~; capture mémoire puis copie logique du volume
+          déverrouillé, à chaud, le 18~mars (NC-07)~; la clé de récupération
+          arrive le 22~mars et permet une acquisition à froid complémentaire.
+\end{itemize}
+
+\textbf{Analyse} (confiance élevée). Les trois choix sont justifiés par ce
+que chaque méthode aurait fait perdre. L'acquisition à chaud de SRV-FIC01 a
+modifié la machine (outil exécuté, fichiers temporaires)~; ces
+modifications sont consignées heure par heure, ce qui permet de les écarter
+de l'analyse. L'acquisition complémentaire du 22~mars confirme que la copie
+logique du 18 contenait bien tous les fichiers du volume.
+\end{boxscenario}
+
+\begin{boxobjet}{Image du disque de SRV-CPT01, 15 mars 2025}
+\textbf{Source~:} serveur SRV-CPT01, disque système de 500~Go.
+
+\textbf{Pièce~:} image E01, scellé NC-03, copie de travail séparée.
+
+\textbf{Méthode~:} arrêt contrôlé, bloqueur matériel vérifié le matin même,
+acquisition de 16~h~00 à 19~h~25~; empreinte SHA-256 de la source et de
+l'image identiques.
+
+\textbf{Ce qu'elle peut prouver~:} les fichiers présents et supprimés, leurs
+dates, les journaux Windows, les traces d'exécution de programmes.
+
+\textbf{Ce qu'elle ne prouve pas~:} ce qui était en mémoire avant l'arrêt du
+15~mars, ni ce qui s'est passé sur d'autres serveurs.
+\end{boxobjet}
+
+\begin{boxlecture}{Les acquisitions de NYANGA au 22 mars}
+\begin{tableaucours}{L{3.4cm}ccc}{%
+    \tableauHeader{Question} &
+    \tableauHeader{SRV-AD01} & \tableauHeader{SRV-CPT01} &
+    \tableauHeader{SRV-FIC01}
+}
+Mémoire capturée avant arrêt & \OUI{} & \NON{} & \OUI{} \\
+Disque acquis sans altération & \OUI{} & \OUI{} & \OUI{} \\
+Altérations éventuelles documentées & \OUI{} & \OUI{} & \OUI{} \\
+Complétude de l'image vérifiée & \OUI{} & \OUI{} & \OUI{} \\
+\end{tableaucours}
+
+\medskip
+\textbf{Lecture.} Une seule cote \NON{}~: la mémoire de SRV-CPT01 n'a pas
+été capturée avant son arrêt. L'enquête ne pourra donc pas savoir si un
+programme de l'attaquant y tournait encore le 15~mars. C'est une limite, et
+le rapport la mentionne.
+\end{boxlecture}
+
+% ============================================================================
+\section{Ce que l'Acquisition demande à chaque Métier}
+\label{sec:c03-metiers}
+% ============================================================================
+
+\begin{boxmetier}{Analyste en réponse à incident}
+Avoir, avant l'incident, une trousse prête~: bloqueur matériel vérifié,
+disques neufs, outils de capture mémoire sur un support en lecture seule,
+formulaires imprimés. On n'improvise pas une acquisition à trois heures du
+matin.
+\end{boxmetier}
+
+\begin{boxmetier}{Application OPJ/Expert Judiciaire}
+Quand l'acquisition a été faite par d'autres, l'expert ne la refait pas
+nécessairement~; il la contrôle~: journal de l'outil, empreintes, bloqueur,
+méthode. S'il refait une acquisition, il explique pourquoi.
+\end{boxmetier}
+
+\begin{boxmetier}{RSSI}
+Conserver, hors des machines, les clés de récupération des volumes chiffrés,
+dans un coffre accessible à l'équipe de crise. À NYANGA, quatre jours ont
+été perdus à attendre une clé détenue par un prestataire.
+\end{boxmetier}
+
+\separateur
+
+\begin{boxresume}
+\textbf{Ce qu'il faut retenir de ce chapitre~:}
+\begin{itemize}
+    \item On recueille de la trace la plus volatile à la moins volatile~;
+          les journaux soumis à rotation sont plus fragiles qu'ils ne
+          paraissent.
+    \item Le choix entre froid et chaud se décide d'après ce que l'on
+          perdrait, et se justifie par écrit.
+    \item Un disque s'acquiert derrière un bloqueur d'écriture vérifié,
+          dans un format qui garde les métadonnées, et l'acquisition se
+          vérifie.
+    \item Une capture mémoire ne se répète pas~: on documente l'outil,
+          l'heure et l'empreinte laissée sur la machine.
+    \item À NYANGA, trois serveurs ont reçu trois méthodes différentes,
+          chacune justifiée~; la mémoire de SRV-CPT01 manque.
+\end{itemize}
+\end{boxresume}
+
+\begin{boxinfo}
+\textbf{Points de contrôle.} Vous avez compris ce chapitre si vous savez~:
+\begin{itemize}
+    \item classer des traces selon leur volatilité~;
+    \item choisir et justifier une méthode d'acquisition~;
+    \item lire le journal d'un outil d'acquisition et y repérer ce qui
+          compte.
+\end{itemize}
+\end{boxinfo}
+
+% ============================================================================
+\section*{Exercices}
+% ============================================================================
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~3.1. Classer par volatilité \niveaubase}]
+Classez de la plus volatile à la moins volatile~: (a) le journal de la
+passerelle, conservé 60~jours~; (b) la table ARP du contrôleur de domaine~;
+(c) le fichier d'échange de SRV-CPT01~; (d) les sauvegardes sur bande de
+février~; (e) les connexions réseau ouvertes de SRV-FIC01~; (f) la capture
+de la sonde, conservée 48~heures.
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~3.2. Choisir la méthode \niveaumoyen}]
+Pour chaque situation, proposez une méthode d'acquisition et justifiez-la
+par ce que l'on perdrait avec l'autre~:
+\begin{enumerate}[(a)]
+    \item un portable d'agent, éteint, saisi dans un sac~;
+    \item le serveur de l'interface de paiement, qui ne peut pas s'arrêter
+          plus de dix minutes~;
+    \item une machine virtuelle hébergée sur l'hyperviseur du siège~;
+    \item la messagerie de l'établissement, hébergée par un fournisseur en
+          nuage.
+\end{enumerate}
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~3.3. Lire un journal d'acquisition \niveaumoyen}]
+Le journal d'une acquisition indique~: « Source~: 500\,107\,862\,016
+octets. Secteurs lus avec erreur~: 384. Remplacés par des zéros. Empreinte
+SHA-256 de l'image~: 9f3c\ldots{} Vérification~: empreinte de l'image
+identique à l'empreinte calculée pendant l'acquisition. »
+\begin{enumerate}[(a)]
+    \item L'image est-elle intègre~? Est-elle complète~?
+    \item Quelle taille de données est perdue, si les secteurs font 512
+          octets~?
+    \item Comment le rapport doit-il présenter ce fait~?
+\end{enumerate}
+\end{boxexo}
+
+\begin{boxexo}[title={\ding{45}\quad Exercice~3.4. SRV-FIC01 à chaud \niveauexpert}]
+\begin{enumerate}[(a)]
+    \item Rédigez la justification écrite du choix d'une acquisition à chaud
+          de SRV-FIC01 le 18~mars.
+    \item Listez les traces que l'acquisition à chaud a pu laisser sur la
+          machine, et dites comment les distinguer de celles de
+          l'attaquant.
+    \item La clé BitLocker arrive le 22~mars. Que permet l'acquisition à
+          froid complémentaire, et quelle comparaison faites-vous entre les
+          deux copies~?
+\end{enumerate}
+\end{boxexo}
+
+\bigskip
+
+\begin{boxinfo}
+\textbf{Pour aller plus loin.}
+\begin{itemize}
+    \item La RFC~3227~\cite{rfc3227} et l'ISO/IEC~27037~\cite{iso27037_2012}.
+    \item B.~Carrier, \textit{File System Forensic
+          Analysis}~\cite{carrier2005}, chapitre sur l'acquisition.
+\end{itemize}
+\end{boxinfo}
+
+\begin{boxinfo}
+\textbf{Transition.} L'image du disque de SRV-CPT01 est sous scellé, sa
+copie de travail est prête. Que contient-elle~? Le Chapitre~\ref{chap:disque}
+apprend à lire un système de fichiers et ses artefacts.
+\end{boxinfo}

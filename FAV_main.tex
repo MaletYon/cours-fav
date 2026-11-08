@@ -1,0 +1,198 @@
+% ============================================================================
+% Fichier     : FAV_main.tex
+% Titre       : Forensics et analyse de vulnérabilités
+% Auteur      : MINKA MI NGUIDJOÏ Thierry Emmanuel
+% Institution : Chaire UNESCO d'Afrique Centrale Accès TIC, ENSP / LIMSI
+% Version     : 1.0 -- novembre 2024 (traité complet : P00 à C16, annexes A à F)
+% ============================================================================
+
+\documentclass[12pt, twoside, openright, a4paper]{book}
+
+\usepackage{Style_FAV}
+\raggedbottom
+
+\addbibresource{bibliographie/FAV_references.bib}
+
+\hypersetup{
+    pdftitle={Forensics et analyse de vulnérabilités},
+    pdfauthor={MINKA MI NGUIDJOÏ Thierry Emmanuel},
+    pdfsubject={MSN-2S3-SEC07 · Master Professionnel en Sécurité des Systèmes Numériques · Chaire UNESCO d'Afrique Centrale Accès TIC},
+    pdfkeywords={investigation numérique, forensique, ISO/IEC 27037, analyse mémoire, analyse disque, analyse réseau, CVSS, EPSS, KEV, gestion des vulnérabilités, NEK}
+}
+
+\begin{document}
+
+% --------------------------------------------------------------------------
+% ÉLÉMENTS PRÉLIMINAIRES (pages romaines)
+% --------------------------------------------------------------------------
+\frontmatter
+
+    \input{front/00_page_titre}
+    \cleardoublepage
+
+    \input{front/01_avant_propos}
+    \cleardoublepage
+
+    \input{front/02_mode_emploi}
+    \cleardoublepage
+
+    \input{front/03_ndap_sukulu}
+    \cleardoublepage
+
+    \tableofcontents
+    \cleardoublepage
+
+    \listoffigures
+    \listoftables
+    \cleardoublepage
+
+% CORPS (pages arabes). Numérotation continue : le prologue est le chapitre 0,
+% puis C01 à C16, un numéro par fichier.
+% --------------------------------------------------------------------------
+\mainmatter
+
+    % PARTIE 0 · PROLOGUE OPÉRATIONNEL (niveau introductif)
+    \part*{Prologue Opérationnel}
+    \addcontentsline{toc}{part}{Prologue Opérationnel}
+
+        \setcounter{chapter}{-1}
+        \input{partie0/P00_nuit_bafoussam}
+
+    % PARTIE 1 · FONDEMENTS (ISO/IEC 27037, 27043 ; RFC 3227)
+    \part{Fondements : Enquêter sur des Traces Numériques}
+    \label{part:fondements}
+
+        \input{partie1/P01_C01_investigation_numerique}
+        \input{partie1/P01_C02_preuve_chaine_possession}
+
+    % PARTIE 2 · MÉTHODE (NIST SP 800-86 ; ISO/IEC 27042)
+    \part{Méthode : Acquérir et Analyser}
+    \label{part:methode}
+
+        \input{partie2/P02_C03_acquerir_preserver}
+        \input{partie2/P02_C04_analyse_disque}
+        \input{partie2/P02_C05_analyse_memoire}
+        \input{partie2/P02_C06_analyse_reseau}
+        \input{partie2/P02_C07_chronologie_correlation}
+
+    % PARTIE 3 · CADRE NORMATIF ET JURIDIQUE (ISO/IEC 27037 à 27043 ; loi
+    % n° 2010/012 ; Budapest ; Malabo)
+    \part{Cadre Normatif et Juridique}
+    \label{part:normatif}
+
+        \input{partie3/P03_C08_normes_droit}
+
+    % PARTIE 4 · VULNÉRABILITÉS (CVE, CWE, CVSS v4.0, EPSS, KEV ; NIST SP 800-40)
+    \part{Vulnérabilités : Identifier, Coter, Corriger}
+    \label{part:vulnerabilites}
+
+        \input{partie4/P04_C09_vulnerabilite}
+        \input{partie4/P04_C10_identifier}
+        \input{partie4/P04_C11_gerer_vulnerabilites}
+        \input{partie4/P04_C12_artefact_vulnerabilite}
+
+    % PARTIE 5 · DÉFIS AVANCÉS
+    \part{Défis Avancés}
+    \label{part:avance}
+
+        \input{partie5/P05_C13_antiforensique_nuage}
+        \input{partie5/P05_C14_enquete_integratrice}
+        \input{partie5/P05_C15_rapport_temoignage}
+
+    % PARTIE 6 · RECHERCHE
+    \part{Recherche : Mesurer l'Incertitude d'une Enquête}
+    \label{part:recherche}
+
+        \input{partie6/P06_C16_mesurer_incertitude}
+
+% --------------------------------------------------------------------------
+% ANNEXES
+% --------------------------------------------------------------------------
+\appendix
+
+    \input{annexes/Ann_A_glossaire}
+    \input{annexes/Ann_B_outils}
+    \input{annexes/Ann_C_modeles}
+    \input{annexes/Ann_D_textes}
+    \input{annexes/Ann_E_bibliographie}
+    \input{annexes/Ann_F_contacts}
+
+% --------------------------------------------------------------------------
+% ÉLÉMENTS FINAUX
+% --------------------------------------------------------------------------
+\backmatter
+
+    \nocite{*}
+    \printbibliography[heading=bibintoc, title={Références bibliographiques}]
+
+    \printindex
+
+% ==============================================================================
+% 4E DE COUVERTURE
+% ==============================================================================
+\clearpage
+\thispagestyle{empty}
+\pagecolor{CouleurPrimaire}
+
+\begin{tikzpicture}[remember picture, overlay]
+    \fill[CouleurAccent]
+        (current page.south west) rectangle
+        ([yshift=1.8cm] current page.south east);
+    \fill[CouleurAccent]
+        ([yshift=-1.4cm] current page.north west) rectangle
+        ([yshift=-1.7cm] current page.north east);
+\end{tikzpicture}
+
+\vspace*{2.5cm}
+
+\begin{center}
+    {\color{CouleurAccent}\rule{0.6\linewidth}{1pt}}\\[1.5ex]
+    {\color{white}\Large\bfseries À propos de ce cours}\\[1.5ex]
+    {\color{CouleurAccent}\rule{0.6\linewidth}{1pt}}
+\end{center}
+
+\vspace{1cm}
+
+\begin{center}
+\begin{minipage}{0.75\textwidth}
+\color{white!85!gray}\setstretch{1.4}
+Une enquête numérique part d'une trace et remonte vers une cause. Une
+analyse de vulnérabilités part d'une faiblesse connue et cherche à la
+fermer avant qu'elle ne laisse une trace. Ce cours enseigne les deux, et
+la manière dont l'une nourrit l'autre.
+
+\medskip
+
+Il progresse en six parties, précédées d'un prologue~: les fondements de
+l'investigation et de la preuve, la méthode (acquisition, disque, mémoire,
+réseau, chronologie), le cadre normatif et juridique, les vulnérabilités
+(identifier, coter, corriger), les défis avancés et la recherche sur
+l'incertitude d'une enquête.
+
+\medskip
+
+Il s'adresse aux étudiants du Master Professionnel en Sécurité des Systèmes
+Numériques et aux professionnels qui exercent comme analystes forensiques,
+analystes en réponse à incident, analystes en gestion des vulnérabilités ou
+RSSI.
+\end{minipage}
+\end{center}
+
+\vfill
+
+\begin{center}
+    {\color{CouleurAccent}\rule{0.7\linewidth}{1.2pt}}\\[1.2ex]
+    {\color{white}\large\bfseries MINKA MI NGUIDJOÏ Thierry Emmanuel}\\[0.4ex]
+    {\color{white!80!gray}\small
+        CISA~·~CISM~·~CGEIT~·~CRISC~·~CDPSE~·~ISO 27001~·~ISO 22301~·~ISO 9001}\\[0.3ex]
+    {\color{white!70!gray}\footnotesize\itshape
+        Chercheur au laboratoire d'Ingénierie Mathématiques et des Systèmes d'Information}\\[0.3ex]
+    {\color{white!70!gray}\footnotesize\itshape
+        Chercheur~|~Cryptologue~|~Auditeur Senior~|~Expert Judiciaire~|~GRC \& Sécurité de l'Information}\\[1.2ex]
+    {\color{CouleurAccent}\rule{0.7\linewidth}{1.2pt}}
+\end{center}
+
+\vspace{1cm}
+
+\afterpage{\nopagecolor}
+\end{document}

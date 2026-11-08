@@ -1,0 +1,233 @@
+NDAP SUKULU · FAV · fiche FAV-FICHE-C07
+Chapitre 7 : Chronologie et corrélation
+
+Version papier, à utiliser en attendant l'ouverture du portail NDAP SUKULU.
+La fiche complète compte 40 questions. Répondez sur la grille en fin de fiche.
+Durée indicative : 60 minutes. Seuil de réussite : 60 %.
+Les corrections figurent dans le livret de correction du cours.
+
+========================================================================
+Questions à choix multiple (une seule bonne réponse)
+========================================================================
+
+ 1. Que reçoit chaque source avant toute fusion ?
+      a) Un mot de passe
+      b) Son fuseau, sa dérive et sa précision
+      c) Une couleur
+      d) Un nouveau nom
+
+ 2. En quel temps la chronologie se construit-elle ?
+      a) En heure locale non corrigée
+      b) En heure de l'outil
+      c) En UTC corrigé
+      d) En heure du suspect
+
+ 3. De combien la passerelle de NYANGA avançait-elle ?
+      a) 47 secondes
+      b) 2 secondes
+      c) 1 heure
+      d) 40 minutes
+
+ 4. Quelle horloge n'était pas synchronisée à NYANGA ?
+      a) Celle de SRV-AD01
+      b) Celle de SRV-CPT01
+      c) Celle de la sonde
+      d) Celle de la passerelle
+
+ 5. Quelle dérive avait SRV-AD01 ?
+      a) 47 secondes
+      b) 2 secondes
+      c) Inconnue
+      d) 1 minute
+
+ 6. Quelle source a une dérive inconnue ?
+      a) La sonde
+      b) SRV-AD01
+      c) L'interface de paiement
+      d) SRV-CPT01
+
+ 7. Quelle précision a la sonde réseau ?
+      a) La microseconde
+      b) La minute
+      c) L'heure
+      d) Le jour
+
+ 8. Quand mesure-t-on la dérive d'une horloge ?
+      a) Au procès
+      b) Jamais
+      c) À l'achat du serveur
+      d) Au moment de l'acquisition
+
+ 9. Que suppose-t-on en corrigeant une dérive mesurée ?
+      a) Qu'elle est nulle
+      b) Qu'elle est constante sur la période
+      c) Qu'elle double chaque jour
+      d) Qu'elle est aléatoire
+
+10. Corrigée de 47 secondes, à quelle heure s'ouvre la session du 9 mars sur la passerelle ?
+      a) 1 h 35 min 41 s
+      b) 1 h 35 min 09 s
+      c) 1 h 34 min 54 s
+      d) 1 h 36 min 28 s
+
+11. Quelle est l'incohérence apparente du 9 mars avant correction ?
+      a) Le service est créé avant l'ouverture de session
+      b) La session dure trois jours
+      c) Le service n'existe pas
+      d) La passerelle est éteinte
+
+12. Quels outils produisent des super-chronologies ?
+      a) Wireshark et Zeek
+      b) WinPmem et LiME
+      c) Nessus et OpenVAS
+      d) log2timeline et Plaso
+
+13. Qu'est-ce qu'un pivot ?
+      a) Un outil de capture
+      b) Un élément commun qui relie des événements
+      c) Une faille
+      d) Une sauvegarde
+
+14. Quel pivot relie la balise de SRV-AD01 et l'exfiltration de SRV-FIC01 ?
+      a) Le compte svc_backup
+      b) Le fichier api.ini
+      c) L'adresse 203.0.113.47
+      d) Le port 445
+
+15. Quel pivot relie les sessions sur SRV-CPT01 et SRV-FIC01 ?
+      a) Le compte adm.kamga
+      b) L'adresse 203.0.113.62
+      c) Le nom cdn-update
+      d) Le port 22
+
+16. Que faut-il pour confirmer un lien de cause entre deux événements ?
+      a) Un seul pivot
+      b) L'avis du client
+      c) Une alerte
+      d) Une seconde coïncidence indépendante
+
+17. Quand le bulletin de l'éditeur sur VULN-2024-4471 est-il publié ?
+      a) Le 15 décembre 2024
+      b) Le 12 décembre 2024
+      c) Le 19 décembre 2024
+      d) Le 2 mars 2025
+
+18. Quand le correctif est-il publié ?
+      a) Le 12 décembre 2024
+      b) Le 19 décembre 2024
+      c) Le 15 décembre 2024
+      d) Le 14 mars 2025
+
+19. Quelle période n'est couverte par aucune source ?
+      a) Du 3 au 8 mars
+      b) Du 9 au 12 mars
+      c) Le 14 mars
+      d) Le 2 mars
+
+20. Quel est le temps de présence établi à NYANGA ?
+      a) 89 jours
+      b) 48 heures
+      c) 2 h 35
+      d) 11 jours, 7 heures et 42 minutes
+
+========================================================================
+Vrai ou faux
+========================================================================
+
+21. On peut fusionner les heures de plusieurs sources sans connaître leurs fuseaux.
+      Vrai / Faux
+
+22. La passerelle de NYANGA se synchronisait sur le serveur de temps interne.
+      Vrai / Faux
+
+23. La dérive se mesure en comparant l'heure de la machine à une référence.
+      Vrai / Faux
+
+24. Après correction, l'ouverture de session précède la création du service.
+      Vrai / Faux
+
+25. L'incohérence du 9 mars prouvait une falsification.
+      Vrai / Faux
+
+26. Un pivot prouve à lui seul un lien de cause.
+      Vrai / Faux
+
+27. Deux machines qui parlent à la même adresse peuvent utiliser le même service légitime.
+      Vrai / Faux
+
+28. Le temps de présence peut diminuer avec de nouvelles pièces.
+      Vrai / Faux
+
+29. La période du 3 au 8 mars est cotée NEK.
+      Vrai / Faux
+
+30. La passerelle enregistre des sessions de svc_backup du 3 au 8 mars.
+      Vrai / Faux
+
+========================================================================
+Textes à trous
+========================================================================
+
+31. La chronologie se construit en ______ corrigé.
+
+32. La passerelle avançait de ______ secondes.
+
+33. SRV-AD01 avait une dérive de ______ secondes.
+
+34. Un élément commun qui relie des événements est un ______.
+
+35. Les super-chronologies sont produites par log2timeline et ______.
+
+36. Le temps de présence établi est de 11 jours, 7 heures et ______ minutes.
+
+37. La durée entre première action et détection est le temps de ______.
+
+38. La période sans trace va du 3 au ______ mars.
+
+39. La matrice des tactiques est la matrice ATT&______ de MITRE.
+
+40. La session du 2 mars relève de l'accès ______.
+
+========================================================================
+Grille de réponses   Nom : ............................  Matricule : ............
+========================================================================
+ 1. ............................................
+ 2. ............................................
+ 3. ............................................
+ 4. ............................................
+ 5. ............................................
+ 6. ............................................
+ 7. ............................................
+ 8. ............................................
+ 9. ............................................
+10. ............................................
+11. ............................................
+12. ............................................
+13. ............................................
+14. ............................................
+15. ............................................
+16. ............................................
+17. ............................................
+18. ............................................
+19. ............................................
+20. ............................................
+21. ............................................
+22. ............................................
+23. ............................................
+24. ............................................
+25. ............................................
+26. ............................................
+27. ............................................
+28. ............................................
+29. ............................................
+30. ............................................
+31. ............................................
+32. ............................................
+33. ............................................
+34. ............................................
+35. ............................................
+36. ............................................
+37. ............................................
+38. ............................................
+39. ............................................
+40. ............................................

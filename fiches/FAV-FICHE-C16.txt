@@ -1,0 +1,233 @@
+NDAP SUKULU · FAV · fiche FAV-FICHE-C16
+Chapitre 16 : Mesurer l'incertitude d'une enquête
+
+Version papier, à utiliser en attendant l'ouverture du portail NDAP SUKULU.
+La fiche complète compte 40 questions. Répondez sur la grille en fin de fiche.
+Durée indicative : 60 minutes. Seuil de réussite : 60 %.
+Les corrections figurent dans le livret de correction du cours.
+
+========================================================================
+Questions à choix multiple (une seule bonne réponse)
+========================================================================
+
+ 1. D'où vient l'instrument OUI, NON, NEK ?
+      a) De la norme ISO/IEC 27037
+      b) Du programme de recherche de l'auditologie
+      c) Du CVSS
+      d) De la loi 2010/012
+
+ 2. Que force une réponse binaire selon l'article sur l'instrument ?
+      a) À tout savoir
+      b) À refuser de répondre
+      c) À transformer son ignorance en affirmation
+      d) À payer plus
+
+ 3. Que rend visible la troisième réponse NEK ?
+      a) L'ignorance, mesurable
+      b) La culpabilité
+      c) La conformité
+      d) Le coût
+
+ 4. Où les articles fondateurs de l'auditologie sont-ils déposés ?
+      a) Sur GitHub seulement
+      b) Dans une revue payante
+      c) Nulle part
+      d) Sur HAL
+
+ 5. Comment se définit le taux d'établissement μ ?
+      a) La part des NEK
+      b) La part des propositions cotées OUI
+      c) La part des NON
+      d) L'entropie
+
+ 6. Comment se définit le taux d'incertitude U ?
+      a) La part des OUI
+      b) La part des NON
+      c) La part des propositions cotées NEK
+      d) Le nombre de pièces
+
+ 7. Que mesure l'entropie H ?
+      a) La dispersion des cotes
+      b) L'ignorance seule
+      c) Le coût
+      d) La durée de l'enquête
+
+ 8. En quelle unité s'exprime H ?
+      a) En jours
+      b) En francs CFA
+      c) En pourcentage
+      d) En bits
+
+ 9. Quelle est la valeur maximale de H pour trois cotes ?
+      a) 1 bit
+      b) Environ 1,585 bit
+      c) 3 bits
+      d) 0 bit
+
+10. Quand H est-il nul ?
+      a) Quand les cotes sont également réparties
+      b) Jamais
+      c) Quand toutes les cotes sont identiques
+      d) Quand U vaut 0,5
+
+11. Qui est à l'origine de la mesure d'entropie ?
+      a) Claude Shannon
+      b) Edmond Locard
+      c) Richards Heuer
+      d) Brian Carrier
+
+12. Dans une enquête, quelle est la mesure principale ?
+      a) μ
+      b) H
+      c) Le nombre de pièces
+      d) U
+
+13. Pourquoi U devient-il la mesure principale dans une enquête ?
+      a) NON est une erreur
+      b) OUI et NON sont deux formes de savoir
+      c) OUI est rare
+      d) H est interdit
+
+14. Que vaut la part de savoir dans une enquête ?
+      a) μ seul
+      b) H
+      c) 1 - U
+      d) U
+
+15. Combien de propositions l'enquête de NYANGA doit-elle trancher ?
+      a) Douze
+      b) Cinq
+      c) Quatorze
+      d) Vingt-trois
+
+16. Quelle est la répartition au 14 mars au soir ?
+      a) 4/2/6
+      b) 5/2/5
+      c) 12/0/0
+      d) 0/0/12
+
+17. Quelle est la répartition au 29 mars ?
+      a) 0/0/12
+      b) 4/2/6
+      c) 5/2/5
+      d) 6/2/4
+
+18. Quelle est la répartition au 6 avril ?
+      a) 4/2/6
+      b) 0/0/12
+      c) 5/2/5
+      d) 6/0/6
+
+19. Quelle est la valeur de U au 29 mars ?
+      a) 0,500
+      b) 0,417
+      c) 1
+      d) 0,333
+
+20. Quelle est la valeur de U au 6 avril ?
+      a) 0,500
+      b) 1
+      c) 0,333
+      d) 0,417
+
+========================================================================
+Vrai ou faux
+========================================================================
+
+21. Une réponse binaire rend l'ignorance visible.
+      Vrai / Faux
+
+22. Dans un audit, μ mesure la conformité.
+      Vrai / Faux
+
+23. Dans une enquête, une proposition réfutée est aussi tranchée qu'une proposition établie.
+      Vrai / Faux
+
+24. H est maximal quand toutes les cotes sont identiques.
+      Vrai / Faux
+
+25. Une répartition 10/0/0 et une répartition 0/0/10 ont la même entropie.
+      Vrai / Faux
+
+26. U se lit avant μ et H.
+      Vrai / Faux
+
+27. Le 14 mars au soir, les douze propositions sont NEK.
+      Vrai / Faux
+
+28. U augmente entre le 29 mars et le 6 avril.
+      Vrai / Faux
+
+29. H diminue à mesure que l'enquête tranche.
+      Vrai / Faux
+
+30. P11 porte sur le passage des virements par le lien du siège.
+      Vrai / Faux
+
+========================================================================
+Textes à trous
+========================================================================
+
+31. La part des propositions cotées NEK est le taux d'______.
+
+32. La part des propositions cotées OUI est le taux d'______.
+
+33. L'entropie s'exprime en ______.
+
+34. La mesure d'entropie vient de Claude ______.
+
+35. Dans une enquête, la mesure principale est ______.
+
+36. L'enquête de NYANGA compte ______ propositions.
+
+37. Au 6 avril, U vaut 0,______.
+
+38. Au 29 mars, H vaut 1,______ bit.
+
+39. Au 6 avril, la répartition est 5/2/______.
+
+40. Un NEK que l'enquête peut lever est dit ______.
+
+========================================================================
+Grille de réponses   Nom : ............................  Matricule : ............
+========================================================================
+ 1. ............................................
+ 2. ............................................
+ 3. ............................................
+ 4. ............................................
+ 5. ............................................
+ 6. ............................................
+ 7. ............................................
+ 8. ............................................
+ 9. ............................................
+10. ............................................
+11. ............................................
+12. ............................................
+13. ............................................
+14. ............................................
+15. ............................................
+16. ............................................
+17. ............................................
+18. ............................................
+19. ............................................
+20. ............................................
+21. ............................................
+22. ............................................
+23. ............................................
+24. ............................................
+25. ............................................
+26. ............................................
+27. ............................................
+28. ............................................
+29. ............................................
+30. ............................................
+31. ............................................
+32. ............................................
+33. ............................................
+34. ............................................
+35. ............................................
+36. ............................................
+37. ............................................
+38. ............................................
+39. ............................................
+40. ............................................
