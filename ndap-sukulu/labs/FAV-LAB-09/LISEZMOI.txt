@@ -1,0 +1,27 @@
+FAV-LAB-09, prioriser et suivre la remédiation
+
+Les pièces du lab se trouvent dans le dossier preuves, en lecture seule, et
+une copie de travail modifiable dans le dossier travail (ouvert au démarrage).
+  constats_suivi.csv   suivi de douze constats au 30 septembre 2025
+  exceptions.csv       exceptions déclarées
+  MANIFESTE_SHA256.txt empreintes de référence (preuves)
+
+Marche à suivre.
+
+1. Vérifier l'intégrité avant toute analyse. Ouvrez un terminal, puis tapez :
+       cd ~/preuves
+       sha256sum -c MANIFESTE_SHA256.txt
+   Chaque fichier doit afficher OK.
+
+2. Calculer les délais de correction vérifiée des P1 et leur médiane.
+
+3. Compter les P1 en retard au 30 septembre et la part des P2 dans le délai.
+
+4. Repérer les tickets fermés sans vérification et l'exception qui n'en est pas une.
+
+5. Répondre. Saisissez vos réponses dans le volet Points de contrôle de la
+   page du lab, puis enregistrez. Nombres avec un point ou une virgule
+   décimale ; codes et listes comme indiqué dans chaque question. Quand vous
+   avez terminé, cliquez sur Terminer et corriger pour obtenir votre note.
+
+Toute votre activité dans le terminal est journalisée.

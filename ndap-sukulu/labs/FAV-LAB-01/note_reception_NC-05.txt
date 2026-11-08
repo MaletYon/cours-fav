@@ -1,0 +1,5 @@
+Note de réception, NYANGA CRÉDIT, 15 mars 2025, 18 h 05.
+Les journaux de l'interface de paiement mobile ont été reçus en pièce jointe
+d'un courriel du prestataire (fichier api_logs_0314.csv). Le prestataire n'a pas
+indiqué comment il a extrait ces journaux. Empreinte calculée à réception.
+(Document fictif établi pour le cours FAV (MSN-2S3-SEC07). Noms, dates, adresses et montants fictifs.)

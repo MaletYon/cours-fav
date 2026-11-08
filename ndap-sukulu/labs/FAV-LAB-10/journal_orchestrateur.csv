@@ -1,0 +1,5 @@
+Heure (UTC);Objet;Événement
+2026-02-09 01:48:15;pod portail-7c9f;fichier inattendu écrit dans /app/tmp
+2026-02-09 03:09:50;pod portail-7c9f;sonde de vie en échec
+2026-02-09 03:10:02;pod portail-7c9f;supprimé par la reprise automatique
+2026-02-09 03:10:09;pod portail-8d1a;créé depuis l'image d'origine

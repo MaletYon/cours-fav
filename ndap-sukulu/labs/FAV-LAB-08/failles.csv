@@ -1,0 +1,9 @@
+Réf.;Vecteur CVSS v4.0;Score CVSS-B;EPSS;Catalogue KEV;Actif
+V1;CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N;9.3;0.71;oui;Portail des transitaires
+V2;CVSS:4.0/AV:L/AC:L/AT:N/PR:L/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N;8.5;0.04;non;Serveur de facturation
+V3;CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:A/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N;7.7;0.12;non;Poste de direction
+V4;CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:L/VI:N/VA:N/SC:N/SI:N/SA:N;6.9;0.63;oui;Pare-feu de Kribi
+V5;CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N;9.3;0.02;non;Serveur d'impression
+V6;CVSS:4.0/AV:L/AC:L/AT:N/PR:L/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N;8.5;0.35;oui;Base de suivi des conteneurs
+V7;CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:L/VI:L/VA:N/SC:N/SI:N/SA:N;2.3;0.01;non;Site vitrine
+V8;CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N;9.3;0.55;non;Messagerie exposée

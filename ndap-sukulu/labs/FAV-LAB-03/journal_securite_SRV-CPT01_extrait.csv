@@ -1,0 +1,6 @@
+Date et heure (UTC+1);Événement;Compte;Type d'ouverture;Adresse source;Commentaire
+2025-03-12 08:02:11;4624;comptable1;2;-;Ouverture interactive au siège
+2025-03-12 12:47:30;4624;svc_sauvegarde;5;-;Service de sauvegarde
+2025-03-12 22:39:12;4624;adm.kamga;10;10.20.1.10;Bureau à distance
+2025-03-12 23:11:45;4634;adm.kamga;10;10.20.1.10;Fermeture de session
+2025-03-13 07:58:03;4624;comptable2;2;-;Ouverture interactive au siège

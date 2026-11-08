@@ -1,0 +1,7 @@
+Source;Heure brute;Événement
+Passerelle;2025-03-02 23:48:35;Session svc_backup depuis 203.0.113.18
+Passerelle;2025-03-09 01:35:41;Session svc_backup
+SRV-AD01;2025-03-09 01:35:11;Service WinUpdSvc installé (7045)
+SRV-AD01;2025-03-09 01:37:02;Création de lsass.dmp
+SRV-CPT01 (NTFS);2025-03-12 21:44:07;Création de api.ini.lnk
+Sonde réseau;2025-03-14 00:12:00;Début du flux de 3,2 Go vers 203.0.113.47

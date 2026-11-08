@@ -1,0 +1,8 @@
+Journal d'acquisition, portable de l'agence de Dschang (PSTE-AG07)
+Source           : disque de 256 Go
+Bloqueur         : bloqueur matériel
+Format           : brut (dd)
+Secteurs lus avec erreur : 384 (remplacés par des zéros)
+Taille de secteur : 512 octets
+Vérification     : empreinte de l'image identique à l'empreinte calculée pendant l'acquisition
+(Document fictif établi pour le cours FAV (MSN-2S3-SEC07). Noms, dates, adresses et montants fictifs.)

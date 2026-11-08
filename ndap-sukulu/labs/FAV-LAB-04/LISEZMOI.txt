@@ -1,0 +1,29 @@
+FAV-LAB-04, mémoire, processus et connexions
+
+Les pièces du lab se trouvent dans le dossier preuves, en lecture seule, et
+une copie de travail modifiable dans le dossier travail (ouvert au démarrage).
+  windows.pslist.txt    sortie du greffon Volatility 3 du même nom
+  windows.psscan.txt    sortie du greffon Volatility 3 du même nom
+  windows.netscan.txt   sortie du greffon Volatility 3 du même nom
+  windows.svcscan.txt   sortie du greffon Volatility 3 du même nom
+  MANIFESTE_SHA256.txt  empreintes de référence (preuves)
+
+Marche à suivre.
+
+1. Vérifier l'intégrité avant toute analyse. Ouvrez un terminal, puis tapez :
+       cd ~/preuves
+       sha256sum -c MANIFESTE_SHA256.txt
+   Chaque fichier doit afficher OK.
+
+2. Compter les processus svchost.exe et repérer celui qui ne tourne pas depuis System32.
+
+3. Comparer pslist et psscan.
+
+4. Relier le processus suspect à sa connexion et à son service.
+
+5. Répondre. Saisissez vos réponses dans le volet Points de contrôle de la
+   page du lab, puis enregistrez. Nombres avec un point ou une virgule
+   décimale ; codes et listes comme indiqué dans chaque question. Quand vous
+   avez terminé, cliquez sur Terminer et corriger pour obtenir votre note.
+
+Toute votre activité dans le terminal est journalisée.

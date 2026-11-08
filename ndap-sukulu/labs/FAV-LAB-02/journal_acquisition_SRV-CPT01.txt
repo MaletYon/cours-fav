@@ -1,0 +1,10 @@
+Journal d'acquisition, scellé NC-03
+Source           : disque système de SRV-CPT01, 500107862016 octets
+Bloqueur         : bloqueur matériel, vérifié le 15/03/2025 à 08:40
+Format           : E01
+Début            : 15/03/2025 16:00:12
+Fin              : 15/03/2025 19:25:47
+Secteurs lus avec erreur : 0
+SHA-256 source   : 4f2a9c...e81b (calcul pendant l'acquisition)
+SHA-256 image    : 4f2a9c...e81b (vérification à 19:40)
+(Document fictif établi pour le cours FAV (MSN-2S3-SEC07). Noms, dates, adresses et montants fictifs.)

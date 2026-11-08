@@ -1,0 +1,4 @@
+Proto	Adresse locale	Adresse distante	État	PID	Processus
+TCPv4	10.20.1.10:389	10.20.1.30:51544	ESTABLISHED	724	lsass.exe
+TCPv4	10.20.1.10:49812	203.0.113.47:443	ESTABLISHED	4412	svchost.exe
+TCPv4	10.20.1.10:445	10.20.1.20:50211	CLOSE_WAIT	4	System

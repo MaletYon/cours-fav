@@ -1,0 +1,3 @@
+Client;Serveur;SNI;Émetteur du certificat;Certificat émis le
+10.20.1.20;203.0.113.47;cdn-update.example.net;cdn-update.example.net (auto-signé);2025-03-01
+10.20.1.30;198.51.100.10;api.fournisseur.example;Autorité de certification publique;2024-06-12

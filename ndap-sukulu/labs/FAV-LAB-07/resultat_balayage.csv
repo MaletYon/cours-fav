@@ -1,0 +1,15 @@
+Actif;Faille;Score CVSS-B;Authentifié;Version lue
+SRV-01;VULN-2025-0101;9.8;oui;openssl 3.0.2-0ubuntu1.10
+SRV-01;VULN-2025-0101;9.8;oui;openssl 3.0.2-0ubuntu1.10
+SRV-02;VULN-2025-0207;7.5;oui;openssh 9.2p1-2+deb12u3
+SRV-03;VULN-2025-0207;7.5;oui;openssh 9.2p1-2+deb12u1
+SRV-04;VULN-2025-0207;7.5;non;OpenSSH_9.2 (bannière)
+SRV-05;VULN-2025-0315;8.1;oui;nginx 1.22.1-9+deb12u2
+SRV-05;VULN-2025-0315;8.1;oui;nginx 1.22.1-9+deb12u2
+SRV-06;VULN-2025-0315;8.1;oui;nginx 1.22.1-9
+SRV-07;VULN-2025-0420;6.5;non;Apache/2.4 (bannière)
+SRV-08;VULN-2025-0101;9.8;oui;openssl 3.0.2-0ubuntu1.15
+PST-01;VULN-2025-0533;8.8;oui;navigateur 120.0
+PST-02;VULN-2025-0533;8.8;oui;navigateur 120.0
+PST-02;VULN-2025-0533;8.8;oui;navigateur 120.0
+SRV-09;VULN-2025-0612;5.3;non;SMB (réponse du service)

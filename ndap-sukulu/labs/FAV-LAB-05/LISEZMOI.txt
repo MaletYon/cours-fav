@@ -1,0 +1,28 @@
+FAV-LAB-05, réseau, l'exfiltration
+
+Les pièces du lab se trouvent dans le dossier preuves, en lecture seule, et
+une copie de travail modifiable dans le dossier travail (ouvert au démarrage).
+  conversations.csv         statistiques de conversations de la capture (UTC)
+  tls.csv                   échanges TLS : nom annoncé et certificat
+  connexions_SRV-AD01.csv   connexions de SRV-AD01 vers 203.0.113.47 sur 24 heures
+  MANIFESTE_SHA256.txt      empreintes de référence (preuves)
+
+Marche à suivre.
+
+1. Vérifier l'intégrité avant toute analyse. Ouvrez un terminal, puis tapez :
+       cd ~/preuves
+       sha256sum -c MANIFESTE_SHA256.txt
+   Chaque fichier doit afficher OK.
+
+2. Repérer la conversation d'exfiltration et calculer sa durée et son débit.
+
+3. Lire le nom annoncé et le certificat du serveur.
+
+4. Compter les connexions de la balise et mesurer leur intervalle moyen.
+
+5. Répondre. Saisissez vos réponses dans le volet Points de contrôle de la
+   page du lab, puis enregistrez. Nombres avec un point ou une virgule
+   décimale ; codes et listes comme indiqué dans chaque question. Quand vous
+   avez terminé, cliquez sur Terminer et corriger pour obtenir votre note.
+
+Toute votre activité dans le terminal est journalisée.

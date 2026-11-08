@@ -1,0 +1,4 @@
+Nom	État	Démarrage	Binaire
+Netlogon	Running	Auto	C:\Windows\System32\lsass.exe
+WinUpdSvc	Running	Auto	C:\ProgramData\WinUpd\svchost.exe
+Spooler	Running	Auto	C:\Windows\System32\spoolsv.exe

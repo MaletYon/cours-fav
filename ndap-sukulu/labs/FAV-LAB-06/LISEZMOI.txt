@@ -1,0 +1,27 @@
+FAV-LAB-06, chronologie unifiée
+
+Les pièces du lab se trouvent dans le dossier preuves, en lecture seule, et
+une copie de travail modifiable dans le dossier travail (ouvert au démarrage).
+  horloges.csv           fuseau, dérive et synchronisation de chaque source
+  evenements_bruts.csv   événements dans l'heure brute de leur source
+  MANIFESTE_SHA256.txt   empreintes de référence (preuves)
+
+Marche à suivre.
+
+1. Vérifier l'intégrité avant toute analyse. Ouvrez un terminal, puis tapez :
+       cd ~/preuves
+       sha256sum -c MANIFESTE_SHA256.txt
+   Chaque fichier doit afficher OK.
+
+2. Normaliser chaque heure en UTC corrigé (retirer la dérive, puis le décalage horaire).
+
+3. Remettre les événements du 9 mars dans le bon ordre.
+
+4. Calculer le temps de présence, de la première session à la détection (7 h 30 locale le 14 mars).
+
+5. Répondre. Saisissez vos réponses dans le volet Points de contrôle de la
+   page du lab, puis enregistrez. Nombres avec un point ou une virgule
+   décimale ; codes et listes comme indiqué dans chaque question. Quand vous
+   avez terminé, cliquez sur Terminer et corriger pour obtenir votre note.
+
+Toute votre activité dans le terminal est journalisée.

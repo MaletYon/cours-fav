@@ -1,0 +1,5 @@
+Heure (UTC);Source ou événement;Chemin;Décision
+2026-01-21 10:00:00;Règle R-77 activée : bloque /admin/../ (exception E-03);-;-
+2026-02-09 01:46:58;203.0.113.90;/admin/../export;bloqué par R-77
+2026-02-09 01:47:22;203.0.113.90;/admin/..%2f..%2fexport;autorisé
+2026-02-09 01:47:40;203.0.113.90;/admin/..%2f..%2fupload;autorisé

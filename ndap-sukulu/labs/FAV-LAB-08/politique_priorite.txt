@@ -1,0 +1,6 @@
+Politique de priorité de SOLITRANS (juin 2025)
+P1 (7 jours)  : inscrite au catalogue KEV, ou EPSS >= 0,5, sur un actif exposé ou critique.
+P2 (15 jours) : inscrite au catalogue KEV sur un actif interne, ou CVSS-B >= 9,0 sur un actif exposé.
+P3 (30 jours) : CVSS-B >= 7,0, hors P1 et P2.
+P4 (90 jours) : autres constats confirmés.
+(Document fictif établi pour le cours FAV (MSN-2S3-SEC07). Noms, dates, adresses et montants fictifs.)

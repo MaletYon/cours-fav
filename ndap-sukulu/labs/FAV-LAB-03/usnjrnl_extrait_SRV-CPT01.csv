@@ -1,0 +1,4 @@
+Date et heure (UTC);Fichier;Raison
+2025-03-12 21:52:18;cpt.7z;FILE_CREATE
+2025-03-12 21:52:40;cpt.7z;DATA_EXTEND
+2025-03-12 22:06:02;cpt.7z;FILE_DELETE | CLOSE

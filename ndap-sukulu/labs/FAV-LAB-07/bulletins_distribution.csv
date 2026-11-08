@@ -1,0 +1,4 @@
+Faille;Paquet;Révision corrigée
+VULN-2025-0101;openssl;3.0.2-0ubuntu1.15
+VULN-2025-0207;openssh;9.2p1-2+deb12u3
+VULN-2025-0315;nginx;1.22.1-9+deb12u2

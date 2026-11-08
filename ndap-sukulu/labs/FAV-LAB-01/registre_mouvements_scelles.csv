@@ -1,0 +1,11 @@
+Scellé;Date et heure;Détenteur;Lieu;Opération;Conditionnement
+NC-01;2025-03-14 10:02;Mme NDOUMBE;Salle serveurs;Capture mémoire de SRV-AD01;sans numéro
+NC-01;2025-03-14 15:50;M. KAMGA;Bureau du DSI;Enveloppe kraft, ruban adhésif;sans numéro
+NC-01;2025-03-15 09:30;Mme MBARGA;Bureau du DSI;Empreinte recalculée, mise sous scellé;NC-01
+NC-01;2025-03-16 10:15;Adjudant-chef NANA;Brigade de recherches;Remise sur réquisition;NC-01 intact
+NC-01;2025-03-17 14:00;M. ABOUBAKAR;Laboratoire de l'expert;Ouverture, copie, nouveau scellé;NC-01-E1
+NC-02;2025-03-14 11:20;Mme NDOUMBE;Salle serveurs;Export des journaux de la passerelle;NC-02
+NC-02;2025-03-16 10:15;Adjudant-chef NANA;Brigade de recherches;Remise sur réquisition;NC-02 intact
+NC-03;2025-03-15 19:40;Mme MBARGA;Salle de crise;Image E01 de SRV-CPT01, scellé;NC-03
+NC-03;2025-03-16 10:15;Adjudant-chef NANA;Brigade de recherches;Remise sur réquisition;NC-03 intact
+NC-05;2025-03-15 18:05;Mme MBARGA;Salle de crise;Réception par courriel des journaux du prestataire;NC-05

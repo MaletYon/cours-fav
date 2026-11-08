@@ -1,0 +1,5 @@
+Source;Fuseau;Dérive mesurée;Synchronisée
+Passerelle;UTC+1;+47 s;non
+SRV-AD01;UTC+1;+2 s;oui
+SRV-CPT01 (NTFS);UTC;+2 s;oui
+Sonde réseau;UTC;0 s;oui
